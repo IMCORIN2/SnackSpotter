@@ -1,0 +1,12 @@
+### 회원가입
+POST http://localhost:3000/api/auth/signup
+Content-Type: application/json
+
+{
+    "name": "example3",
+    "email": "example3@naver.com",
+    "password": "example3",
+    "passwordConfirm": "example3",
+    "gender": "women",
+    "birthday": "1311-12-22"
+}
