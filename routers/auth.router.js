@@ -92,7 +92,6 @@ authRouter.post('/signup', async (req, res) => {
 //로그인
 authRouter.post('/signin', async (req, res) => {
   try {
-    console.log("여기")
     const { email, password } = req.body;
 
     if (!email || !password) {
