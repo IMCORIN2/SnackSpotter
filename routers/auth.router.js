@@ -101,7 +101,7 @@ authRouter.post('/signin', async (req, res) => {
       });
     }
 
-    const user = (await Users.findOne({ where: { email } })).toJSON();
+    const user = (await Users.findOne({ where: { email } }))?.toJSON();
     const hashedPassword = user.password;
     const ispasswordMatched = bcrypt.compareSync(password, hashedPassword);
 
