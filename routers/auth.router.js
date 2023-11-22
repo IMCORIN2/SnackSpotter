@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const db = require('../models/index.js');
-const PASSWORD_HASH_SALT_ROUNDS = require('../constants/security.constant.js');
+const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN }= require('../constants/security.constant.js');
 const { Users } = db;
 const authRouter = express.Router();
 // 회원가입
@@ -9,24 +10,20 @@ authRouter.post('/signup', async (req, res) => {
   try {
     const { name, email, password, passwordConfirm, gender, birthday } =
       req.body;
-    if (!email) {
+    if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: '이메일 입력이 필요합니다.',
+        message: '이메일 또는 비밀번호 입력이 필요합니다.',
       });
     }
-    if (!password) {
-      return res.status(400).json({
-        success: false,
-        message: '비밀번호 입력이 필요합니다.',
-      });
-    }
+
     if (!passwordConfirm) {
       return res.status(400).json({
         success: false,
         message: '비밀번호 확인 입력이 필요합니다.',
       });
     }
+
     if (!name) {
       return res.status(400).json({
         success: false,
@@ -93,6 +90,46 @@ authRouter.post('/signup', async (req, res) => {
 });
 
 //로그인
-authRouter.post('/signin', async (req, res) => {});
+authRouter.post('/signin', async (req, res) => {
+  try {
+    console.log("여기")
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: '이메일 또는 비밀번호 입력이 필요합니다.',
+      });
+    }
+
+    const user = (await Users.findOne({ where: { email } })).toJSON();
+    const hashedPassword = user.password;
+    const ispasswordMatched = bcrypt.compareSync(password, hashedPassword);
+
+    const isCorrectUser = user && ispasswordMatched;
+
+    if (!isCorrectUser) {
+      return res.status(401).json({
+        success: false,
+        message: '일치하는 인증 정보가 없습니다.',
+      });
+    }
+
+    const accessToken = jwt.sign({ userId: user.id }, JWT_ACCESS_TOKEN_SECRET,{
+      expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN
+    });
+    return res.status(200).json({
+      success: true,
+      message: '로그인에 성공했습니다.',
+      data: { accessToken },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
+    });
+  }
+});
 
 module.exports = authRouter;
