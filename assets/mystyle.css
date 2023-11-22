@@ -61,3 +61,50 @@
 .alert-sparta .alert-link {
   color: #360000;
 }
+  body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        .foodDisplay {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .recommendButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }  body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        .foodDisplay {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .recommendButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+          margin: 50px;
+      }
+
+      .foodDisplay {
+          font-size: 24px;
+          margin-bottom: 20px;
+      }
+
+      .recommendButton {
+          padding: 10px 20px;
+          font-size: 16px;
+          cursor: pointer;
+      }
