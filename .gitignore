@@ -1,0 +1,27 @@
+# 환경 및 로깅 파일
+.env
+.env.local
+.env.*.local
+.env.test
+.env.production
+
+# npm
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# 특정 개발 환경에 필요한 파일
+/config/dev.js
+/config/local.js
+
+# VS Code 설정 파일
+.vscode/
+
+# 기타
+.DS_Store
+.envrc
+.log
+logs
+*.log
