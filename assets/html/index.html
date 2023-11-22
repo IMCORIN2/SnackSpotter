@@ -7,8 +7,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon" />
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -21,7 +21,7 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
-    <link href="/mystyle.css" rel="stylesheet" />
+    <link href="./css/mystyle.css" rel="stylesheet" />
     <title>스파르타 쇼핑몰 | 로그인</title>
 
     <style>
@@ -94,7 +94,7 @@
               <button
                 type="button"
                 class="btn btn-outline-sparta btn-block"
-                onclick="window.location.href='/register.html'"
+                onclick="window.location.href='./html/register.html'"
               >
                 회원가입
               </button>
@@ -163,7 +163,7 @@
       if (localStorage.getItem("token")) {
         getSelf(function () {
           alert("이미 로그인이 되어있습니다. 상품 페이지로 이동합니다.");
-          window.location.replace("/goods.html");
+          window.location.replace("./html/goods.html");
         });
       }
 
@@ -179,7 +179,7 @@
           },
           success: function (response) {
             localStorage.setItem("token", response.token);
-            window.location.replace("/goods.html");
+            window.location.replace("./html/goods.html");
           },
           error: function (error) {
             customAlert(error.responseJSON.errorMessage);
