@@ -2,10 +2,14 @@ const express = require('express');
 const { SERVER_PORT, GENDER } = require("./constants/app.constant");
 const apiRouter = require("./routers/index")
 const bodyParser = require('body-parser');
+const morgan = require("morgan");
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = 3000;
+app.use(morgan())
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api", apiRouter);
 const staticPath = path.join(__dirname, 'assets');
 app.use('/assets', express.static(staticPath));

@@ -1,10 +1,15 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const db = require('../models/index.js');
-const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN }= require('../constants/security.constant.js');
+const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN, JWT_REFRESH_TOKEN_SECRET, JWT_REFRESH_TOKEN_EXPIRES_IN  }= require('../constants/security.constant.js');
+const needSignin = require('../middlewares/need-signin.middleware.js');
+const verifyToken = require("../middlewares/verifyToken.middleware.js");
 const { Users } = db;
+const { RefreshTokens } = db;
 const authRouter = express.Router();
+
 // 회원가입
 authRouter.post('/signup', async (req, res) => {
   try {
@@ -118,6 +123,22 @@ authRouter.post('/signin', async (req, res) => {
     const accessToken = jwt.sign({ userId: user.id }, JWT_ACCESS_TOKEN_SECRET,{
       expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN
     });
+
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 12);
+
+    res.cookie("authorization",`Bearer + ${accessToken}`,{
+        "expires" : expires,
+    })
+
+    const refreshToken = jwt.sign({ userId: user.id }, JWT_REFRESH_TOKEN_SECRET,{
+      expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN
+    })
+
+    const newRefreshToken = (
+      await RefreshTokens.create({ value: refreshToken, userId: user.id })
+    ).toJSON();
+
     return res.status(200).json({
       success: true,
       message: '로그인에 성공했습니다.',
@@ -131,5 +152,32 @@ authRouter.post('/signin', async (req, res) => {
     });
   }
 });
+
+authRouter.delete("/logout", needSignin, verifyToken, (req, res) => {
+  try {
+    const user = res.locals.user;
+    const authorizationHeader = req.headers.authorization;
+    res.clearCookie();
+    
+    // HTTP GET 메서드에서 destroy를 사용할 수 있나?
+    // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나
+    // 생각해보니 DB에 넣어놓고 비교할 이유가 있나? db에서 삭제해도 refresh토큰은 그대로 남아있는 것 아닌가?
+    // db에 있는 refresh 토큰값과 그냥 가지고 있는 refresh 토큰 값을 비교해서 refresh 토큰이 존재한다고 조건을 걸면 되는건가
+    const refreshToken = RefreshTokens.destroy({ where : { userId : user.id}});
+
+    res.status(200).json({
+      success: true,
+      message: "정상적으로 로그아웃 되었습니다.",
+      data: {}
+    })
+  } catch(error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
+    });
+  }
+})
 
 module.exports = authRouter;
