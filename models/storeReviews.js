@@ -2,14 +2,14 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class storeReviews extends Model {
+  class StoreReviews extends Model {
     static associate(models) {
-      storeReviews.belongsTo(models.Stores, { foreignKey: 'storeId', as: 'store' });
-      storeReviews.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
+        StoreReviews.belongsTo(models.Stores, { foreignKey: 'storeId', as: 'store' });
+        StoreReviews.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
     }
   }
 
-  storeReviews.init(
+  StoreReviews.init(
     {
       id: {
         allowNull: false,
@@ -50,5 +50,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  return storeReviews;
+  return StoreReviews;
 };

@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('storeReviews', {
+    await queryInterface.createTable('StoreReviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -36,7 +36,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.addConstraint('storeReviews', {
+    await queryInterface.addConstraint('StoreReviews', {
       fields: ['storeId'],
       type: 'foreign key',
       name: 'fk_store_id_' + Date.now(),
@@ -48,7 +48,7 @@ module.exports = {
       onUpdate: 'cascade',
     });
     
-    await queryInterface.addConstraint('storeReviews', {
+    await queryInterface.addConstraint('StoreReviews', {
       fields: ['userId'],
       type: 'foreign key',
       name: 'fk_user_id_' + Date.now(),
@@ -62,6 +62,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('storeReviews');
+    await queryInterface.dropTable('StoreReviews');
   },
 };
