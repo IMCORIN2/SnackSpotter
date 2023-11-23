@@ -93,7 +93,7 @@ function getGoodsDetail(goodsId, callback) {
 }
 
 function makeBuyNotification(targetNickname, goodsName, goodsId, date) {
-  const messageHtml = `${targetNickname}님이 방금 <a href="/detail.html?goodsId=${goodsId}" class="alert-link">${goodsName}</a>을 구매했어요! <br /><small>(${date})</small>
+  const messageHtml = `${targetNickname}님이 방금 <a href="./html/detail.html?goodsId=${goodsId}" class="alert-link">${goodsName}</a>을 구매했어요! <br /><small>(${date})</small>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>`;
@@ -120,7 +120,7 @@ function addToCart(goodsId, quantity, callback) {
       if (status == 400) {
         alert("존재하지 않는 상품입니다.");
       }
-      window.location.href = "/goods.html";
+      window.location.href = "./html/goods.html";
     },
     success: function () {
       callback();
