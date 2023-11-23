@@ -5,18 +5,28 @@ const db = require('../models/index.js');
 const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN }= require('../constants/security.constant.js');
 const { Users } = db;
 const authRouter = express.Router();
-//이메일 중복 확인
-authRouter.post("/check-email", async (req, res) => {
+
+// 이메일 중복 확인
+authRouter.post('/check-email', async (req, res) => {
   try {
     const { email } = req.body;
 
-    // 이메일 중복 확인 로직 추가
+    // 이미 등록된 이메일인지 확인
+    const existingUser = await User.findOne({ email });
 
-    return res.status(200).json({
-      success: true,
-      message: '이메일 중복 확인에 성공했습니다.',
-      data: { isEmailAvailable: true }, // 실제 로직에 따라 데이터를 보내도록 수정
-    });
+    if (existingUser) {
+      return res.status(200).json({
+        success: true,
+        message: '이메일 중복 확인에 성공했습니다.',
+        data: { isEmailAvailable: false }, 
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: '이메일 중복 확인에 성공했습니다.',
+        data: { isEmailAvailable: true }, 
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({
