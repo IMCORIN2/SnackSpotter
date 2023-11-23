@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = 3000;
+app.use(express.json());
 app.use("/api", apiRouter);
-app.use(bodyParser.json());
 const staticPath = path.join(__dirname, 'assets');
 app.use('/assets', express.static(staticPath));
 

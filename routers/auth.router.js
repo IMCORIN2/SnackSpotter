@@ -10,6 +10,7 @@ authRouter.post('/signup', async (req, res) => {
   try {
     const { name, email, password, passwordConfirm, gender, birthday } =
       req.body;
+      console.log(name, email, password, passwordConfirm, gender, birthday )
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -73,7 +74,7 @@ authRouter.post('/signup', async (req, res) => {
         birthday,
       })
     ).toJSON();
-    delete newUser.passord;
+    delete newUser.password;
 
     return res.status(201).json({
       success: true,

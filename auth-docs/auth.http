@@ -5,12 +5,12 @@ POST {{host}}/signup
 Content-Type: application/json
 
 {
-    "name": "example6",
-    "email": "example6@naver.com",
-    "password": "example6",
-    "passwordConfirm": "example6",
+    "name": "example7",
+    "email": "example7@naver.com",
+    "password": "example7",
+    "passwordConfirm": "example7",
     "gender": "women",
-    "birthday": "1311-12-22"
+    "birthday": "1999-12-13"
 }
 
 ### 로그인
