@@ -1,12 +1,24 @@
+@host = http://localhost:3000/api/auth
+
 ### 회원가입
-POST http://localhost:3000/api/auth/signup
+POST {{host}}/signup
 Content-Type: application/json
 
 {
-    "name": "example3",
-    "email": "example3@naver.com",
-    "password": "example3",
-    "passwordConfirm": "example3",
+    "name": "example6",
+    "email": "example6@naver.com",
+    "password": "example6",
+    "passwordConfirm": "example6",
     "gender": "women",
     "birthday": "1311-12-22"
+}
+
+### 로그인
+
+POST {{host}}/signin
+Content-Type: application/json
+
+{
+    "email": "example3@naver.com",
+    "password": "example3"
 }

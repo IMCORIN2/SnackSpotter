@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>편의점 군것질 투표</title>
+    <link rel="stylesheet" href="../css/vote.css">
+</head>
+<body>
+    <div id="voting-app">
+        <h1>편의점 군것질 투표</h1>
+        <div id="options">
+            <button type="button" class="option" onclick="vote('option1')">
+                <img src="https://asset.m-gs.kr/prod/1032647306/1/550" alt="[농심] 민초 바나나킥 60g">
+              </button>
+              
+              <button type="button" class="option" onclick="vote('option2')">
+                <img src="https://asset.m-gs.kr/prod/1015360318/1/550" alt="아리랑 발효보리건빵(60g) x 30개입(1박스)/ 군대건빵">
+              </button>
+              
+        </div>
+        <div id="result">
+            <h2>투표 결과</h2>
+            <p id="option1-votes">민초 바나나킥: 0 표</p>
+            <p id="option2-votes">아리랑 발효보리건빵: 0 표</p>
+        </div>
+    </div>
+    <script src="../js/vote.js"></script>
+</body>
+</html>
