@@ -1,6 +1,17 @@
 const express = require('express');
 const { Products } = require('../models');
 const router = express.Router();
+const path = require('path');
+
+router.get('/products', async (req, res) => {
+  try {
+    const products = await Products.findAll();
+    res.json({ products });
+  } catch (error) {
+    console.error('에러 ---', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 router.get('/', async (req, res) => {
   try {
@@ -19,7 +30,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get(`/:productId`, async (req, res) => {
+router.get('/:productId', async (req, res) => {
   try {
     const { productId } = req.params;
 
@@ -38,6 +49,30 @@ router.get(`/:productId`, async (req, res) => {
       message: '상품 조회 성공했습니다',
       data: product,
     });
+  } catch (error) {
+    console.error('에러 ---', error);
+    res.status(500).json({ success: false, message: '오류가 발생했습니다' });
+  }
+});
+
+router.get('/html', async (req, res) => {
+  try {
+    const products = await Products.findAll({
+      attributes: ['id', 'name', 'description', 'image', 'price', 'category'],
+    });
+
+    const html = products
+      .map(
+        (product) => `<div>
+          <img src="${product.image}" alt="${product.name}">
+          <p>${product.name}</p>
+          <p>${product.description}</p>
+          <p>${product.price}</p>
+        </div>`
+      )
+      .join('');
+
+    res.send(html);
   } catch (error) {
     console.error('에러 ---', error);
     res.status(500).json({ success: false, message: '오류가 발생했습니다' });
