@@ -3,10 +3,9 @@ const { JWT_ACCESS_TOKEN_SECRET } = require('../constants/security.constant');
 const db = require('../models/index.js');
 const { Users } = db;
 
-const needSignin = async (req, res, next) => {
+const isAuthenticated = async (req, res, next) => {
   try {
     const authorizationHeaders = req.headers.authorization;
-    console.log('여기');
     if (!authorizationHeaders) {
       return res.status(400).json({
         success: false,
@@ -47,8 +46,7 @@ const needSignin = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error.message);
-    // 토큰의 유효기간이 지난 경우와 검증에 실패한 경우는 오류가 뜨지 때문에
-    // catch의 error 부분에서 처리해줌
+    // 토큰의 유효기간이 지난 경우와 검증에 실패한 경우는 오류가 뜨지 때문에 catch의 error 부분에서 처리해줌
     let statusCode = 500;
     let errorMessage = '';
 
@@ -73,4 +71,4 @@ const needSignin = async (req, res, next) => {
   }
 };
 
-module.exports = needSignin;
+module.exports = isAuthenticated;

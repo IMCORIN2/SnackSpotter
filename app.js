@@ -1,17 +1,23 @@
 const express = require('express');
 const { SERVER_PORT, GENDER } = require("./constants/app.constant");
 const apiRouter = require("./routers/index")
+const votesRouter = require('./routers/votes.router.js'); 
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');  // CORS 모듈 추가
+
 const app = express();
 const port = 3000;
 app.use(express.json());
+app.use(cors());  // 모든 경로에 대해 CORS 허용
+
 app.use("/api", apiRouter);
+app.use('/votes', votesRouter);
 const staticPath = path.join(__dirname, 'assets');
 app.use('/assets', express.static(staticPath));
 
-
 console.log('Static Path:', staticPath);
+
 const reviews = [
   {
     id: 1,

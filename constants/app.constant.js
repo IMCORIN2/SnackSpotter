@@ -3,8 +3,8 @@ require("dotenv").config();
 const SERVER_PORT = process.env.SERVER_PORT;
 
 const GENDER = {
-    man: "man",
-    women: "women",
+    MALE: "MALE",
+    FEMALE: "FEMALE",
   };
   
   module.exports = {
