@@ -1,6 +1,6 @@
 const express = require('express');
 const { SERVER_PORT, GENDER } = require('./constants/app.constant');
-const { startCronJob } = require('./routers/cron');
+const { startCronJob } = require('./routers/cron.router');
 const apiRouter = require('./routers/index');
 const bodyParser = require('body-parser');
 const path = require('path');

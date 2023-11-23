@@ -2,11 +2,13 @@ const puppeteer = require('puppeteer');
 const { Products } = require('../models');
 
 let links = [];
+let categories = [];
 
 async function getLink() {
   try {
     await Products.destroy({ where: {} });
     links = [];
+    categories = [];
 
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
@@ -17,26 +19,33 @@ async function getLink() {
     );
 
     // 웹 페이지 열기
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 6; i++) {
       await page.goto(
         `https://cu.bgfretail.com/product/product.do?category=product&depth2=4&depth3=${i}`,
       );
 
       await page.reload();
-      console.log('한번', i);
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // prod_list 클래스를 가진 모든 요소 선택
       const prodListElements = await page.$$('.prod_list');
 
       for (prodListElement of prodListElements) {
-        console.log('두번', i);
-        const click = await prodListElement.$eval('div.prod_img', (element) =>
+        const link = await prodListElement.$eval('div.prod_img', (element) =>
           element.getAttribute('onclick').replace(/[^0-9]/g, ''),
         );
-        console.log(click, 'zz');
 
-        links.push(click);
+        const category = {
+          1: '간편식사',
+          2: '즉석요리',
+          3: '과자',
+          4: '아이스크림',
+          5: '식품',
+          6: '음료',
+        };
+
+        links.push(link);
+        categories.push(category[i]);
       }
     }
 
@@ -72,7 +81,14 @@ async function getProducts() {
         description.textContent.replace(/\s+/g, ' ').trim(),
       );
 
-      await Products.create({ id: i, image, name, price, description });
+      await Products.create({
+        id: i,
+        image,
+        name,
+        price,
+        description,
+        category: categories[i - 1],
+      });
     }
     await browser.close();
   } catch (error) {
