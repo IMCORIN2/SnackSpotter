@@ -1,9 +1,11 @@
 const express = require('express');
+const { SERVER_PORT, GENDER } = require("./constants/app.constant");
+const apiRouter = require("./routers/index")
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = 3000;
-
+app.use("/api", apiRouter);
 app.use(bodyParser.json());
 const staticPath = path.join(__dirname, 'assets');
 app.use('/assets', express.static(staticPath));
