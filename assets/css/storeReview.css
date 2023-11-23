@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #3366cc;
+    color: white;
+    text-align: center;
+    padding: 1em;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+form {
+    display: grid;
+    gap: 10px;
+}
+
+textarea {
+    width: 100%;
+}
+
+#reviewList {
+    margin-top: 20px;
+}
+
+.selected-button {
+    background-color: #3366cc; 
+    color: #ffffff; 
+    transform: scale(20); /* 선택된 버튼 크기를 20배로 확대 */
+    transition: transform 0.3s ease; /* 변화에 대한 부드러운 전환 효과 추가 */
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+button.selected-button {
+    padding: 12px;
+    transform: scale(1);
+}

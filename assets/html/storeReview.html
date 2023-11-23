@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>편의점 투어 리뷰</title>
+    <link rel="stylesheet" href="../css/storeReview.css">
+</head>
+<body>
+    <header>
+        <h1>편의점 투어 리뷰</h1>
+    </header>
+    <main>
+        <!-- 리뷰 폼 -->
+        <form id="reviewForm">
+            <label for="convenienceStore">편의점 선택:</label>
+            <select id="convenienceStore" name="convenienceStore">
+                <!-- 여러 편의점 옵션들 -->
+                <!--TODO: LOCATION TO ADD! LOCATION API NEEDED-->
+                <option value="gs25">GS25</option>
+                <option value="cu">CU</option>
+                <option value="7eleven">7-Eleven</option>
+                <!-- 추가적인 편의점 옵션들 -->
+            </select>
+            <div class="button-container">
+            <button type="button" class="option" onclick="vote('추천')" id="voteRecommend">&#128077</button>
+            <button type="button" class="option" onclick="vote('비추천')" id="voteNotRecommend">&#128078</button>
+            </div>
+            <div class="score-select">
+              <span class="score-select-star" data-value="1">⭐</span>
+              <span class="score-select-star" data-value="2">⭐</span>
+              <span class="score-select-star" data-value="3">⭐</span>
+              <span class="score-select-star" data-value="4">⭐</span>
+              <span class="score-select-star" data-value="5">⭐</span>
+            </div>
+
+            <label for="review">리뷰 작성:</label>
+            <textarea id="review" name="review" rows="4"></textarea>
+
+            <button type="button" onclick="submitReview()">리뷰 제출</button>
+        </form>
+
+        <!-- 리뷰 목록 -->
+<section id="reviewList">
+    <!-- 여기에 동적으로 리뷰가 추가됨 -->
+    <!-- 예시로 초기에 미리 작성된 리뷰가 있다고 가정합니다 -->
+    <div class="reviewItem">
+    </div>
+  </section>
+  
+    </main>
+
+    <script src="../js/storeReview.js"></script>
+</body>
+</html>
