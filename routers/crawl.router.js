@@ -10,7 +10,7 @@ async function getLink() {
     links = [];
     categories = [];
 
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     // 웹 사이트에게 브라우저처럼 보이기 위한 User-Agent 설정
@@ -25,12 +25,12 @@ async function getLink() {
       );
 
       await page.reload();
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await page.waitForTimeout(1000);
 
       // prod_list 클래스를 가진 모든 요소 선택
       const prodListElements = await page.$$('.prod_list');
 
-      for (prodListElement of prodListElements) {
+      for (const prodListElement of prodListElements) {
         const link = await prodListElement.$eval('div.prod_img', (element) =>
           element.getAttribute('onclick').replace(/[^0-9]/g, ''),
         );
@@ -52,25 +52,23 @@ async function getLink() {
     await browser.close();
   } catch (error) {
     console.error('에러 ---', error);
+    // 에러 처리 및 응답 로직 추가
   }
 }
 
 async function getProducts() {
   try {
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     // 웹 사이트에게 브라우저처럼 보이기 위한 User-Agent 설정
     await page.setUserAgent(
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
     );
-    for (let i = 1; i <= links.length; i++) {
-      await page.goto(
-        `https://cu.bgfretail.com/product/view.do?category=product&gdIdx=${
-          links[i - 1]
-        }`,
-      );
 
+    await Promise.all(links.map(async (link, index) => {
+      await page.goto(`https://cu.bgfretail.com/product/view.do?category=product&gdIdx=${link}`);
+    
       // prod_list 클래스를 가진 모든 요소 선택
       const image = await page.$eval('.prodDetail-w img', (image) => image.src);
       const name = await page.$eval('.tit', (name) => name.textContent.trim());
@@ -82,17 +80,19 @@ async function getProducts() {
       );
 
       await Products.create({
-        id: i,
+        id: index + 1,
         image,
         name,
         price,
         description,
-        category: categories[i - 1],
+        category: categories[index],
       });
-    }
+    }));
+
     await browser.close();
   } catch (error) {
     console.error('에러 ---', error);
+    // 에러 처리 및 응답 로직 추가
   }
 }
 
