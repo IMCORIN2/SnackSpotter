@@ -1,17 +1,28 @@
 const express = require('express');
+const cors = require('cors');
 const { SERVER_PORT, GENDER } = require("./constants/app.constant");
 const apiRouter = require("./routers/index")
 const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = 3000;
+
+// CORS 설정을 가장 먼저 적용
+const corsOptions = {
+  origin: 'http://127.0.0.1:5500', // 허용할 오리진
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use("/api", apiRouter);
+
 const staticPath = path.join(__dirname, 'assets');
 app.use('/assets', express.static(staticPath));
 
-
 console.log('Static Path:', staticPath);
+
 const reviews = [
   {
     id: 1,
