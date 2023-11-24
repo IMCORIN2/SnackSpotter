@@ -1,5 +1,6 @@
 @host = http://localhost:3000/api/auth
 
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTcwMDc1Njc5OCwiZXhwIjoxNzAwNzYwMzk4fQ.62uSyDN0EFmidLdj90RI1-t2DEOBnC4Em1RUg4ShNG0
 ### 회원가입
 POST {{host}}/signup
 Content-Type: application/json
@@ -22,3 +23,8 @@ Content-Type: application/json
     "email": "example3@naver.com",
     "password": "example3"
 }
+
+### 로그아웃
+DELETE {{host}}/logout
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
