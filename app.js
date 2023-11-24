@@ -1,10 +1,20 @@
 const express = require('express');
+<<<<<<< HEAD
+const { SERVER_PORT, GENDER } = require("./constants/app.constant");
+const apiRouter = require("./routers/index")
+const votesRouter = require('./routers/votes.router.js'); 
+const bodyParser = require('body-parser');
+const path = require('path');
+const cors = require('cors');  // CORS 모듈 추가
+
+=======
 const cors = require('cors');
 const apiRouter = require("./routers/index");
 const { startCronJob } = require('./routers/cron.router');
 const bodyParser = require('body-parser');
 const path = require('path');
 const axios = require('axios');
+>>>>>>> 0fa56033dc633fb3b7ddbe7f879b42a883efccc5
 const app = express();
 const { SERVER_PORT } = require("./constants/app.constant");
 
@@ -23,6 +33,8 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cors());  // 모든 경로에 대해 CORS 허용
+
 app.use("/api", apiRouter);
 
 // 정적 파일 제공
