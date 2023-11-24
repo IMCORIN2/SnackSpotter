@@ -1,17 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>편의점 군것질 투표</title>
-    <link rel="stylesheet" href="../css/vote.css">
-</head>
-<body>
-    <header><!-- This is where the common header will be inserted --></header>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SnackSpotter 상품 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+  <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
+    <div class="ms-5 col-md-3">
+      <a href="main.html" class="text-decoration-none title text-primary">
+        <p class="fs-30" style="font-weight: 700;">&#129384;SnackSpotter&#127829;</p>
+      </a>
+    </div>
+        <!-- Navbar added to the header -->
+        <nav class="navbar navbar-expand-md navbar-light">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="./community.html">Community</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="./products.html">Products</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="./cart.html">Cart</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <div class="col-md-3 text-end">
+          <div class="me-5 col-md-3 text-end" id="loginContainer">
+            <!-- 로그인 또는 로그아웃 버튼이 여기에 동적으로 추가. -->
+          </div>
+        </div>
+  </header>
+
+  <main>
     <div id="voting-app">
         <!-- The common header will replace this h1 tag -->
-        <h1>편의점 군것질 투표</h1>
         <div id="options">
             <button type="button" class="option" onclick="vote('option1')">
                 <img src="https://asset.m-gs.kr/prod/1032647306/1/550" alt="[농심] 민초 바나나킥 60g">
@@ -28,16 +62,14 @@
             <p id="option2-votes">아리랑 발효보리건빵: 0 표</p>
         </div>
     </div>
-    <script>
-        // Dynamically load the common header
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("./commonHeader.html")
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector("header").innerHTML = html;
-                });
-        });
-    </script>
-    <script src="../js/vote.js"></script>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/assets/js/products.js"></script>
+
 </body>
+<script src="../js/header.js"></script>
 </html>

@@ -1,78 +1,98 @@
 // 서버에서 데이터 가져오기
 async function fetchProducts() {
-    try {
-      const response = await axios.get('http://localhost:3000/api/products');
-      return response.data.data;
-    } catch (error) {
-      console.error('에러 ---', error);
-      throw error;
-    }
+  try {
+    const response = await axios.get('http://localhost:3000/api/products');
+    return response.data.data;
+  } catch (error) {
+    console.error('에러 ---', error);
+    throw error;
   }
-  
-  // 상품 카드 렌더링하기
-  async function renderProductCards() {
-    try {
-      const products = await fetchProducts();
-      const productCardsContainer = document.getElementById('productCards');
-      const modalsContainer = document.getElementById('modalsContainer');
-  
-      for (let i = 0; i < 3 && i < products.length; i++) {
-        const product = products[i];
-        const imageUrl = `https://tqklhszfkvzk6518638.cdn.ntruss.com/product/${product.image}`;
-        
-        productCardsContainer.innerHTML += `
-          <div class="col">
-            <div class="card h-100">
-              <img src="${imageUrl}" class="card-img-top" alt="${product.name}">
-              <div class="card-body">
-                <h5 class="card-title">${product.name}</h5>
-                <p class="card-text">${product.description}</p>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal${product.id}">
-                  View Details
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-  
-        // Dynamically create the corresponding modal for each product
-        createProductModal(product);
-      }
-    } catch (error) {
-      console.error('에러 ---', error);
-    }
-  }
-  
-  // 동적으로 상품 모달 생성하기
-  function createProductModal(product) {
-    const modalsContainer = document.getElementById('modalsContainer');
-  
-    modalsContainer.innerHTML += `
-      <!-- Modal for Product ${product.id} -->
-      <div class="modal fade" id="productModal${product.id}" tabindex="-1" aria-labelledby="productModalLabel${product.id}" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="productModalLabel${product.id}">Product Details</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <!-- Product details go here -->
-              <h2 class="text-primary">${product.name}</h2>
-              <p>Description: ${product.description}</p>
-              <p>Price: $${product.price}</p>
-              <!-- Add more details as needed -->
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Add to Cart</button>
-            </div>
+}
+
+// 상품 카드 렌더링하기
+async function renderProductCards() {
+  try {
+    const products = await fetchProducts();
+
+    // 상품 목록을 담을 Carousel 요소
+    const productCarousel = document.getElementById('productCarousel');
+    const productCardsContainer = document.getElementById('productCards');
+
+    // 기존 상품 카드 초기화
+    productCardsContainer.innerHTML = '';
+
+    // 상품을 Carousel에 추가
+    for (let i = 0; i < products.length; i++) {
+      const product = products[i];
+      const imageUrl = `https://tqklhszfkvzk6518638.cdn.ntruss.com/product/${product.image}`;
+
+      const productCard = document.createElement('div');
+      productCard.className = `carousel-item ${i === 0 ? 'active' : ''}`;
+
+      productCard.innerHTML = `
+        <div class="card h-100">
+          <img src="${imageUrl}" class="card-img-top" alt="${product.name}">
+          <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <p class="card-text">${product.description}</p>
+            <a href="#" class="btn btn-primary view-details" data-product-id="${product.id}">View Details</a>
           </div>
         </div>
-      </div>
-    `;
+      `;
+
+      // Carousel에 상품 카드 추가
+      productCardsContainer.appendChild(productCard);
+    }
+
+    // Carousel 초기화
+    const carousel = new bootstrap.Carousel(productCarousel, {
+      interval: 1500, // 1.5초 간격으로 슬라이딩
+      wrap: false // 루프 비활성화
+    });
+
+    // "다음" 버튼 클릭 시 이벤트 리스너 추가
+    const nextButton = document.querySelector('.carousel-control-next');
+    nextButton.addEventListener('click', function () {
+      const activeItem = productCarousel.querySelector('.carousel-item.active');
+      const nextItem = activeItem.nextElementSibling;
+
+      // 현재 활성화된 항목이 마지막 이미지일 경우, 다음에 보여줄 이미지를 처음 이미지로 설정
+      if (!nextItem) {
+        carousel.to(0); // 처음 이미지로 이동
+      }
+    });
+
+    // 마우스가 Carousel 영역에 들어가면 자동 슬라이딩을 비활성화
+    productCarousel.addEventListener('mouseenter', function () {
+      carousel.pause();
+    });
+
+    // 마우스가 Carousel 영역에서 나가면 다시 자동 슬라이딩을 활성화
+    productCarousel.addEventListener('mouseleave', function () {
+      carousel.cycle();
+    });
+
+    // 이벤트 위임을 사용하여 "View Details" 버튼 클릭 이벤트 처리
+    productCardsContainer.addEventListener('click', function (event) {
+      const target = event.target;
+
+      // "View Details" 버튼 클릭한 경우
+      if (target.classList.contains('view-details')) {
+        event.preventDefault();
+
+        // 클릭한 상품의 ID를 가져와서 출력
+        const productId = target.getAttribute('data-product-id');
+        console.log('View Details clicked for product ID:', productId);
+
+        // 상세 페이지로 이동
+        window.location.href = `detail.html?id=${productId}`;
+      }
+    });
+
+  } catch (error) {
+    console.error('에러 ---', error);
   }
-  
-  // 페이지 로드 시 자동으로 상품 카드 렌더링 함수 호출
-  window.onload = renderProductCards;
-  
+}
+
+// 페이지 로드 시 상품 카드 렌더링 함수 호출
+window.onload = renderProductCards;

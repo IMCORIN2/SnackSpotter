@@ -62,3 +62,22 @@
   color: #360000;
 }
 
+.carousel-item img{
+  max-height: 200px; 
+  object-fit: contain; 
+}
+
+.card-img-top {
+  max-height: 200px;
+  object-fit: cover; 
+}
+
+.card-body {
+  text-align: center; 
+}
+
+.card-body .btn {
+  margin-top: 10px; 
+  display: block; 
+  mx-auto: auto;
+}
