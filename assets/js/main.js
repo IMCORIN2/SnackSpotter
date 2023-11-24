@@ -18,8 +18,9 @@ async function fetchProducts() {
   
       for (let i = 0; i < 3 && i < products.length; i++) {
         const product = products[i];
-        const imageUrl = `https://tqklhszfkvzk6518638.cdn.ntruss.com/product/${product.category}/${product.image}`;
-  
+        const categoryEncoded = encodeURIComponent(product.category);
+        const imageUrl = `https://tqklhszfkvzk6518638.cdn.ntruss.com/product/${categoryEncoded}/${product.image}`;
+        
         productCardsContainer.innerHTML += `
           <div class="col">
             <div class="card h-100">
