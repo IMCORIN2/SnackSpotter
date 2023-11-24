@@ -1,5 +1,5 @@
 // 서버에서 데이터 가져오기
-async function fetchReviews()() {
+async function fetchReviews() {
   try {
     const response = await axios.get('http://localhost:3000/api/products');
     return response.data.data;
@@ -12,7 +12,7 @@ async function fetchReviews()() {
 // 상품 카드 렌더링하기
 async function renderReviewCards() {
   try {
-    const products = await fetchReviews()();
+    const products = await fetchReviews();
     const productCardsContainer = document.getElementById('productCardsContainer');
 
     for (let i = 0; i < products.length; i++) {
