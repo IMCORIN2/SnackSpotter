@@ -1,9 +1,11 @@
 const express = require("express")
 const usersRouter = express.Router();
-const isAuthenticated = require("../middlewares/authMiddleware")
+const isAuthenticated = require("../middlewares/authMiddleware");
+const verifyToken = require("../middlewares/verifyToken.middleware")
 
-usersRouter.get("/profile", isAuthenticated, (req, res)=>{
+usersRouter.get("/profile", isAuthenticated, verifyToken, (req, res)=>{
     try {
+        
         const me = res.locals.user;
 
         return res.status(200).json({
