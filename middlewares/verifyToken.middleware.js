@@ -17,11 +17,6 @@ const verifyToken = async (req, res, next) => {
       });
     }
 
-    const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
-
-    const { userId } = decodedPayload;
-    const user = (await Users.findByPk(userId)).toJSON();
-
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -32,9 +27,12 @@ const verifyToken = async (req, res, next) => {
     delete user.password;
     res.locals.user = user;
 
-    const refreshToken = await RefreshTokens.findOne({
-      where: { userId: user.id },
-    });
+    const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
+
+    const { userId } = decodedPayload;
+    const user = (await Users.findByPk(userId)).toJSON();
+
+    const refreshToken = RefreshTokens.findOne({ where: { userId: user.id } });
 
     if (!accessToken && !refreshToken) {
       return res.status(400).json({
@@ -63,7 +61,7 @@ const verifyToken = async (req, res, next) => {
     if (accessToken && refreshToken) {
       return next();
     }
-  } catch (error) {
+  } catch {
     console.error(error.message);
     // 토큰의 유효기간이 지난 경우와 검증에 실패한 경우는 오류가 뜨기 때문에
     // catch의 error 부분에서 처리해줌
