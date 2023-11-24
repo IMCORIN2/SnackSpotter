@@ -7,16 +7,19 @@
     <link rel="stylesheet" href="../css/vote.css">
 </head>
 <body>
+    <header><!-- This is where the common header will be inserted --></header>
+
     <div id="voting-app">
+        <!-- The common header will replace this h1 tag -->
         <h1>편의점 군것질 투표</h1>
         <div id="options">
             <button type="button" class="option" onclick="vote('option1')">
                 <img src="https://asset.m-gs.kr/prod/1032647306/1/550" alt="[농심] 민초 바나나킥 60g">
-              </button>
+            </button>
               
-              <button type="button" class="option" onclick="vote('option2')">
+            <button type="button" class="option" onclick="vote('option2')">
                 <img src="https://asset.m-gs.kr/prod/1015360318/1/550" alt="아리랑 발효보리건빵(60g) x 30개입(1박스)/ 군대건빵">
-              </button>
+            </button>
               
         </div>
         <div id="result">
@@ -25,6 +28,16 @@
             <p id="option2-votes">아리랑 발효보리건빵: 0 표</p>
         </div>
     </div>
+    <script>
+        // Dynamically load the common header
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("./commonHeader.html")
+                .then(response => response.text())
+                .then(html => {
+                    document.querySelector("header").innerHTML = html;
+                });
+        });
+    </script>
     <script src="../js/vote.js"></script>
 </body>
 </html>
