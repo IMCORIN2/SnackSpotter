@@ -159,9 +159,7 @@ authRouter.delete("/logout", needSignin, verifyToken, (req, res) => {
     const authorizationHeader = req.headers.authorization;
     res.clearCookie();
     
-    // HTTP GET 메서드에서 destroy를 사용할 수 있나?
     // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나
-    // 생각해보니 DB에 넣어놓고 비교할 이유가 있나? db에서 삭제해도 refresh토큰은 그대로 남아있는 것 아닌가?
     // db에 있는 refresh 토큰값과 그냥 가지고 있는 refresh 토큰 값을 비교해서 refresh 토큰이 존재한다고 조건을 걸면 되는건가
     const refreshToken = RefreshTokens.destroy({ where : { userId : user.id}});
 
