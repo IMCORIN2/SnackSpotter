@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SnackSpotter</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+  <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
+    <div class="ms-5 col-md-3">
+  <a href="main.html" class="text-decoration-none title text-primary">
+                <p class="fs-30">&#129384;SnackSpotter&#127829;</p>
+            </a>
+    </div>
+
+    <div class="me-5 col-md-3 text-end">
+      <button id='loginBtn' type="button" class="btn btn-outline-primary me-2"
+        onclick="window.location.href='login.html'">Login</button>
+      <button id='cartBtn' type="button" class="btn btn-primary" onclick="window.location.href='myPage.html'">myPage</button>
+     </div>
+  </header>
+  <main>
+    <div class="container my-5">
+      <h2 class="text-primary mb-4">
+        <a href="products.html" class="text-decoration-none text-primary"onclick="window.location.href='product.html'">Featured Products</a>
+      </h2>
+
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Product Cards go here -->
+        <div id="productCards" class="row row-cols-1 row-cols-md-3 g-4">
+        </div>
+      </div>
+
+      <!-- Product Detail Modals Container -->
+      <div id="modalsContainer">
+      </div>
+
+      <div class="container my-5">
+        <h2 class="text-primary mb-4">
+          <a href="community.html" class="text-decoration-none text-primary"onclick="window.location.href='posts.html'">Popular Posts</a>
+        </h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          <!-- Popular Post Cards go here -->
+          <!-- Popular Post 1 -->
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Post 1</h5>
+                <p class="card-text">Content of Post 1.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Popular Post 2 -->
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Post 2</h5>
+                <p class="card-text">Content of Post 2.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Popular Post 3 -->
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Post 3</h5>
+                <p class="card-text">Content of Post 3.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/assets/js/main.js"></script>
+
+</body>
+
+</html>

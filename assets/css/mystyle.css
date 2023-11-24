@@ -109,3 +109,32 @@
           cursor: pointer;
       }
 
+      .input-group>input {
+        border-left-color: white;
+      }
+        body {
+              font-family: Arial, sans-serif;
+              text-align: center;
+              margin: 50px;
+          }
+  
+          .foodDisplay {
+              font-size: 24px;
+              margin-bottom: 20px;
+          }
+  
+          .recommendButton {
+              padding: 10px 20px;
+              font-size: 16px;
+              cursor: pointer;
+          }
+  
+          .imageContainer img {
+              width: 150px;
+              height: 150px;
+          }
+          .carouselslide {
+            width: 500px;
+            height: 40px;
+  
+          }

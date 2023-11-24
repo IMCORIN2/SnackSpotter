@@ -1,11 +1,8 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
-
-const { GENDER } = require('../constants/app.constant.js');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Products', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,21 +13,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      email: {
+      description: {
+        allowNull: false,
+        type: Sequelize.TEXT,
+      },
+      image: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      password: {
+      price: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      gender: {
+      category: {
         allowNull: false,
-        type: Sequelize.ENUM(...Object.values(GENDER)),
-      },
-      birthday: {
-        allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Products');
   },
 };
