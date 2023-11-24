@@ -66,7 +66,7 @@ async function getProducts() {
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
     );
 
-    await Promise.all(links.map(async (link, index) => {
+    const products = await Promise.all(links.map(async (link, index) => {
       await page.goto(`https://cu.bgfretail.com/product/view.do?category=product&gdIdx=${link}`);
     
       // prod_list 클래스를 가진 모든 요소 선택
@@ -82,8 +82,8 @@ async function getProducts() {
       const description = await page.$eval('.prodExplain li', (description) =>
         description.textContent.replace(/\s+/g, ' ').trim(),
       );
-      
 
+      // 데이터베이스에 저장
       await Products.create({
         id: index + 1,
         image,
@@ -92,6 +92,16 @@ async function getProducts() {
         description,
         category: categories[index],
       });
+
+      // 제품 정보 반환
+      return {
+        id: index + 1,
+        image,
+        name,
+        price,
+        description,
+        category: categories[index],
+      };
     }));
 
     await browser.close();
