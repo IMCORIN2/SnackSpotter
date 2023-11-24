@@ -1,20 +1,33 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ProductStores', {
+    await queryInterface.createTable('StoreReviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      productId: {
+      storeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      storeId: {
+      userId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      image: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      rating: {
+        type: Sequelize.INTEGER,  
+        allowNull: false,
+      },
+      comment: {
+        type: Sequelize.TEXT, 
         allowNull: false,
       },
       createdAt: {
@@ -27,24 +40,24 @@ module.exports = {
       },
     });
 
-    await queryInterface.addConstraint('ProductStores', {
-      fields: ['productId'],
+    await queryInterface.addConstraint('StoreReviews', {
+      fields: ['storeId'],
       type: 'foreign key',
-      name: 'fk_product_id'+ Date.now(),
+      name: 'fk_store_id_' + Date.now(),
       references: {
-        table: 'Products',
+        table: 'Stores',
         field: 'id',
       },
       onDelete: 'cascade',
       onUpdate: 'cascade',
     });
-
-    await queryInterface.addConstraint('ProductStores', {
-      fields: ['storeId'],
+    
+    await queryInterface.addConstraint('StoreReviews', {
+      fields: ['userId'],
       type: 'foreign key',
-      name: 'fk_store_id' + Date.now(),
+      name: 'fk_user_id_' + Date.now(),
       references: {
-        table: 'Stores',
+        table: 'Users',
         field: 'id',
       },
       onDelete: 'cascade',
@@ -53,6 +66,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('ProductStores');
+    await queryInterface.dropTable('StoreReviews');
   },
 };

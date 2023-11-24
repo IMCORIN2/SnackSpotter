@@ -4,9 +4,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Reviews extends Model {
     static associate(models) {
-      Reviews.belongsTo(models.Products, { foreignKey: 'productId', as: 'product' });
+      Reviews.belongsTo(models.Stores, { foreignKey: 'storeId', as: 'store' });
       Reviews.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
-    }
+  }
   }
 
   Reviews.init(
@@ -17,7 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      productId: {
+      storeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -25,12 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      image: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
       comment: {
         type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
         allowNull: false,
       },
       createdAt: {
