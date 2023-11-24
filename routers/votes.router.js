@@ -4,7 +4,7 @@ const db = require('../models/index');
 const { Products, Votes } = db;
 const isAuthenticated = require('../middlewares/authMiddleware.js');
 
-// 투표 생성 라우트 (로그인이 필요한 경우 isAuthenticated 미들웨어 적용)
+// 투표 생성 라우트 
 router.post('/', isAuthenticated, async (req, res) => {
   try {
     // 클라이언트로부터 받은 투표 처리 로직

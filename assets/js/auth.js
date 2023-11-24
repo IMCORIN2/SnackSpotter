@@ -83,9 +83,7 @@ function sign_up() {
       console.log(result);
       if (result.success) {
         alert('로그인 성공!');
-        // 로그인에 성공하면 토큰을 저장하고 원하는 페이지로 이동
         localStorage.setItem('token', result.data.accessToken);
-        window.location.replace('./main.html');
       } else {
         alert(`로그인 실패: ${result.message}`);
       }

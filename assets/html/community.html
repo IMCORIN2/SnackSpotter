@@ -7,85 +7,47 @@
   <title>Community Page</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <link href="../css/main.css" rel="stylesheet">
-  <link href="../css/search.css" rel="stylesheet">
-  <link href="../css/slidebar.css" rel="stylesheet">
-  <link href="../css/card.css" rel="stylesheet">
-  <link href="../css/autoSearch.css" rel="stylesheet">
   <link href="../css/community.css" rel="stylesheet">
 </head>
 
 <body>
   <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
     <div class="ms-5 col-md-3">
-      <a href="main.html" class="text-decoration-none title text-primary">
-  <a href="main.html" class="text-decoration-none title text-primary">
-                <p class="fs-30">&#129384;SnackSpotter&#127829;</p>
-            </a>
-      </a>
+        <a href="main.html" class="text-decoration-none title text-primary">
+          <p class="fs-30" style="font-weight: 700;">&#129384;SnackSpotter&#127829;</p>
+        </a>
     </div>
+    <!-- Navbar added to the header -->
     <nav class="navbar navbar-expand-md navbar-light">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Community</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    <div class="me-5 col-md-3 text-end">
-      <button id='loginBtn' type="button" class="btn btn-outline-primary me-2">Login</button>
-      <a href="cart.html" type="button" class="btn btn-primary">Cart</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="./community.html">Community</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="./products.html">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="./cart.html">Cart</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="col-md-3 text-end">
+      <div class="me-5 col-md-3 text-end" id="loginContainer">
+        <!-- 로그인 또는 로그아웃 버튼이 여기에 동적으로 추가. -->
+      </div>
     </div>
   </header>
-
-  <main>
-    <div class="search-container">
-      <div class="search_box border border-primary">
-        <input class="search_input" type="text" id="search" autocomplete="off" placeholder="검색어를 입력하세요.">
-        <button type="button" id="search-button" class="search_button btn btn-primary">검색</button>
-      </div>
-      <div class="autocomplete-container">
-        <div class="autocomplete-card">
-          <div class="autocomplete"></div>
-        </div>
-      </div>
-    </div>
-    <div class="search_line">
-      <p class="search_text"><span class="search_keyword text-primary"></span>의 검색 결과</p>
-      <div class="search_sort_button">
-        <span><button type="button" id="search_sort_button" class="vote_average_btn btn btn-primary">별점순</button></span>
-        <span><button type="button" id="release_date_button" class="release_date_btn btn btn-primary">최신순</button></span>
-        <span><button type="button" id="vote_count_button" class="vote_count_btn btn btn-primary">조회순</button></span>
-      </div>
-    </div>
-
-    <div class="search_result album py-5 bg-body-tertiary">
-      <div class="container">
-        <div class="search_list row row-cols-1 row-cols-md-3 g-4">
-          <!-- Community Post Cards go here -->
-        </div>
-      </div>
-      <div class="no_results">
-        검색 결과가 나오지 않습니다
-      </div>
-    </div>
-  </main>
 <!-- 투표 인기 게시물 -->
 <section class="pop vote-pop">
     <span class="slide_title text-primary">투표 인기 게시물</span>
     <div class="d-flex justify-content-end">
-    <a href="vote.html" class="write btn btn-primary"style="margin-right: 50px;">글 적기</a>
+      <button id='submitPostBtn' type="button" class="btn btn-outline-primary me-2" onclick="submitPost()">글 적기</button>
     </div>
     <div class="slide_box pop_slide">
       <div class="slide_list">
@@ -124,7 +86,7 @@
   <section class="pop convenience-review-pop">
     <span class="slide_title text-primary">편의점 투어 리뷰 인기 게시물</span>
     <div class="d-flex justify-content-end">
-    <a href="storeReview.html" class="write btn btn-primary"style="margin-right: 50px;">글 적기</a>
+      <button id='submitPostBtn' type="button" class="btn btn-outline-primary me-2" onclick="submitPost()">글 적기</button>
     </div>
     <div class="slide_box pop_slide">
         
@@ -159,25 +121,12 @@
       <button type="button" class="next btn btn-outline-primary">></button>
     </div>
   </section>
-  
-
-
-  <div class="hide_block"></div>
-
-  <script type='module' src='../js/firebase/authService.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
   </script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="../js/secret.js"></script>
-  <script src="../js/abuses.js"></script>
-  <script src="../js/validation.js"></script>
-  <script type='module' src="../js/search.js"></script>
-  <script type='module' src="../js/playSlide.js"></script>
-  <script type='module' src="../js/popSlide.js"></script>
-  <script src="../js/autoSearch.js"></script>
-  <script src="../js/card.js"></script>
-  <script src="../js/community.js"></script>
+  <script defer src="../js/community.js"></script>
+  <script src="../js/header.js"></script>
 </body>
 
 </html>
