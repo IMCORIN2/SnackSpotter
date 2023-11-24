@@ -70,7 +70,11 @@ async function getProducts() {
       await page.goto(`https://cu.bgfretail.com/product/view.do?category=product&gdIdx=${link}`);
     
       // prod_list 클래스를 가진 모든 요소 선택
-      const image = await page.$eval('.prodDetail-w img', (image) => image.src);
+      const imageElement = await page.$('.prodDetail-w img');
+      const imageSrc = await page.evaluate((element) => element.src, imageElement);
+      const image = imageSrc.split('/').pop();
+      const category = categories[index];
+      
       const name = await page.$eval('.tit', (name) => name.textContent.trim());
       const price = await page.$eval('.prodPrice p span', (price) =>
         price.textContent.trim(),
@@ -78,6 +82,7 @@ async function getProducts() {
       const description = await page.$eval('.prodExplain li', (description) =>
         description.textContent.replace(/\s+/g, ' ').trim(),
       );
+      
 
       await Products.create({
         id: index + 1,
@@ -90,6 +95,7 @@ async function getProducts() {
     }));
 
     await browser.close();
+    return products; // 이미지 URL을 포함한 제품 객체 배열을 반환
   } catch (error) {
     console.error('에러 ---', error);
     // 에러 처리 및 응답 로직 추가
