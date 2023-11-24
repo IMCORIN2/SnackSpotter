@@ -48,8 +48,20 @@
         <a href="products.html" class="text-decoration-none text-primary"
           onclick="window.location.href='product.html'">Featured Products</a>
       </h2>
+  <!-- 상품 목록 Carousel -->
+  <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner" id="productCards"></div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">이전</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">다음</span>
+    </button>
+  </div>
 
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+  <div id="productCardsContainer" class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Product Cards go here -->
         <div id="productCards" class="row row-cols-1 row-cols-md-3 g-4">
         </div>

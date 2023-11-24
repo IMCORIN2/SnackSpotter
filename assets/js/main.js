@@ -13,32 +13,58 @@ async function fetchProducts() {
 async function renderProductCards() {
   try {
     const products = await fetchProducts();
-    const productCardsContainer = document.getElementById('productCards');
-    const modalsContainer = document.getElementById('modalsContainer');
 
-    for (let i = 0; i < 3 && i < products.length; i++) {
+    // 상품 목록을 담을 Carousel 요소
+    const productCarousel = document.getElementById('productCarousel');
+    const productCardsContainer = document.getElementById('productCards');
+
+    // 기존 상품 카드 초기화
+    productCardsContainer.innerHTML = '';
+
+    // 상품을 Carousel에 추가
+    for (let i = 0; i < products.length; i++) {
       const product = products[i];
       const imageUrl = `https://tqklhszfkvzk6518638.cdn.ntruss.com/product/${product.image}`;
 
-      productCardsContainer.innerHTML += `
-        <div class="col">
-          <div class="card h-100">
-            <img src="${imageUrl}" class="card-img-top" alt="${product.name}">
-            <div class="card-body">
-              <h5 class="card-title">${product.name}</h5>
-              <p class="card-text">${product.description}</p>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#productModal${product.id}">
-                View Details
-              </button>
-            </div>
+      const productCard = document.createElement('div');
+      productCard.className = `carousel-item ${i === 0 ? 'active' : ''}`;
+
+      productCard.innerHTML = `
+        <div class="card h-100">
+          <img src="${imageUrl}" class="card-img-top" alt="${product.name}">
+          <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <p class="card-text">${product.description}</p>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+              data-bs-target="#productModal${product.id}">
+              View Details
+            </button>
           </div>
         </div>
       `;
 
       // 동적으로 해당 제품에 대한 모달 생성
       createProductModal(product);
+
+      // Carousel에 상품 카드 추가
+      productCardsContainer.appendChild(productCard);
     }
+
+    // Carousel 초기화
+    const carousel = new bootstrap.Carousel(productCarousel, {
+      interval: 1500, // 1.5초 간격으로 슬라이딩
+      wrap: false // 처음과 끝에서 더 이상 슬라이드하지 않음
+    });
+
+    // 마우스가 Carousel 영역에 들어가면 자동 슬라이딩을 비활성화
+    productCarousel.addEventListener('mouseenter', function () {
+      carousel.pause();
+    });
+
+    // 마우스가 Carousel 영역에서 나가면 다시 자동 슬라이딩을 활성화
+    productCarousel.addEventListener('mouseleave', function () {
+      carousel.cycle();
+    });
   } catch (error) {
     console.error('에러 ---', error);
   }
@@ -112,8 +138,7 @@ if (isLoggedIn) {
   });
 
   buttonContainer.appendChild(myPageButton);
-}
-else {
+} else {
   const registerBtn = document.createElement('button');
   registerBtn.type = 'button';
   registerBtn.className = 'btn btn-primary me-2';
@@ -122,10 +147,10 @@ else {
     window.location.href = 'register.html';
   });
 
-  buttonContainer.appendChild(registerBtn); 
+  buttonContainer.appendChild(registerBtn);
 }
 
 loginContainer.appendChild(buttonContainer);
 
-// 상품 카드 렌더링 함수 호출
-renderProductCards();
+// 페이지 로드 시 상품 카드 렌더링 함수 호출
+window.onload = renderProductCards;
