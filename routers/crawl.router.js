@@ -78,8 +78,6 @@ async function getProducts() {
         imageElement,
       );
       const image = imageSrc.split('/').pop();
-      const category = categories[index];
-
       const name = await page.$eval('.tit', (name) => name.textContent.trim());
       const price = await page.$eval('.prodPrice p span', (price) =>
         price.textContent.trim(),
