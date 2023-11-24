@@ -37,6 +37,11 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+if (db.Votes && db.Products && db.Users) {
+  db.Votes.belongsTo(db.Products, { foreignKey: 'productId', as: 'productVote' });
+  db.Votes.belongsTo(db.Users, { foreignKey: 'userId', as: 'userVote' });
+}
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

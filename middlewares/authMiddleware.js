@@ -3,7 +3,7 @@ const { JWT_ACCESS_TOKEN_SECRET } = require('../constants/security.constant');
 const db = require('../models/index.js');
 const { Users } = db;
 
-const needSignin = async (req, res, next) => {
+const isAuthenticated = async (req, res, next) => {
   try {
     const authorizationHeaders = req.headers.authorization;
     if (!authorizationHeaders) {
@@ -23,4 +23,4 @@ const needSignin = async (req, res, next) => {
   }
 };
 
-module.exports = needSignin;
+module.exports = isAuthenticated;
