@@ -25,8 +25,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api", apiRouter);
 
-app.set('view engine', 'ejs');
-
 // 정적 파일 제공
 const staticPath = path.join(__dirname, 'assets');
 app.use('/assets', express.static(staticPath));
