@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -42,7 +43,7 @@ module.exports = {
     await queryInterface.addConstraint('ProductStores', {
       fields: ['storeId'],
       type: 'foreign key',
-      name: 'fk_store_id' + Date.now(),
+      name: 'fk_store_id'+ Date.now(),
       references: {
         table: 'Stores',
         field: 'id',
