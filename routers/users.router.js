@@ -14,7 +14,7 @@ usersRouter.get("/profile", isAuthenticated, verifyToken, async (req, res)=>{
         return res.status(200).json({
             success: true,
             message: "내 정보 조회에 성공했습니다.",
-            data: {},
+            data: {name , email},
         })
     } catch (error) {
         console.error(error);
