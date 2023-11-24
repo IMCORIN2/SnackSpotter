@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SnackSpotter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
+        <div class="ms-5 col-md-3">
+  <a href="main.html" class="text-decoration-none title text-primary">
+                <p class="fs-30">&#129384;SnackSpotter&#127829;</p>
+            </a>
+        </div>
+
+        <div class="me-5 col-md-3 text-end">
+            <button id='loginBtn' type="button" class="btn btn-outline-primary me-2"
+                onclick="window.location.href='login.html'">Login</button>
+            <button id='cartBtn' type="button" class="btn btn-primary" onclick="window.location.href='cart.html'">Cart</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- 마이페이지 섹션 -->
+        <div id="myPageSection" class="container my-5">
+            <h2 class="text-primary mb-4">마이페이지</h2>
+            
+            <!-- 사용자 세부 정보 -->
+            <div>
+                <h3>사용자 세부 정보</h3>
+                <p><strong>이름:</strong> John Doe</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+                <!-- 기타 사용자 정보를 여기에 추가하세요 -->
+                <button class="btn btn-primary" onclick="editUserInfo()">수정하기</button>
+            </div>
+
+            <!-- 주문 정보 -->
+            <div class="mt-4">
+                <h3>주문 정보</h3>
+                <ul>
+                    <li>주문 번호: 12345</li>
+                    <li>상품: Snack A, Snack B, Snack C</li>
+                    <li>주문 일시: 2023-11-24 14:30:00</li>
+                    <!-- 기타 주문 정보를 여기에 추가하세요 -->
+                </ul>
+                <button class="btn btn-primary" onclick="editOrderInfo()">수정하기</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+
+    <script>
+        function editUserInfo() {
+            // 사용자 정보 수정 로직을 추가하세요.
+            alert('사용자 정보를 수정합니다.');
+        }
+
+        function editOrderInfo() {
+            // 주문 정보 수정 로직을 추가하세요.
+            alert('주문 정보를 수정합니다.');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,17 +1,15 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  class Products extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Reviews extends Model {
     static associate(models) {
-      // define association here
+      Votes.belongsTo(models.Products, { foreignKey: 'productId', as: 'product' });
+      Votes.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
     }
   }
-  Products.init(
+
+  Votes.init(
     {
       id: {
         allowNull: false,
@@ -19,25 +17,21 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      name: {
+      productId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        type: DataTypes.STRING,
       },
-      description: {
+      rating: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      comment: {
         type: DataTypes.TEXT,
-      },
-      image: {
         allowNull: false,
-        type: DataTypes.STRING,
       },
-      price: {
+      userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        type: DataTypes.STRING,
-      },
-      category: {
-        allowNull: false,
-        type: DataTypes.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -52,8 +46,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Products',
-    },
+      modelName: 'Reviews',
+    }
   );
-  return Products;
+
+  return Reviews;
 };
