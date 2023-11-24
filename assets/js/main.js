@@ -94,56 +94,5 @@ async function renderProductCards() {
   }
 }
 
-// 페이지 로드 시 로그인 버튼 동적으로 추가
-const isLoggedIn = localStorage.getItem('token') !== null;
-const loginContainer = document.getElementById('loginContainer');
-const buttonContainer = document.createElement('div');
-buttonContainer.className = 'd-flex';
-
-// 로그인 버튼 추가
-const loginButton = document.createElement('button');
-loginButton.type = 'button';
-loginButton.className = 'btn btn-outline-primary me-2';
-
-if (isLoggedIn) {
-  loginButton.innerText = 'logout';
-  loginButton.addEventListener('click', function () {
-    localStorage.removeItem('token');
-    window.location.reload();
-  });
-} else {
-  loginButton.innerText = 'login';
-  loginButton.addEventListener('click', function () {
-    window.location.href = 'login.html';
-  });
-}
-
-buttonContainer.appendChild(loginButton);
-
-// myPage 버튼 추가
-if (isLoggedIn) {
-  const myPageButton = document.createElement('button');
-  myPageButton.type = 'button';
-  myPageButton.className = 'btn btn-primary me-2';
-  myPageButton.innerText = 'my page';
-  myPageButton.addEventListener('click', function () {
-    window.location.href = 'myPage.html';
-  });
-
-  buttonContainer.appendChild(myPageButton);
-} else {
-  const registerBtn = document.createElement('button');
-  registerBtn.type = 'button';
-  registerBtn.className = 'btn btn-primary me-2';
-  registerBtn.innerText = 'signup';
-  registerBtn.addEventListener('click', function () {
-    window.location.href = 'register.html';
-  });
-
-  buttonContainer.appendChild(registerBtn);
-}
-
-loginContainer.appendChild(buttonContainer);
-
 // 페이지 로드 시 상품 카드 렌더링 함수 호출
 window.onload = renderProductCards;
