@@ -35,16 +35,10 @@ async function renderProductCards() {
           <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.description}</p>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-              data-bs-target="#productModal${product.id}">
-              View Details
-            </button>
+            <a href="#" class="btn btn-primary view-details" data-product-id="${product.id}">View Details</a>
           </div>
         </div>
       `;
-
-      // 동적으로 해당 제품에 대한 모달 생성
-      createProductModal(product);
 
       // Carousel에 상품 카드 추가
       productCardsContainer.appendChild(productCard);
@@ -53,7 +47,19 @@ async function renderProductCards() {
     // Carousel 초기화
     const carousel = new bootstrap.Carousel(productCarousel, {
       interval: 1500, // 1.5초 간격으로 슬라이딩
-      wrap: false // 처음과 끝에서 더 이상 슬라이드하지 않음
+      wrap: false // 루프 비활성화
+    });
+
+    // "다음" 버튼 클릭 시 이벤트 리스너 추가
+    const nextButton = document.querySelector('.carousel-control-next');
+    nextButton.addEventListener('click', function () {
+      const activeItem = productCarousel.querySelector('.carousel-item.active');
+      const nextItem = activeItem.nextElementSibling;
+
+      // 현재 활성화된 항목이 마지막 이미지일 경우, 다음에 보여줄 이미지를 처음 이미지로 설정
+      if (!nextItem) {
+        carousel.to(0); // 처음 이미지로 이동
+      }
     });
 
     // 마우스가 Carousel 영역에 들어가면 자동 슬라이딩을 비활성화
@@ -65,40 +71,27 @@ async function renderProductCards() {
     productCarousel.addEventListener('mouseleave', function () {
       carousel.cycle();
     });
+
+    // 이벤트 위임을 사용하여 "View Details" 버튼 클릭 이벤트 처리
+    productCardsContainer.addEventListener('click', function (event) {
+      const target = event.target;
+
+      // "View Details" 버튼 클릭한 경우
+      if (target.classList.contains('view-details')) {
+        event.preventDefault();
+
+        // 클릭한 상품의 ID를 가져와서 출력
+        const productId = target.getAttribute('data-product-id');
+        console.log('View Details clicked for product ID:', productId);
+
+        // 상세 페이지로 이동
+        window.location.href = `detail.html?id=${productId}`;
+      }
+    });
+
   } catch (error) {
     console.error('에러 ---', error);
   }
-}
-
-// 동적으로 상품 모달 생성하기
-function createProductModal(product) {
-  const modalsContainer = document.getElementById('modalsContainer');
-
-  modalsContainer.innerHTML += `
-    <!-- Product ${product.id}에 대한 모달 -->
-    <div class="modal fade" id="productModal${product.id}" tabindex="-1"
-      aria-labelledby="productModalLabel${product.id}" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="productModalLabel${product.id}">Product Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <!-- 제품 상세 정보가 여기에 들어갑니다 -->
-            <h2 class="text-primary">${product.name}</h2>
-            <p>Description: ${product.description}</p>
-            <p>Price: $${product.price}</p>
-            <!-- 필요에 따라 더 많은 정보 추가 -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
 }
 
 // 페이지 로드 시 로그인 버튼 동적으로 추가

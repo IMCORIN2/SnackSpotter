@@ -24,9 +24,11 @@ router.get('/', async (req, res) => {
       message: '상품 목록 조회했습니다',
       data: products,
     });
+    return; // 응답을 보낸 후 함수 종료
   } catch (error) {
     console.error('에러 ---', error);
     res.status(500).json({ success: false, message: '오류가 발생했습니다' });
+    return; // 응답을 보낸 후 함수 종료
   }
 });
 
@@ -42,6 +44,7 @@ router.get('/:productId', async (req, res) => {
       res
         .status(404)
         .json({ success: false, message: '상품 조회에 실패하였습니다' });
+      return; // 응답을 보낸 후 함수 종료
     }
 
     res.status(200).json({
@@ -49,9 +52,11 @@ router.get('/:productId', async (req, res) => {
       message: '상품 조회 성공했습니다',
       data: product,
     });
+    return; // 응답을 보낸 후 함수 종료
   } catch (error) {
     console.error('에러 ---', error);
     res.status(500).json({ success: false, message: '오류가 발생했습니다' });
+    return; // 응답을 보낸 후 함수 종료
   }
 });
 
@@ -73,9 +78,11 @@ router.get('/html', async (req, res) => {
       .join('');
 
     res.send(html);
+    return; // 응답을 보낸 후 함수 종료
   } catch (error) {
     console.error('에러 ---', error);
     res.status(500).json({ success: false, message: '오류가 발생했습니다' });
+    return; // 응답을 보낸 후 함수 종료
   }
 });
 
