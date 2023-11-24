@@ -35,7 +35,9 @@ async function renderProductCards() {
           <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.description}</p>
-            <a href="#" class="btn btn-primary view-details" data-product-id="${product.id}">View Details</a>
+            <div class="d-flex justify-content-center">
+          <a href="#" class="btn btn-primary view-details" data-product-id="${product.id}">View Details</a>
+        </div>
           </div>
         </div>
       `;
