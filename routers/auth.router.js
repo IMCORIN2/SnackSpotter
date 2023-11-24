@@ -1,15 +1,47 @@
-const express = require('express');
+const express = require("express");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../models/index.js');
 const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN }= require('../constants/security.constant.js');
 const { Users } = db;
 const authRouter = express.Router();
+
+// 이메일 중복 확인
+authRouter.post('/check-email', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // 이미 등록된 이메일인지 확인
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(200).json({
+        success: true,
+        message: '이메일 중복 확인에 성공했습니다.',
+        data: { isEmailAvailable: false }, 
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: '이메일 중복 확인에 성공했습니다.',
+        data: { isEmailAvailable: true }, 
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
+    });
+  }
+});
+
 // 회원가입
 authRouter.post('/signup', async (req, res) => {
   try {
     const { name, email, password, passwordConfirm, gender, birthday } =
       req.body;
+      console.log(name, email, password, passwordConfirm, gender, birthday )
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -73,7 +105,7 @@ authRouter.post('/signup', async (req, res) => {
         birthday,
       })
     ).toJSON();
-    delete newUser.passord;
+    delete newUser.password;
 
     return res.status(201).json({
       success: true,
@@ -102,10 +134,10 @@ authRouter.post('/signin', async (req, res) => {
     }
 
     const user = (await Users.findOne({ where: { email } }))?.toJSON();
-    const hashedPassword = user.password;
+    const hashedPassword = user?.password; // optional chaining을 사용하여 'user'가 정의되어 있을 때만 'password'를 읽어옴
     const ispasswordMatched = bcrypt.compareSync(password, hashedPassword);
-
     const isCorrectUser = user && ispasswordMatched;
+
 
     if (!isCorrectUser) {
       return res.status(401).json({

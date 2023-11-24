@@ -1,8 +1,8 @@
 const express = require("express")
 const usersRouter = express.Router();
-const needSignin = require("../middlewares/need-signin.middleware")
+const isAuthenticated = require("../middlewares/authMiddleware")
 
-usersRouter.get("/profile", needSignin, (req, res)=>{
+usersRouter.get("/profile", isAuthenticated, (req, res)=>{
     try {
         const me = res.locals.user;
 
