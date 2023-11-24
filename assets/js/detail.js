@@ -90,16 +90,18 @@ if (productId) {
       const response = await fetch('http://localhost:3000/api/cart', {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
           productId: product.id,
-          quantity,
+          quantity: quantity,
         }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      const result = await response.json();
+
+      if (result.success) {
         console.log(
           `${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`,
           data,

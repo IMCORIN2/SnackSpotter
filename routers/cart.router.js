@@ -33,22 +33,22 @@ router.get('/', isAuthenticated, verifyToken, async (req, res) => {
 
 // 장바구니에 물품 추가
 router.post('/', isAuthenticated, verifyToken, async (req, res) => {
-  const { productId, quantity } = req.body;
+  try {
+    const { productId, quantity } = req.body;
 
-  console.log(res.locals.user.id);
-  console.log(productId);
-  console.log(quantity);
+    await Carts.create({
+      userId: res.locals.user.id,
+      productId,
+      quantity,
+    });
 
-  await Carts.create({
-    userId: res.locals.user.id,
-    productId,
-    quantity,
-  });
-
-  res.status(200).json({
-    success: true,
-    message: '장바구니에 담기 성공하였습니다',
-  });
+    res.status(200).json({
+      success: true,
+      message: '장바구니에 담기 성공하였습니다',
+    });
+  } catch (error) {
+    console.error('에러 --- ', error);
+  }
 });
 
 module.exports = router;
