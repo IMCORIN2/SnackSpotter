@@ -1,5 +1,5 @@
 // 서버에서 데이터 가져오기
-async function fetchProducts() {
+async function fetchReviews()() {
   try {
     const response = await axios.get('http://localhost:3000/api/products');
     return response.data.data;
@@ -10,9 +10,9 @@ async function fetchProducts() {
 }
 
 // 상품 카드 렌더링하기
-async function renderProductCards() {
+async function renderReviewCards() {
   try {
-    const products = await fetchProducts();
+    const products = await fetchReviews()();
     const productCardsContainer = document.getElementById('productCardsContainer');
 
     for (let i = 0; i < products.length; i++) {
@@ -38,4 +38,4 @@ async function renderProductCards() {
 }
 
 // 페이지 로드 시 자동으로 상품 카드 렌더링 함수 호출
-window.onload = renderProductCards;
+window.onload = renderReviewCards;
