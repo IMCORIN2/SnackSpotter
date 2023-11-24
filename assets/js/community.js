@@ -8,7 +8,7 @@ function createReview() {
   }
 
   // 로그인이 되어 있으면 포스트 작성 페이지로 이동
-  window.location.href = './storeReview.html';
+  window.location.href = './storeReviews.html';
 }
 
 

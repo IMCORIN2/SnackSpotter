@@ -11,6 +11,31 @@ const isAuthenticated = async (req, res, next) => {
         message: '인증 정보가 없습니다.',
       });
     }
+
+    const [tokenType, accessToken] = authorizationHeaders.split(' ');
+
+    if (tokenType !== 'Bearer') {
+      return res.status(400).json({
+        success: false,
+        message: '지원하지 않는 인증 방식입니다.',
+      });
+    }
+
+    // 토큰이 유효한지 확인
+    const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
+
+    const { userId } = decodedPayload;
+    const user = await Users.findByPk(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: '존재하지 않는 사용자입니다.',
+      });
+    }
+
+    req.user = user; // 사용자 정보를 req.user에 할당
+
     next();
   } catch (error) {
     console.error(error);
@@ -20,6 +45,7 @@ const isAuthenticated = async (req, res, next) => {
     });
   }
 };
+
 
 const verifyToken = async (req, res, next) => {
     try{
@@ -46,7 +72,7 @@ const verifyToken = async (req, res, next) => {
           }
       
           delete user.password;
-          res.locals.user = user;
+          req.user = user;
 
         const refreshToken = RefreshTokens.findOne({where:{ userId : user.id }})
 
