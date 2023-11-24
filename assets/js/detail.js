@@ -90,11 +90,10 @@ if (productId) {
       const response = await fetch('http://localhost:3000/api/cart', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-          productName: product.name,
+          productId: product.id,
           quantity,
         }),
       });

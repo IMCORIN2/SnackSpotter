@@ -29,12 +29,12 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      productName: {
+      productId: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         references: {
           model: 'Products',
-          key: 'name',
+          key: 'id',
         },
       },
       quantity: {

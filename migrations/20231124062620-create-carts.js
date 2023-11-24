@@ -17,12 +17,12 @@ module.exports = {
           key: 'id',
         },
       },
-      productName: {
+      productId: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Products',
-          key: 'name',
+          key: 'id',
         },
       },
       quantity: {
