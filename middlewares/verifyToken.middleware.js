@@ -1,62 +1,70 @@
 const jwt = require('jsonwebtoken');
-const { JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN } = require('../constants/security.constant');
+const {
+  JWT_ACCESS_TOKEN_SECRET,
+  JWT_ACCESS_TOKEN_EXPIRES_IN,
+} = require('../constants/security.constant');
 const db = require('../models/index.js');
 const { Users, RefreshTokens } = db;
 
 const verifyToken = async (req, res, next) => {
-    try{
-        const [tokenType, accessToken] = req.headers.authorization?.split(' ');
-        
-        if (tokenType !== 'Bearer') {
-            return res.status(400).json({
-              success: false,
-              message: '지원하지 않는 인증 방식입니다.',
-            });
-          }
+  try {
+    const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
-          const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
+    if (tokenType !== 'Bearer') {
+      return res.status(400).json({
+        success: false,
+        message: '지원하지 않는 인증 방식입니다.',
+      });
+    }
 
-          const { userId } = decodedPayload;
-          const user = (await Users.findByPk(userId)).toJSON();
+    const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
 
-          if (!user) {
-            return res.status(400).json({
-              success: false,
-              message: '존재하지 않는 사용자입니다.',
-            });
-          }
-      
-          delete user.password;
-          res.locals.user = user;
+    const { userId } = decodedPayload;
+    const user = (await Users.findByPk(userId)).toJSON();
 
-        const refreshToken = RefreshTokens.findOne({where:{ userId : user.id }})
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: '존재하지 않는 사용자입니다.',
+      });
+    }
 
-        if(!accessToken && !refreshToken) {
-            return res.status(400).json({
-                success: false,
-                message: '인증되지 않은 사용자입니다.',
-              });
-        }
-        
-        if(!accessToken && refreshToken) {
-            const accessToken = jwt.sign({ userId: user.id }, JWT_ACCESS_TOKEN_SECRET,{
-                expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN
-              });
-          
-              const expires = new Date();
-              expires.setHours(expires.getHours() + 12);
-          
-              res.cookie("authorization",`Bearer + ${accessToken}`,{
-                  "expires" : expires,
-              })
-        }
+    delete user.password;
+    res.locals.user = user;
 
-        if(accessToken && refreshToken) {
-            return next();
-        }
+    const refreshToken = await RefreshTokens.findOne({
+      where: { userId: user.id },
+    });
 
-    } catch (error) {
-        console.error(error.message);
+    if (!accessToken && !refreshToken) {
+      return res.status(400).json({
+        success: false,
+        message: '인증되지 않은 사용자입니다.',
+      });
+    }
+
+    if (!accessToken && refreshToken) {
+      const accessToken = jwt.sign(
+        { userId: user.id },
+        JWT_ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+        },
+      );
+
+      const expires = new Date();
+      expires.setHours(expires.getHours() + 12);
+
+      res.cookie('authorization', `Bearer + ${accessToken}`, {
+        expires: expires,
+      });
+    }
+
+    if (accessToken && refreshToken) {
+      return next();
+    }
+  } catch (error) {
+    console.error(error.message);
     // 토큰의 유효기간이 지난 경우와 검증에 실패한 경우는 오류가 뜨기 때문에
     // catch의 error 부분에서 처리해줌
     let statusCode = 500;
@@ -80,7 +88,7 @@ const verifyToken = async (req, res, next) => {
       success: false,
       message: errorMessage,
     });
-    }
-}
+  }
+};
 
 module.exports = verifyToken;

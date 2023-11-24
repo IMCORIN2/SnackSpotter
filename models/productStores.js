@@ -4,8 +4,14 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class ProductStores extends Model {
     static associate(models) {
-        ProductStores.belongsTo(models.Products, { foreignKey: 'productId', as: 'product' });
-        ProductStores.belongsTo(models.Stores, { foreignKey: 'storeId', as: 'store' });
+      ProductStores.belongsTo(models.Products, {
+        foreignKey: 'productId',
+        as: 'product',
+      });
+      ProductStores.belongsTo(models.Stores, {
+        foreignKey: 'storeId',
+        as: 'store',
+      });
     }
   }
 
@@ -39,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'ProductStores',
-    }
+    },
   );
 
   return ProductStores;

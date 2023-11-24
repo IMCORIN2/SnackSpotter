@@ -57,7 +57,7 @@
       });
 
       function get_goods() {
-        $("#goodsList").empty();
+        $('#goodsList').empty();
         getCarts(function (c) {
           for (let i = 0; i < c.length; i++) {
             const item = c[i];
@@ -89,7 +89,7 @@
                                 item.name
                               }</p>
                               <span class="card-price col text-right">$${number2decimals(
-                                item.price
+                                item.price,
                               )}</span>
                           </div>
                           <div class="form-group row mr-0">
@@ -105,18 +105,18 @@
                                   .map(
                                     (i) =>
                                       `<option ${
-                                        i === quantity ? "selected" : ""
-                                      } value="${i}">${i}</option>`
+                                        i === quantity ? 'selected' : ''
+                                      } value="${i}">${i}</option>`,
                                   )
-                                  .join(" ")}
+                                  .join(' ')}
                               </select>
                           </div>
                       </div>
                   </div>
               </div>
           </div>`;
-        $("#goodsList").append(htmlTemp);
-        $(`#numberSelect-${item["goodsId"]}`).change(function () {
+        $('#goodsList').append(htmlTemp);
+        $(`#numberSelect-${item['goodsId']}`).change(function () {
           addToCart(item.goodsId, $(this).val(), function () {
             getSum();
           });
@@ -130,20 +130,20 @@
       }
 
       function getSum() {
-        let $prices = $(".card-price");
-        let $selects = $("select");
+        let $prices = $('.card-price');
+        let $selects = $('select');
         if ($prices.length != $selects.length) {
-          console.log("길이가 맞지 않습니다.");
+          console.log('길이가 맞지 않습니다.');
           return;
         }
         let sum = 0;
         for (let i = 0; i < $prices.length; i++) {
-          let price = parseFloat($($prices[i]).text().replace("$", ""));
+          let price = parseFloat($($prices[i]).text().replace('$', ''));
           let count = parseInt($($selects[i]).val());
           sum += price * count;
         }
-        $("#priceSum").text("$" + number2decimals(sum));
-        sessionStorage.setItem("priceSum", number2decimals(sum));
+        $('#priceSum').text('$' + number2decimals(sum));
+        sessionStorage.setItem('priceSum', number2decimals(sum));
       }
 
       function number2decimals(num) {
@@ -221,9 +221,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div class="modal-body">
-                    정말로 로그아웃 하시겠습니까?
-                  </div>
+                  <div class="modal-body">정말로 로그아웃 하시겠습니까?</div>
                   <div class="modal-footer">
                     <button
                       type="button"

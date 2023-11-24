@@ -1,13 +1,11 @@
 const express = require("express");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
 const db = require('../models/index.js');
 const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN, JWT_REFRESH_TOKEN_SECRET, JWT_REFRESH_TOKEN_EXPIRES_IN  }= require('../constants/security.constant.js');
 const isAuthenticated = require('../middlewares/authMiddleware.js');
 const verifyToken = require("../middlewares/verifyToken.middleware.js");
-const { Users } = db;
-const { RefreshTokens } = db;
+const { Users , RefreshTokens } = db;
 const authRouter = express.Router();
 
 // 이메일 중복 확인
@@ -190,7 +188,7 @@ authRouter.post('/signin', async (req, res) => {
   }
 });
 
-authRouter.delete("/logout", isAuthenticated, verifyToken, (req, res) => {
+authRouter.delete("/logout", isAuthenticated, verifyToken, async (req, res) => {
   try {
     const user = res.locals.user;
     const authorizationHeader = req.headers.authorization;
@@ -198,7 +196,7 @@ authRouter.delete("/logout", isAuthenticated, verifyToken, (req, res) => {
     
     // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나
     // db에 있는 refresh 토큰값과 그냥 가지고 있는 refresh 토큰 값을 비교해서 refresh 토큰이 존재한다고 조건을 걸면 되는건가
-    const refreshToken = RefreshTokens.destroy({ where : { userId : user.id}});
+    const refreshToken = await RefreshTokens.destroy({ where : { userId : user.id}});
 
     res.status(200).json({
       success: true,

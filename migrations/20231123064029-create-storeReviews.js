@@ -18,12 +18,16 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      image: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       rating: {
-        type: Sequelize.INTEGER,  
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       comment: {
-        type: Sequelize.TEXT, 
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       createdAt: {
@@ -47,7 +51,7 @@ module.exports = {
       onDelete: 'cascade',
       onUpdate: 'cascade',
     });
-    
+
     await queryInterface.addConstraint('StoreReviews', {
       fields: ['userId'],
       type: 'foreign key',

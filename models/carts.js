@@ -1,15 +1,19 @@
 'use strict';
 const { Model } = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
-  class StoreReviews extends Model {
+  class Carts extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
-        StoreReviews.belongsTo(models.Stores, { foreignKey: 'storeId', as: 'store' });
-        StoreReviews.belongsTo(models.Users, { foreignKey: 'userId', as: 'user' });
+      // define association here
+      this.belongsTo(models.Users, { as: 'user' });
+      this.belongsTo(models.Products, { as: 'product' });
     }
   }
-
-  StoreReviews.init(
+  Carts.init(
     {
       id: {
         allowNull: false,
@@ -17,25 +21,25 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      storeId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       userId: {
-        type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      rating: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
-      image: {
-        allowNull: true,
+      productName: {
+        allowNull: false,
         type: DataTypes.STRING,
+        references: {
+          model: 'Products',
+          key: 'name',
+        },
       },
-      comment: {
-        type: DataTypes.TEXT,
+      quantity: {
         allowNull: false,
+        type: DataTypes.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -50,9 +54,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'storeReviews',
-    }
+      modelName: 'Carts',
+    },
   );
-
-  return StoreReviews;
+  return Carts;
 };

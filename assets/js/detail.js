@@ -7,7 +7,9 @@ if (productId) {
   // 서버에서 특정 제품 가져오기
   async function fetchProductDetails() {
     try {
-      const response = await axios.get(`http://localhost:3000/api/products/${productId}`);
+      const response = await axios.get(
+        `http://localhost:3000/api/products/${productId}`,
+      );
       return response.data.data;
     } catch (error) {
       console.error('에러 ---', error);
@@ -80,10 +82,35 @@ if (productId) {
   }
 
   // 장바구니에 제품 추가 로직
-  function addToCart(product, quantity) {
+  async function addToCart(product, quantity) {
     // 제품을 장바구니에 추가하는 로직 구현
     // 로컬 스토리지에 장바구니 항목 저장이나 서버에 요청을 보낼 수 있음
-    console.log(`${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`);
+
+    try {
+      const response = await fetch('http://localhost:3000/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          productName: product.name,
+          quantity,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(
+          `${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`,
+          data,
+        );
+      } else {
+        console.error('Error:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   // 직접 구매 로직
