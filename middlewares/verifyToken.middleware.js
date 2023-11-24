@@ -17,6 +17,7 @@ const verifyToken = async (req, res, next) => {
       });
     }
 
+    //TODO: try catch => 기간 만료된 경우에만 재발급 (에러 네입&설명 로그로 날짜 찾기)
     const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
 
     const { userId } = decodedPayload;

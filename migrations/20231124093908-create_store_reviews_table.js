@@ -19,15 +19,15 @@ module.exports = {
         allowNull: false,
       },
       image: {
-        allowNull: true,
         type: Sequelize.STRING,
+        allowNull: true,
       },
       rating: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER,  
         allowNull: false,
       },
       comment: {
-        type: Sequelize.TEXT,
+        type: Sequelize.TEXT, 
         allowNull: false,
       },
       createdAt: {
@@ -43,7 +43,7 @@ module.exports = {
     await queryInterface.addConstraint('StoreReviews', {
       fields: ['storeId'],
       type: 'foreign key',
-      name: 'fk_store_id_'+ Date.now(),
+      name: 'fk_store_id_' + Date.now(),
       references: {
         table: 'Stores',
         field: 'id',
@@ -51,7 +51,7 @@ module.exports = {
       onDelete: 'cascade',
       onUpdate: 'cascade',
     });
-
+    
     await queryInterface.addConstraint('StoreReviews', {
       fields: ['userId'],
       type: 'foreign key',

@@ -1,9 +1,8 @@
 'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('StoreReviews', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,13 +17,13 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      image: {
-        allowNull: true,
-        type: Sequelize.STRING,
-      },
       rating: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      image: {
+        allowNull: true,
+        type: Sequelize.STRING,
       },
       comment: {
         type: Sequelize.TEXT,
@@ -33,17 +32,18 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
     });
-
-    await queryInterface.addConstraint('StoreReviews', {
+    await queryInterface.addConstraint('Reviews', {
       fields: ['storeId'],
       type: 'foreign key',
-      name: 'fk_store_id_'+ Date.now(),
+      name: 'FK_reviews_storeId'+ Date.now(),
       references: {
         table: 'Stores',
         field: 'id',
@@ -51,11 +51,10 @@ module.exports = {
       onDelete: 'cascade',
       onUpdate: 'cascade',
     });
-
-    await queryInterface.addConstraint('StoreReviews', {
+    await queryInterface.addConstraint('Reviews', {
       fields: ['userId'],
       type: 'foreign key',
-      name: 'fk_user_id_' + Date.now(),
+      name: 'FK_reviews_userId'+ Date.now(),
       references: {
         table: 'Users',
         field: 'id',
@@ -65,7 +64,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('StoreReviews');
-  },
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Reviews');
+  }
 };

@@ -1,33 +1,20 @@
 'use strict';
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('StoreReviews', {
+    await queryInterface.createTable('ProductStores', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      productId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       storeId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      image: {
-        allowNull: true,
-        type: Sequelize.STRING,
-      },
-      rating: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      comment: {
-        type: Sequelize.TEXT,
         allowNull: false,
       },
       createdAt: {
@@ -40,24 +27,24 @@ module.exports = {
       },
     });
 
-    await queryInterface.addConstraint('StoreReviews', {
-      fields: ['storeId'],
+    await queryInterface.addConstraint('ProductStores', {
+      fields: ['productId'],
       type: 'foreign key',
-      name: 'fk_store_id_'+ Date.now(),
+      name: 'fk_product_id'+ Date.now(),
       references: {
-        table: 'Stores',
+        table: 'Products',
         field: 'id',
       },
       onDelete: 'cascade',
       onUpdate: 'cascade',
     });
 
-    await queryInterface.addConstraint('StoreReviews', {
-      fields: ['userId'],
+    await queryInterface.addConstraint('ProductStores', {
+      fields: ['storeId'],
       type: 'foreign key',
-      name: 'fk_user_id_' + Date.now(),
+      name: 'fk_store_id' + Date.now(),
       references: {
-        table: 'Users',
+        table: 'Stores',
         field: 'id',
       },
       onDelete: 'cascade',
@@ -66,6 +53,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('StoreReviews');
+    await queryInterface.dropTable('ProductStores');
   },
 };
