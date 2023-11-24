@@ -6,10 +6,10 @@ const bodyParser = require('body-parser');
 const morgan = require("morgan");
 const path = require('path');
 const cookieParser = require('cookie-parser');
-app.use(cookieParser());
 const axios = require('axios');
 const app = express();
 const { SERVER_PORT } = require("./constants/app.constant");
+app.use(cookieParser());
 
 // CORS 설정
 const corsOptions = {
@@ -27,8 +27,6 @@ app.use((req, res, next) => {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cors());  // 모든 경로에 대해 CORS 허용
-
->>>>>>> 98e41a97ff7d4ab149f32e1d45bf3454897ec543
 app.use("/api", apiRouter);
 
 // 정적 파일 제공

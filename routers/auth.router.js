@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const db = require('../models/index.js');
 const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN, JWT_REFRESH_TOKEN_SECRET, JWT_REFRESH_TOKEN_EXPIRES_IN  }= require('../constants/security.constant.js');
-const needSignin = require('../middlewares/need-signin.middleware.js');
+const isAuthenticated = require('../middlewares/authMiddleware.js');
 const verifyToken = require("../middlewares/verifyToken.middleware.js");
 const { Users } = db;
 const { RefreshTokens } = db;
@@ -183,7 +183,7 @@ authRouter.post('/signin', async (req, res) => {
   }
 });
 
-authRouter.delete("/logout", needSignin, verifyToken, (req, res) => {
+authRouter.delete("/logout", isAuthenticated, verifyToken, (req, res) => {
   try {
     const user = res.locals.user;
     const authorizationHeader = req.headers.authorization;
