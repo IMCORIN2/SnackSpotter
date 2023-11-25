@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const db = require('../models/index.js');
 const { PASSWORD_HASH_SALT_ROUNDS, JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN, JWT_REFRESH_TOKEN_SECRET, JWT_REFRESH_TOKEN_EXPIRES_IN  }= require('../constants/security.constant.js');
 const isAuthenticated = require('../middlewares/authMiddleware.js');
-const verifyToken = require("../middlewares/verifyToken.middleware.js");
 const { Users } = db;
 const { RefreshTokens } = db;
 const authRouter = express.Router();
@@ -16,7 +15,7 @@ authRouter.post('/check-email', async (req, res) => {
     const { email } = req.body;
 
     // 이미 등록된 이메일인지 확인
-    const existingUser = await User.findOne({ email });
+    const existingUser = await Users.findOne({ email });
 
     if (existingUser) {
       return res.status(200).json({
@@ -45,7 +44,7 @@ authRouter.post('/signup', async (req, res) => {
   try {
     const { name, email, password, passwordConfirm, gender, birthday } =
       req.body;
-      console.log(name, email, password, passwordConfirm, gender, birthday )
+
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -190,7 +189,7 @@ authRouter.post('/signin', async (req, res) => {
   }
 });
 
-authRouter.delete("/logout", isAuthenticated, verifyToken, (req, res) => {
+authRouter.delete("/logout", isAuthenticated, (req, res) => {
   try {
     const user = res.locals.user;
     const authorizationHeader = req.headers.authorization;
