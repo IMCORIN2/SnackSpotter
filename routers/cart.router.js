@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const isAuthenticated = require('../middlewares/authMiddleware.js');
-const verifyToken = require('../middlewares/verifyToken.middleware.js');
 
 const { Carts, Products } = require('../models');
 
 // 장바구니 조회
-router.get('/', isAuthenticated, verifyToken, async (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
   const carts = await Carts.findAll({
-    where: { userId: res.locals.user.id },
+    where: { userId: req.user.id },
     attributes: ['productId', 'quantity'],
   });
 
@@ -35,12 +34,12 @@ router.get('/', isAuthenticated, verifyToken, async (req, res) => {
 });
 
 // 장바구니에 물품 추가
-router.post('/', isAuthenticated, verifyToken, async (req, res) => {
+router.post('/', isAuthenticated, async (req, res) => {
   try {
     const { productId, quantity } = req.body;
 
     const existProduct = await Carts.findOne({
-      where: { userId: res.locals.user.id, productId: productId },
+      where: { userId: req.user.id, productId: productId },
       attributes: ['quantity'],
     });
 
@@ -49,11 +48,11 @@ router.post('/', isAuthenticated, verifyToken, async (req, res) => {
     if (existProduct) {
       await Carts.update(
         { quantity: quantity + existProduct.quantity },
-        { where: { userId: res.locals.user.id, productId: productId } },
+        { where: { userId: req.user.id, productId: productId } },
       );
     } else {
       await Carts.create({
-        userId: res.locals.user.id,
+        userId: req.user.id,
         productId,
         quantity,
       });
@@ -69,12 +68,15 @@ router.post('/', isAuthenticated, verifyToken, async (req, res) => {
 });
 
 // 장바구니의 물품 삭제
-router.delete('/', isAuthenticated, verifyToken, async (req, res) => {
+router.delete('/', isAuthenticated, async (req, res) => {
   const { productId } = req.body;
+
+  console.log(req.user.id);
+  console.log(productId);
 
   try {
     const deleteProduct = await Carts.findOne({
-      where: { userId: res.locals.user.id, productId },
+      where: { userId: req.user.id, productId },
     });
     if (deleteProduct) {
       await deleteProduct.destroy();
@@ -91,9 +93,9 @@ router.delete('/', isAuthenticated, verifyToken, async (req, res) => {
   }
 });
 
-router.delete('/all', isAuthenticated, verifyToken, async (req, res) => {
+router.delete('/all', isAuthenticated, async (req, res) => {
   try {
-    await Carts.destroy({ where: { userId: res.locals.user.id } });
+    await Carts.destroy({ where: { userId: req.user.id } });
     res.json({ success: true, message: '상품을 삭제하였습니다' });
   } catch (error) {
     res
@@ -103,7 +105,7 @@ router.delete('/all', isAuthenticated, verifyToken, async (req, res) => {
 });
 
 // 장바구니의 물품 수정
-router.put('/', isAuthenticated, verifyToken, async (req, res) => {
+router.put('/', isAuthenticated, async (req, res) => {
   const { id, quantity } = req.body;
 
   try {

@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { JWT_ACCESS_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXPIRES_IN } = require('../constants/security.constant');
+const {
+  JWT_ACCESS_TOKEN_SECRET,
+  JWT_ACCESS_TOKEN_EXPIRES_IN,
+} = require('../constants/security.constant');
 const db = require('../models/index.js');
 const { Users, RefreshTokens } = db;
 
@@ -71,8 +74,8 @@ const verifyToken = async (req, res, next) => {
     }
 
     delete user.password;
-    res.locals.user = user;
-    console.log("verifyTokenUser",res.locals.user)
+    req.user = user;
+    console.log('verifyTokenUser', req.user);
 
     const refreshToken = await RefreshTokens.findOne({
       where: { userId: user.id },
@@ -106,7 +109,7 @@ const verifyToken = async (req, res, next) => {
       return next();
     }
   } catch (error) {
-    console.error("error message=>",error.message);
+    console.error('error message=>', error.message);
     // 토큰의 유효기간이 지난 경우와 검증에 실패한 경우는 오류가 뜨기 때문에
     // catch의 error 부분에서 처리해줌
     let statusCode = 500;
@@ -115,14 +118,17 @@ const verifyToken = async (req, res, next) => {
     switch (error.message) {
       case 'jwt expired':
         const authorizationHeader = req.headers.authorization;
-        console.log("authorizationHeader=>",authorizationHeader)
-        const decodedPayload = jwt.verify(refreshToken, JWT_ACCESS_TOKEN_SECRET);
-        console.log(decodedPayload)
+        console.log('authorizationHeader=>', authorizationHeader);
+        const decodedPayload = jwt.verify(
+          refreshToken,
+          JWT_ACCESS_TOKEN_SECRET,
+        );
+        console.log(decodedPayload);
         res.clearCookie();
         // const refreshToken = await RefreshTokens.destroy({
         //   where: { userId: user.id },
         // });
-        console.log("here")
+        console.log('here');
         const accessToken = jwt.sign(
           { userId: user.id },
           JWT_ACCESS_TOKEN_SECRET,
@@ -130,7 +136,7 @@ const verifyToken = async (req, res, next) => {
             expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
           },
         );
-          console.log("here")
+        console.log('here');
         const expires = new Date();
         expires.setHours(expires.getHours() + 12);
 
