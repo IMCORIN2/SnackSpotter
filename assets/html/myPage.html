@@ -51,16 +51,17 @@
             
             <!-- 사용자 세부 정보 -->
             <div>
-                <h3>사용자 세부 정보</h3>
-                <p><strong>이름:</strong> John Doe</p>
-                <p><strong>Email:</strong> john.doe@example.com</p>
+              <h3 class="text-primary">사용자 세부 정보</h3>
+                <p id="userName"><strong>이름:</strong> Loading...</p>
+                <p id="userEmail"><strong>Email:</strong> Loading...</p>
                 <!-- 기타 사용자 정보를 여기에 추가하세요 -->
-                <button class="btn btn-primary" onclick="editUserInfo()">수정하기</button>
+                <button class="btn btn-primary" onclick="window.location.href='modifyProfile.html'">수정하기</button>
+                <button class="btn btn-outline-primary" onclick="deleteProfile()">프로필 삭제</button>
             </div>
 
             <!-- 주문 정보 -->
             <div class="mt-4">
-                <h3>주문 정보</h3>
+                <h3 class="text-primary">주문 정보</h3>
                 <ul>
                     <li>주문 번호: 12345</li>
                     <li>상품: Snack A, Snack B, Snack C</li>
@@ -75,20 +76,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/assets/js/main.js"></script>
-
-    <script>
-        function editUserInfo() {
-            // 사용자 정보 수정 로직을 추가하세요.
-            alert('사용자 정보를 수정합니다.');
-        }
-
-        function editOrderInfo() {
-            // 주문 정보 수정 로직을 추가하세요.
-            alert('주문 정보를 수정합니다.');
-        }
-    </script>
       <script src="../js/header.js"></script>
+      <script src="../js/myPage.js"></script>
 </body>
 
 </html>
