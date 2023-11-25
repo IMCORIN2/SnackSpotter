@@ -1,3 +1,10 @@
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  const expires = 'expires=' + date.toUTCString();
+  document.cookie = name + '=' + value + '; ' + expires + '; path=/';
+}
+
 async function checkEmail() {
     const email = document.getElementById('inputEmail').value;
   
@@ -57,6 +64,8 @@ function sign_up() {
       console.log(result);
       if (result.success) {
         alert('회원가입 성공!');
+        setCookie('token', result.data.accessToken, 7);
+        window.history.back();
       } else {
         alert(`회원가입 실패: ${result.message}`);
       }
@@ -83,7 +92,9 @@ function sign_up() {
       console.log(result);
       if (result.success) {
         alert('로그인 성공!');
-        localStorage.setItem('token', result.data.accessToken);
+        //localStorage.setItem('token', result.data.accessToken);
+        setCookie('token', result.data.accessToken, 7);
+        window.history.back();
       } else {
         alert(`로그인 실패: ${result.message}`);
       }
