@@ -3,7 +3,6 @@ const cors = require('cors');
 const apiRouter = require("./routers/index");
 const { startCronJob } = require('./routers/cron.router');
 const bodyParser = require('body-parser');
-const morgan = require("morgan");
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const axios = require('axios');
@@ -26,6 +25,7 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());  // 모든 경로에 대해 CORS 허용
 app.use("/api", apiRouter);
 

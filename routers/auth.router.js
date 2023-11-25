@@ -154,23 +154,27 @@ authRouter.post('/signin', async (req, res) => {
 
     const expires = new Date();
     expires.setHours(expires.getHours() + 12);
-
+    console.log("here")
     res.cookie("authorization",`Bearer + ${accessToken}`,{
         "expires" : expires,
     })
+
 
     const refreshToken = jwt.sign({ userId: user.id }, JWT_REFRESH_TOKEN_SECRET,{
       expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN
     })
 
+    res.cookie('authorization', `Bearer + ${refreshToken}`, {
+      expires: expires,
+    });
+
     const newRefreshToken = (
       await RefreshTokens.create({ value: refreshToken, userId: user.id })
     ).toJSON();
-
     return res.status(200).json({
       success: true,
       message: '로그인에 성공했습니다.',
-      data: { accessToken },
+      data: { accessToken, refreshToken},
     });
   } catch (error) {
     console.error(error);
@@ -187,8 +191,6 @@ authRouter.delete("/logout", isAuthenticated, verifyToken, async (req, res) => {
     const authorizationHeader = req.headers.authorization;
     res.clearCookie();
     
-    // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나
-    // db에 있는 refresh 토큰값과 그냥 가지고 있는 refresh 토큰 값을 비교해서 refresh 토큰이 존재한다고 조건을 걸면 되는건가
     const refreshToken = await RefreshTokens.destroy({ where : { userId : user.id}});
 
     res.status(200).json({

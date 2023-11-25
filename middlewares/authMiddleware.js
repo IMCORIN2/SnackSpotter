@@ -5,6 +5,7 @@ const { Users } = db;
 
 const isAuthenticated = async (req, res, next) => {
   try {
+    console.log("heelo")
     const authorizationHeaders = req.headers.authorization;
     if (!authorizationHeaders) {
       return res.status(400).json({
