@@ -117,7 +117,7 @@ async function renderReviewCards() {
     const reviews = await fetchReviews();
     const reviewCardsContainer = document.getElementById('reviewCardsContainer');
 
-    for (let i = 0; i < reviews.length; i++) {
+    for (let i = 0; i < 3; i++) {
       const review = reviews[i];
       const imageUrl = review.image ? `http://localhost:3000/storeReviews/${review.image}` : '';
       const storeName = review.store ? review.store.name : 'No Store Name';
