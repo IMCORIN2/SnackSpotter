@@ -1,67 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>편의점 투어 리뷰</title>
-    <link rel="stylesheet" href="../css/storeReviews.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SnackSpotter 편의점 투어 리뷰</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
+
 <body>
-    <header><!-- This is where the common header will be inserted --></header>
-    
-    <main>
-        <!-- 리뷰 폼 -->
+    <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
+        <div class="ms-5 col-md-3">
+            <a href="main.html" class="text-decoration-none title text-primary">
+                <p class="fs-30" style="font-weight: 700;">&#129384;SnackSpotter&#127829;</p>
+            </a>
+        </div>
+        <!-- Navbar added to the header -->
+        <nav class="navbar navbar-expand-md navbar-light">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="./community.html">Community</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="./products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="./cart.html">Cart</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="col-md-3 text-end">
+            <div class="me-5 col-md-3 text-end" id="loginContainer">
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-primary ms-2" onclick="logout()">Logout</button>
+                    <a href="myPage.html" type="button" class="btn btn-primary ms-2">MyPage</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <h2 class="text-primary mb-4">편의점 리뷰 작성</h2>
         <form id="reviewForm">
-            <label for="convenienceStore">편의점 선택:</label>
-            <select id="convenienceStore" name="convenienceStore">
-                <!-- 여러 편의점 옵션들 -->
-                <!--TODO: LOCATION TO ADD! LOCATION API NEEDED-->
-                <option value="gs25">GS25</option>
-                <option value="cu">CU</option>
-                <option value="7eleven">7-Eleven</option>
-                <!-- 추가적인 편의점 옵션들 -->
-            </select>
-            <div class="button-container">
-            <button type="button" class="option" onclick="vote('추천')" id="voteRecommend">&#128077</button>
-            <button type="button" class="option" onclick="vote('비추천')" id="voteNotRecommend">&#128078</button>
-            </div>
-            <div class="score-select">
-              <span class="score-select-star" data-value="1">⭐</span>
-              <span class="score-select-star" data-value="2">⭐</span>
-              <span class="score-select-star" data-value="3">⭐</span>
-              <span class="score-select-star" data-value="4">⭐</span>
-              <span class="score-select-star" data-value="5">⭐</span>
+            <div class="mb-3">
+                <label for="convenienceStore" class="form-label">편의점 선택:</label>
+                <!-- Use JavaScript to dynamically populate this dropdown from the database -->
+                <select id="convenienceStore" name="convenienceStore" class="form-select">
+                   
+                </select>
             </div>
 
-            <label for="review">리뷰 작성:</label>
-            <textarea id="review" name="review" rows="4"></textarea>
+            <div class="mb-3">
+                <label for="starRating" class="form-label">별점:</label>
+                <!-- Use JavaScript to allow users to give a star rating -->
+                <select id="starRating" name="starRating" class="form-select">
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                </select>
+            </div>
 
-            <button type="button" onclick="submitReview()">리뷰 제출</button>
+            <div class="mb-3">
+                <label for="image" class="form-label">이미지 업로드:</label>
+                <!-- Use JavaScript to handle image upload -->
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
+
+            <div class="mb-3">
+                <label for="comment" class="form-label">코멘트 남기기:</label>
+                <textarea id="comment" name="comment" class="form-control" rows="4"></textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="submitReview()">리뷰 제출</button>
         </form>
-
-        <!-- 리뷰 목록 -->
-        <section id="reviewList">
-            <!-- 여기에 동적으로 리뷰가 추가됨 -->
-            <!-- 예시로 초기에 미리 작성된 리뷰가 있다고 가정합니다 -->
-            <div class="reviewItem">
-            </div>
-        </section>
-  
     </main>
-    <script>
-        // Dynamically load the common header
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("./commonHeader.html")
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector("header").innerHTML = html;
-                });
-        });
-    </script>
-    <script src="../js/storeReviews.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="../js/header.js"></script>
+    <script defer src="../js/storeReviews.js"></script>
 </body>
 </html>

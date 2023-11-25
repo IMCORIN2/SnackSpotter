@@ -12,30 +12,36 @@
 <body>
     <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
         <div class="ms-5 col-md-3">
-            <a href="main.html" class="text-decoration-none title text-primary">
-                <p class="fs-30" style="font-weight: 700;">&#129384;SnackSpotter&#127829;</p>
-              </a>
+          <a href="main.html" class="text-decoration-none title text-primary">
+            <p class="fs-30" style="font-weight: 700;">&#129384;SnackSpotter&#127829;</p>
+          </a>
         </div>
-        <nav class="navbar navbar-expand-md navbar-light">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            <!-- Navbar added to the header -->
+            <nav class="navbar navbar-expand-md navbar-light">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-primary" href="./community.html">Community</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-primary" href="./products.html">Products</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-primary" href="./cart.html">Cart</a>
+                  </li>
                 </ul>
+              </div>
+            </nav>
+            <div class="col-md-3 text-end">
+              <div class="me-5 col-md-3 text-end" id="loginContainer">
+                <!-- 로그인 또는 로그아웃 버튼이 여기에 동적으로 추가. -->
+              </div>
             </div>
-        </nav>
-    </header>
+      </header>
 
     <!-- Your content... -->
 

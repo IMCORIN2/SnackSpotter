@@ -26,6 +26,7 @@ app.use((req, res, next) => {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cors());  // 모든 경로에 대해 CORS 허용
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use("/api", apiRouter);
 
 // 정적 파일 제공

@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         { model: Stores, as: 'store', attributes: ['id', 'name'] },
         { model: Users, as: 'user', attributes: ['name'] },
       ],
-      attributes: ['id', 'rating', 'comment'],
+      attributes: ['id', 'rating', 'image', 'comment'],
     });
     res.json({ reviews });
   } catch (error) {
@@ -20,18 +20,14 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', isAuthenticated, async (req, res) => {
-  const { name, content, rating } = req.body;
-  
-  if (!name || !content || !rating) {
+  const { name,rating, image, comment } = req.body;
+  if (!name || !comment || !rating) {
     return res.status(400).json({ message: '입력이 올바르지않습니다.' });
   }
-  
   try {
     const userId = req.user.id; 
-
     // 이름으로 가게 찾기
     const store = await Stores.findOne({ where: { name } });
-
     // 가게가 존재하는지 확인
     if (!store) {
       console.error(`가게를 찾을 수 없습니다. 가게 이름: ${name}`);
@@ -40,10 +36,11 @@ router.post('/', isAuthenticated, async (req, res) => {
 
     // 새 리뷰 작성
     const review = await StoreReviews.create({
-      storeId: store ? store.id : null, // 가게가 존재하면 store.id, 아니면 null
+      storeId: store.id, 
       userId,
-      rating,
-      comment: content,
+      rating: rating,
+      image: image,
+      comment: comment,
     });
 
     res.json({
@@ -51,14 +48,33 @@ router.post('/', isAuthenticated, async (req, res) => {
       data: {
         id: review.id,
         name: name,
-        content,
-        rating,
+        comment: comment,
+        rating:rating,
+        image: imageFile.filename ? image : null,
         user: req.user.name,
       },
     });
   } catch (error) {
     console.error(`가게 이름: ${name}`, error);
     res.status(500).json({ message: '오류가 발생했습니다.' });
+  }
+});
+
+router.get('/:id', isAuthenticated, async (req, res) => {
+
+    const reviewId = req.params.id;
+    try {
+      const review = await StoreReviews.findByPk(reviewId);
+  
+      // 리뷰가 존재하는지 확인
+      if (!review) {
+        return res.status(400).json({ message: '리뷰를 찾을 수 없습니다.' });
+      }
+
+    res.json(review);
+  } catch (error) {
+    console.error('Error fetching review:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

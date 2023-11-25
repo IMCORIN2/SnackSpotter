@@ -96,5 +96,58 @@ async function renderProductCards() {
   }
 }
 
+async function fetchReviews() {
+  try {
+    const response = await fetch('http://localhost:3000/api/store-reviews');
+    if (!response.ok) {
+      throw new Error('서버 응답이 실패하였습니다.');
+    }
+
+    const data = await response.json();
+    console.log('Response Data:', data);
+    return data.reviews;
+  } catch (error) {
+    console.error('에러 ---', error);
+    throw error;
+  }
+}
+// 편의점 리뷰 렌더링하기
+async function renderReviewCards() {
+  try {
+    const reviews = await fetchReviews();
+    const reviewCardsContainer = document.getElementById('reviewCardsContainer');
+
+    for (let i = 0; i < reviews.length; i++) {
+      const review = reviews[i];
+      const imageUrl = review.image ? `http://localhost:3000/storeReviews/${review.image}` : '';
+      const storeName = review.store ? review.store.name : 'No Store Name';
+      const userName = review.user ? review.user.name : 'No User Name';
+
+      function getStarRating(rating) {
+        const stars = '⭐'.repeat(rating); 
+        return stars || 'No Rating'; 
+      }
+
+      reviewCardsContainer.innerHTML += `
+        <div class="col">
+          <div class="card h-100">
+            ${review.image ? `<img src="${imageUrl}" class="card-img-top" alt="${storeName}">` : ''}
+            <div class="card-body">
+            <h5 class="card-title" style="color: #0D6EFD;">${storeName}</h5>
+              <p class="card-text">별점: ${getStarRating(review.rating)}</p>
+              <p class="card-text">${review.comment}</p>
+              <p class="card-text">글쓴이: ${userName}</p>
+            </div>
+          </div>
+        </div>`;
+    }
+  } catch (error) {
+    console.error('에러 ---', error);
+  }
+}
+
 // 페이지 로드 시 상품 카드 렌더링 함수 호출
-window.onload = renderProductCards;
+document.addEventListener('DOMContentLoaded', function () {
+  renderProductCards();
+  renderReviewCards();
+});
