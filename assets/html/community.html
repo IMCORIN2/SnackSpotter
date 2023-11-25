@@ -7,7 +7,7 @@
   <title>SnackSpotter 상품 페이지</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-</head>
+  </head>
 
 <body>
   <header class="p-1 d-flex flex-wrap align-items-center justify-content-md-between border-bottom border-primary">
@@ -45,9 +45,11 @@
 
   <main>
     <div class="container my-5">
-      <h2 class="text-primary mb-4">전체 편의점 리뷰</h2>
-      <button id='submitPostBtnReview' type="button" class="btn btn-outline-primary me-2" onclick="createReview()">글 적기</button>
-      <div class="row row-cols-1 row-cols-md-3 g-4" id="productCardsContainer">
+      <h2 class="text-primary mb-4 d-flex justify-content-between align-items-center">
+        <span>전체 편의점 리뷰</span>
+        <button id='submitPostBtnReview' type="button" class="btn btn-primary" onclick="createReview()">글쓰기</button>
+     </h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="productCardsContainer">
         <!-- Product Cards go here -->
       </div>
     </div>
@@ -57,6 +59,7 @@
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script defer src="/assets/js/community.js"></script>
+  
 
 </body>
 <script src="../js/header.js"></script>
