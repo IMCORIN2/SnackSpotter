@@ -51,4 +51,49 @@ router.post('/', isAuthenticated, verifyToken, async (req, res) => {
   }
 });
 
+// 장바구니의 물품 삭제
+router.delete('/', isAuthenticated, verifyToken, async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const deleteProduct = await Products.findOne({ where: { id: id } });
+    if (deleteProduct) {
+      await deleteProduct.destroy();
+      res.json({ success: true, message: '상품을 삭제하였습니다' });
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, errorMessage: '상품을 찾을 수 없습니다' });
+    }
+  } catch (error) {
+    res
+      .status(400)
+      .json({ success: false, message: '상품 삭제에 실패했습니다', error });
+  }
+});
+
+// 장바구니의 물품 수정
+router.put('/', isAuthenticated, verifyToken, async (req, res) => {
+  const { id, quantity } = req.body;
+
+  try {
+    const findProduct = await Products.findOne({ where: { id: id } });
+    if (findProduct) {
+      await findProduct.update({ quantity });
+      return res.json({
+        success: true,
+        message: '상품 정보를 수정하였습니다',
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, errorMessage: '상품을 찾을 수 없습니다' });
+    }
+  } catch (error) {
+    res
+      .status(400)
+      .json({ success: false, message: '상품 수정 실패했습니다', error });
+  }
+});
+
 module.exports = router;
