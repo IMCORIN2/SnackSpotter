@@ -1,4 +1,3 @@
-const deleteProduct = document.querySelectorAll('.remove');
 function getCookie(name) {
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
@@ -37,7 +36,6 @@ async function cartGet() {
     const itemBox = document.querySelector('.Cart-ItemBox');
     const totalAmount = document.querySelector('.total-amount');
     const totalItems = document.querySelector('.items');
-    const deleteProducts = document.querySelectorAll('.remove');
 
     let totalPrice = 0;
 
@@ -77,6 +75,8 @@ async function cartGet() {
     totalAmount.innerText = `${totalPrice} 원`;
     totalItems.innerText = `total items ${carts.length}`;
 
+    const deleteProducts = document.querySelectorAll('.remove');
+
     // 각각의 "Remove" 링크에 클릭 이벤트 핸들러 바인딩
     deleteProducts.forEach((deleteProduct, index) => {
       deleteProduct.addEventListener('click', async () => {
@@ -91,6 +91,7 @@ async function cartGet() {
               productId: carts[index].productId, // id를 적절한 방식으로 수정
             }),
           });
+          console.log('1234');
           location.reload();
         } catch (error) {
           console.error('에러 ---', error);

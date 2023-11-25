@@ -203,7 +203,7 @@ authRouter.post('/signin', async (req, res) => {
 
 authRouter.delete('/logout', isAuthenticated, async (req, res) => {
   try {
-    const user = res.locals.user;
+    const user = req.user;
     const authorizationHeader = req.headers.authorization;
     res.clearCookie();
 
