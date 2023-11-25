@@ -5,7 +5,6 @@ const productRouter = require('./products.router');
 const votesRouter = require('./votes.router');
 const storesRouter = require('./stores.router');
 const storeReviewsRouter = require('./storeReviews.router');
-
 const apiRouter = express.Router();
 
 apiRouter.use('/auth', authRouter);
