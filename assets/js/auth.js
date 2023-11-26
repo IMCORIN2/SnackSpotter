@@ -63,8 +63,13 @@ function sign_up() {
     .then(result => {
       console.log(result);
       if (result.success) {
+        console.log(result.data.refreshToken);
+
         alert('회원가입 성공!');
         setCookie('token', result.data.accessToken, 7);
+
+        // TODO: implement proper refreshToken endpoint. matching with authMiddleware
+        setCookie('authorization', 'Bearer '+result.data.accessToken+' '+result.data.refreshToken);
         window.history.back();
       } else {
         alert(`회원가입 실패: ${result.message}`);
@@ -94,6 +99,9 @@ function sign_up() {
         alert('로그인 성공!');
         //localStorage.setItem('token', result.data.accessToken);
         setCookie('token', result.data.accessToken, 7);
+
+        // TODO: implement proper refreshToken endpoint. matching with authMiddleware
+        setCookie('authorization', 'Bearer '+result.data.accessToken+' '+result.data.refreshToken);
         window.history.back();
       } else {
         alert(`로그인 실패: ${result.message}`);

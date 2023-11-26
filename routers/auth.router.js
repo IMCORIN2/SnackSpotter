@@ -190,7 +190,7 @@ authRouter.post('/signin', async (req, res) => {
     return res.status(200).json({
       success: true,
       message: '로그인에 성공했습니다.',
-      data: { accessToken },
+      data: { accessToken, refreshToken },
     });
   } catch (error) {
     console.error(error);
