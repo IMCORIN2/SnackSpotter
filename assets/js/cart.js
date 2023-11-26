@@ -47,37 +47,50 @@ async function cartGet() {
       const imageUrl = `https://tqklhszfkvzk6518638.cdn.ntruss.com/product/${product.image}`;
 
       const productNum = product.price.replace(',', '');
-
       const amount = parseInt(productNum) * cart.quantity;
 
       totalPrice += amount;
 
-      itemBox.innerHTML += `
-    <div class="Cart-Items">
-    <div class="image-box">
-      <img src="${imageUrl}" style="height: 120px" />
-    </div>
-    <div class="about">
-      <h3 class="title">${product.name}</h3>
-    </div>
-    <div class="counter">
-      <div class="btn plus">+</div>
-      <div class="count">${cart.quantity}</div>
-      <div class="btn minus">-</div>
-    </div>
-    <div class="prices">
-      <div class="amount">${amount}원</div>
-      <div class="remove"><u>Remove</u></div>
-    </div>
-  </div>
-    `;
+      const cartItem = document.createElement('div');
+      cartItem.className = 'Cart-Items';
+
+      cartItem.innerHTML = `
+        <div class="image-box">
+          <img src="${imageUrl}" style="height: 120px" />
+        </div>
+        <div class="about">
+          <h3 class="title">${product.name}</h3>
+        </div>
+        <div class="counter">
+          <div class="btn minus" data-index="${i}">-</div>
+          <div class="count">${cart.quantity}</div>
+          <div class="btn plus" data-index="${i}">+</div>
+        </div>
+        <div class="prices">
+          <div class="amount">${amount}원</div>
+          <div class="remove"><u>Remove</u></div>
+        </div>
+      `;
+
+      itemBox.appendChild(cartItem);
     }
+
     totalAmount.innerText = `${totalPrice} 원`;
     totalItems.innerText = `total items ${carts.length}`;
 
+    const plusButtons = document.querySelectorAll('.btn.plus');
+    const minusButtons = document.querySelectorAll('.btn.minus');
+
+    plusButtons.forEach((plusButton) => {
+      plusButton.addEventListener('click', handleQuantityChange);
+    });
+
+    minusButtons.forEach((minusButton) => {
+      minusButton.addEventListener('click', handleQuantityChange);
+    });
+
     const deleteProducts = document.querySelectorAll('.remove');
 
-    // 각각의 "Remove" 링크에 클릭 이벤트 핸들러 바인딩
     deleteProducts.forEach((deleteProduct, index) => {
       deleteProduct.addEventListener('click', async () => {
         try {
@@ -88,7 +101,7 @@ async function cartGet() {
               authorization: `Bearer ${getCookie('token')}`,
             },
             body: JSON.stringify({
-              productId: carts[index].productId, // id를 적절한 방식으로 수정
+              productId: carts[index].productId,
             }),
           });
           console.log('1234');
@@ -104,25 +117,60 @@ async function cartGet() {
   }
 }
 
-const deleteAll = document.querySelector('.Action');
-
-deleteAll.addEventListener('click', deleteCart);
-
-async function deleteCart() {
+async function updateCart(cartItems) {
   try {
-    const response = await fetch('http://localhost:3000/api/cart/all', {
-      method: 'DELETE',
+    const response = await fetch('http://localhost:3000/api/cart', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${getCookie('token')}`,
       },
+      body: JSON.stringify({ cart: cartItems }),
     });
-    location.reload();
-    return data;
+
+    const data = await response.json();
+    console.log('Cart updated successfully:', data);
+  } catch (error) {
+    console.error('Error updating cart:', error);
+    throw error;
+  }
+}
+
+// + 또는 - 버튼이 클릭되었을 때 호출되는 함수
+async function handleQuantityChange(event) {
+  // 클릭된 버튼의 인덱스 가져오기
+  const index = event.target.getAttribute('data-index');
+
+  try {
+    // 서버에서 현재 장바구니 정보 가져오기
+    const cartData = await fetchCart();
+    const { carts } = cartData;
+
+    // 해당 아이템의 수량 찾기
+    const item = carts[index];
+
+    if (item) {
+      // 증가 또는 감소 버튼에 따라 수량 업데이트
+      if (event.target.classList.contains('plus')) {
+        item.quantity += 1;
+      } else if (event.target.classList.contains('minus')) {
+        // 최소 수량이 1 이상이어야 함
+        if (item.quantity > 1) {
+          item.quantity -= 1;
+        }
+      }
+
+      // 서버에 업데이트된 장바구니 정보 전송
+      await updateCart(carts);
+
+      // 장바구니 다시 렌더링
+      await cartGet();
+    }
   } catch (error) {
     console.error('에러 ---', error);
     throw error;
   }
 }
+
 
 window.onload = cartGet;

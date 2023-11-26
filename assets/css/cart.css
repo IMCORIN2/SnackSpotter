@@ -1,14 +1,17 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f8f9fa;
 }
 
 .CartContainer {
   width: 70%;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0px 10px 20px #1687d933;
+  box-shadow: 0px 10px 20px rgba(22, 135, 217, 0.2);
   margin: 3% auto;
+  padding: 20px;
 }
 
 .Header {
@@ -22,14 +25,12 @@ body {
 
 .Heading {
   font-size: 20px;
-  font-family: 'Open Sans';
   font-weight: 700;
   color: #2f3841;
 }
 
 .Action {
   font-size: 14px;
-  font-family: 'Open Sans';
   font-weight: 600;
   color: #e44c4c;
   cursor: pointer;
@@ -38,6 +39,11 @@ body {
 
 .Cart-ItemBox {
   height: 68%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .Cart-Items {
@@ -47,27 +53,29 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 70px;
+  margin-top: 20px;
 }
+
 .image-box {
   width: 15%;
   text-align: center;
 }
+
 .about {
   height: 100%;
   width: 24%;
 }
+
 .title {
   padding-top: 10px;
-  line-height: 10px;
-  font-family: 'Open Sans';
+  line-height: 1.2;
   font-weight: 800;
   color: #202020;
 }
+
 .subtitle {
-  line-height: 10px;
+  line-height: 1.2;
   font-size: 18px;
-  font-family: 'Open Sans';
   font-weight: 600;
   color: #909090;
 }
@@ -78,6 +86,7 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
 .btn {
   width: 30px;
   height: 30px;
@@ -87,14 +96,13 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 20px;
-  font-family: 'Open Sans';
   font-weight: 900;
   color: #202020;
   cursor: pointer;
 }
+
 .count {
   font-size: 16px;
-  font-family: 'Open Sans';
   font-weight: 600;
   color: #202020;
 }
@@ -103,27 +111,19 @@ body {
   height: 100%;
   text-align: right;
 }
+
 .amount {
   padding-top: 20px;
   font-size: 20px;
-  font-family: 'Open Sans';
   font-weight: 800;
   color: #202020;
 }
-.save {
-  padding-top: 5px;
-  font-size: 14px;
-  font-family: 'Open Sans';
-  font-weight: 600;
-  color: #1687d9;
-  cursor: pointer;
-}
+
+.save,
 .remove {
   padding-top: 5px;
   font-size: 14px;
-  font-family: 'Open Sans';
   font-weight: 600;
-  color: #e44c4c;
   cursor: pointer;
 }
 
@@ -134,6 +134,7 @@ body {
 hr {
   margin: 20px 5%;
 }
+
 .checkoutBox {
   margin: auto;
   width: 90%;
@@ -141,34 +142,37 @@ hr {
   display: flex;
   justify-content: flex-end;
 }
+
 .checkout {
   width: 28%;
   margin-bottom: 20px;
 }
+
 .total {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
+
 .Subtotal {
   font-size: 22px;
-  font-family: 'Open Sans';
   font-weight: 700;
   color: #202020;
 }
+
 .items {
   font-size: 16px;
-  font-family: 'Open Sans';
   font-weight: 500;
   color: #909090;
-  line-height: 10px;
+  line-height: 1.2;
 }
+
 .total-amount {
   font-size: 36px;
-  font-family: 'Open Sans';
   font-weight: 900;
   color: #202020;
 }
+
 .button {
   margin-top: 10px;
   width: 100%;
@@ -178,7 +182,6 @@ hr {
   border-radius: 20px;
   cursor: pointer;
   font-size: 16px;
-  font-family: 'Open Sans';
   font-weight: 600;
   color: #202020;
 }
