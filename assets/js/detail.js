@@ -93,7 +93,6 @@ if (productId) {
     }
   }
 
-  // 장바구니에 제품 추가 로직
   async function addToCart(product, quantity) {
     try {
       const response = await fetch('http://localhost:3000/api/cart', {
@@ -107,49 +106,33 @@ if (productId) {
           quantity: quantity,
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (data.success) {
         console.log(`${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`);
-
-        // 동적으로 버튼 생성
-        const buttonContainer = document.getElementById('myModal');
-        if (buttonContainer) {
-          data.buttons.forEach((buttonInfo) => {
-            const button = document.createElement('button');
-            button.innerText = buttonInfo.label;
-            button.addEventListener('click', () => {
-              window.location.href = buttonInfo.action;
-              closeModal();
-            });
-            buttonContainer.appendChild(button);
-          });
+          // 모달 열기
+          openModal();
         } else {
-          console.error('Button container not found.');
-        }
-
-        // 모달 열기
-        openModal();
-      } else {
-        console.error('Error:', response.status, response.statusText);
+        console.error('오류:', response.status, response.statusText);
         alert(data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('오류:', error);
     }
   }
+  
+// 페이지 로드 시 모달 초기화
+const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 
- // 모달 열기
+// 모달 열기 함수
 function openModal() {
-  const modal = document.getElementById('myModal');
-  modal.style.display = 'block';
+  myModal.show();
 }
 
-// 모달 닫기
+// 모달 닫기 함수
 function closeModal() {
-  const modal = document.getElementById('myModal');
-  modal.style.display = 'none';
+  myModal.hide();
 }
 
   // 직접 구매 로직
