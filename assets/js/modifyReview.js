@@ -64,17 +64,18 @@ async function resizeImage(file) {
 
 
 //글쓰기
-async function submitReview() {
+async function editReview() {
   const convenienceStoreSelect = document.getElementById('convenienceStore');
   const starRatingSelect = document.getElementById('starRating');
   const imageInput = document.getElementById('image');
-  const commentType = document.getElementById('comment');
-
+  const commentTextarea = document.getElementById('comment');
+  const comment = commentTextarea.value;
+  const reviewId = getReviewIdFromURL();
   const name = convenienceStoreSelect.value;
   const rating = parseInt(starRatingSelect.value, 10);
   const imageFile = imageInput.files[0];
-  const comment = commentType.value;
   const resizedImageFile = imageFile ? await resizeImage(imageFile) : null;
+  
   let imageUrl = null;
   if (resizedImageFile) {
     imageUrl = await uploadImage(resizedImageFile);
@@ -92,19 +93,20 @@ async function submitReview() {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/store-reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-        mode: 'cors',
-      });
+        const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+          mode: 'cors',
+        });
+      
 
       if (response.ok) {
         const result = await response.json();
-        alert('리뷰 제출이 완료되었습니다!');
+        alert('리뷰 수정이 완료되었습니다!');
         window.location.replace('./community.html'); // 페이지 이동
       } else {
         console.error('Error submitting review:', response.status, response.statusText);
@@ -157,6 +159,12 @@ async function getStores() {
     });
   }
   
+  // URL에서 리뷰 ID를 가져오기
+function getReviewIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+  }
+
   // 이미지를 업로드하고 URL을 반환하는 함수
 async function uploadImage(file) {
   const formData = new FormData();

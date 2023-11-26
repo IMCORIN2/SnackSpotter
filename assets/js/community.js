@@ -63,6 +63,9 @@ async function renderReviewCards() {
     const reviews = await fetchReviews();
     const reviewCardsContainer = document.getElementById('productCardsContainer');
 
+    // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
+    reviewCardsContainer.innerHTML = ''; 
+
     for (let i = 0; i < reviews.length; i++) {
       const review = reviews[i];
       const imageUrl = review.image ? `http://localhost:3000${review.image}` : '';
@@ -74,20 +77,23 @@ async function renderReviewCards() {
         return stars || 'No Rating'; 
       }
 
-      reviewCardsContainer.innerHTML += `
-        <div class="col">
-          <div class="card h-100">
-            ${review.image ? `<img src="${imageUrl}" class="card-img-top" alt="${storeName}">` : ''}
-            <div class="card-body">
+      // 새로운 리뷰 카드를 생성하고 추가
+      const card = document.createElement('div');
+      card.className = 'col';
+      card.innerHTML = `
+        <div class="card h-100">
+          ${review.image ? `<img src="${imageUrl}" class="card-img-top" alt="${storeName}">` : ''}
+          <div class="card-body">
             <h5 class="card-title" style="color: #0D6EFD;">${storeName}</h5>
-              <p class="card-text">별점: ${getStarRating(review.rating)}</p>
-              <p class="card-text">${review.comment}</p>
-              <p class="card-text">글쓴이: ${userName}</p>
-              <button class="btn btn-outline-primary" onclick="deleteReview(${review.id})">Delete</button>
-              <button class="btn btn-primary" onclick="editReview(${review.id})">Edit</button>
-            </div>
+            <p class="card-text">별점: ${getStarRating(review.rating)}</p>
+            <p class="card-text">${review.comment}</p>
+            <p class="card-text">글쓴이: ${userName}</p>
+            <button class="btn btn-outline-primary" onclick="deleteReview(${review.id})">Delete</button>
+            <button class="btn btn-primary" onclick="editReview(${review.id})">Edit</button>
           </div>
         </div>`;
+
+      reviewCardsContainer.appendChild(card);
     }
   } catch (error) {
     console.error('에러 ---', error);
@@ -122,7 +128,6 @@ async function deleteReview(reviewId) {
   }
 }
 
-// 리뷰 수정 페이지로 이동
 async function editReview(reviewId) {
   // 토큰 가져오기
   const token = getCookie('token');
@@ -130,7 +135,7 @@ async function editReview(reviewId) {
   if (token) {
     try {
       const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}/edit`, {
-        method: 'GET',
+        method: 'GET',  
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -139,7 +144,7 @@ async function editReview(reviewId) {
 
       if (response.ok) {
         // 서버에서 권한이 확인되면 수정 페이지로 이동
-        window.location.href = `./storeReviews.html?id=${reviewId}`;
+        window.location.href = `./modifyReview.html?id=${reviewId}`;
       } else if (response.status === 403) {
         // 권한이 없는 경우 알림 표시
         alert('수정할 권한이 없습니다.');
@@ -154,6 +159,7 @@ async function editReview(reviewId) {
     alert('로그인이 필요합니다.');
   }
 }
+
 
 
 
