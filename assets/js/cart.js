@@ -1,3 +1,5 @@
+const itemBox = document.querySelector('.Cart-ItemBox');
+
 function getCookie(name) {
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
@@ -33,11 +35,12 @@ async function cartGet() {
   try {
     const data = await fetchCart();
 
-    const itemBox = document.querySelector('.Cart-ItemBox');
     const totalAmount = document.querySelector('.total-amount');
     const totalItems = document.querySelector('.items');
 
     let totalPrice = 0;
+
+    itemBox.innerHTML = '';
 
     const { carts, products } = data;
 
@@ -189,12 +192,15 @@ async function handleQuantityChange(event) {
       // 서버에 업데이트된 장바구니 정보 전송
       await updateCart(item);
 
-      location.reload();
+      await cartGet();
     }
   } catch (error) {
     console.error('에러 ---', error);
     throw error;
   }
 }
-
-window.onload = cartGet;
+if (document.cookie) {
+  window.onload = cartGet;
+} else {
+  itemBox.innerHTML = '로그인 후 사용해주세요';
+}
