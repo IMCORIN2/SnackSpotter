@@ -8,6 +8,15 @@ const { Users, RefreshTokens } = db;
 
 const isAuthenticated = async (req, res, next) => {
   try {
+    
+    const authorizationHeaders = req.headers.authorization;
+    if (!authorizationHeaders) {
+      return res.status(400).json({
+        success: false,
+        message: '인증 정보가 없습니다.',
+      });
+    }
+
     const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
     if (tokenType !== 'Bearer') {
