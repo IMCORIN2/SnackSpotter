@@ -3,13 +3,14 @@ const router = express.Router();
 const isAuthenticated = require('../middlewares/authMiddleware.js');
 
 const { Carts, Products } = require('../models');
+const { where } = require('sequelize');
 
 // 장바구니 조회
 router.get('/', isAuthenticated, async (req, res) => {
   try {
     const carts = await Carts.findAll({
       where: { userId: req.user.id },
-      attributes: ['productId', 'quantity'],
+      attributes: ['id', 'productId', 'quantity'],
     });
 
     const products = await Promise.all(
@@ -84,7 +85,7 @@ router.post('/', isAuthenticated, async (req, res) => {
     });
   }
 });
-   
+
 // 장바구니의 물품 삭제
 router.delete('/', isAuthenticated, async (req, res) => {
   const { productId } = req.body;
@@ -127,9 +128,10 @@ router.put('/', isAuthenticated, async (req, res) => {
   const { id, quantity } = req.body;
 
   try {
-    const findProduct = await Products.findOne({ where: { id: id } });
+    const findProduct = await Carts.findOne({ where: { id: id } });
     if (findProduct) {
-      await findProduct.update({ quantity });
+      const updatedRows = await findProduct.update({ quantity: quantity });
+      console.log('Updated Rows:', updatedRows);
       return res.json({
         success: true,
         message: '상품 정보를 수정하였습니다',
@@ -152,7 +154,7 @@ router.put('/:id', isAuthenticated, async (req, res) => {
 
   try {
     const findProduct = await Products.findByPk(id);
-    
+
     if (findProduct) {
       await findProduct.update({ quantity });
       return res.json({

@@ -104,7 +104,6 @@ async function cartGet() {
               productId: carts[index].productId,
             }),
           });
-          console.log('1234');
           location.reload();
         } catch (error) {
           console.error('에러 ---', error);
@@ -117,6 +116,30 @@ async function cartGet() {
   }
 }
 
+const removeAllBtn = document.querySelector('.removeAll');
+
+async function deleteAllCart() {
+  try {
+    const response = await fetch('http://localhost:3000/api/cart/all', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${getCookie('token')}`,
+      },
+    });
+    const data = await response.json();
+
+    location.reload();
+
+    console.log('Cart updated successfully:', data);
+  } catch (error) {
+    console.error('Error updating cart:', error);
+    throw error;
+  }
+}
+
+removeAllBtn.addEventListener('click', deleteAllCart);
+
 async function updateCart(cartItems) {
   try {
     const response = await fetch('http://localhost:3000/api/cart', {
@@ -125,10 +148,13 @@ async function updateCart(cartItems) {
         'Content-Type': 'application/json',
         authorization: `Bearer ${getCookie('token')}`,
       },
-      body: JSON.stringify({ cart: cartItems }),
+      body: JSON.stringify({
+        id: cartItems.id,
+        quantity: cartItems.quantity,
+      }),
     });
-
     const data = await response.json();
+
     console.log('Cart updated successfully:', data);
   } catch (error) {
     console.error('Error updating cart:', error);
@@ -161,16 +187,14 @@ async function handleQuantityChange(event) {
       }
 
       // 서버에 업데이트된 장바구니 정보 전송
-      await updateCart(carts);
+      await updateCart(item);
 
-      // 장바구니 다시 렌더링
-      await cartGet();
+      location.reload();
     }
   } catch (error) {
     console.error('에러 ---', error);
     throw error;
   }
 }
-
 
 window.onload = cartGet;
