@@ -1,3 +1,5 @@
+const itemBox = document.querySelector('.Cart-ItemBox');
+
 function getCookie(name) {
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
@@ -33,7 +35,6 @@ async function cartGet() {
   try {
     const data = await fetchCart();
 
-    const itemBox = document.querySelector('.Cart-ItemBox');
     const totalAmount = document.querySelector('.total-amount');
     const totalItems = document.querySelector('.items');
 
@@ -198,5 +199,8 @@ async function handleQuantityChange(event) {
     throw error;
   }
 }
-
-window.onload = cartGet;
+if (document.cookie) {
+  window.onload = cartGet;
+} else {
+  itemBox.innerHTML = '로그인 후 사용해주세요';
+}
