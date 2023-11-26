@@ -4,14 +4,19 @@ async function deleteCookie(name) {
 
   // 서버에 로그아웃 요청 보냄
   try {
-    const response = await fetch('/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // 사용자 ID 전송
-      body: JSON.stringify({ userId: req.user.id }),
-    });
+    const token = getCookie('token'); // 쿠키에서 토큰 가져오기
+    const decodedToken = decodeToken(token); // 토큰 디코딩
+
+ if (decodedToken) {
+      const response = await fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // 토큰을 헤더에 추가
+        },
+        // 사용자 ID 전송
+        body: JSON.stringify({ userId: decodedToken.userId }), // 디코딩된 토큰에서 사용자 ID 가져옴
+      });
 
     const data = await response.json();
 
@@ -21,12 +26,18 @@ async function deleteCookie(name) {
     // 서버에서 로그아웃이 성공
     if (data.success) {
       alert('로그아웃이 성공적으로 처리되었습니다.');
+    } else {
+      // 서버에서 로그아웃이 실패한 경우
+      alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
     }
-  } catch (error) {
-    // 서버에서의 로그아웃이 실패했을 경우의 처리
-    console.error('Error:', error);
-    alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
+  } else {
+    console.error('토큰 디코딩 실패');
   }
+} catch (error) {
+  // 서버에서의 로그아웃이 실패했을 경우의 처리
+  console.error('Error:', error);
+  alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
+}
 }
 
 // 로그인 버튼 설정 함수
@@ -89,7 +100,7 @@ function setupLoginButtons() {
     signupButton.className = 'btn btn-primary me-2';
     signupButton.innerText = 'signup';
     signupButton.addEventListener('click', function () {
-      window.location.href = 'signup.html';
+      window.location.href = 'register.html';
     });
 
     buttonContainer.appendChild(signupButton);
@@ -169,9 +180,10 @@ function logout() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getCookie('token')}`, // 토큰을 헤더에 추가
     },
     // 사용자 ID 전송
-    body: JSON.stringify({ userId: req.user.id }), 
+    body: JSON.stringify({}), // 더 이상 사용자 ID를 전송할 필요가 없음
   })
     .then(response => response.json())
     .then(data => {
@@ -195,6 +207,7 @@ function logout() {
   // 페이지 리로드
   window.location.reload();
 }
+
 
 // 로그인 버튼 설정 함수 호출
 setupLoginButtons();
