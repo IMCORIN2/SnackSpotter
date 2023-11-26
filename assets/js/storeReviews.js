@@ -77,9 +77,11 @@ async function submitReview() {
   const resizedImageFile = imageFile ? await resizeImage(imageFile) : null;
   let imageUrl = null;
   if (resizedImageFile) {
+    console.log(resizedImageFile);
+    console.log(imageUrl);
     imageUrl = await uploadImage(resizedImageFile);
   }
-  
+  console.log(imageUrl);
   // 토큰 가져오기
   const token = getCookie('token');
 
@@ -163,13 +165,14 @@ async function uploadImage(file) {
   formData.append('image', file);
 
   try {
-    const response = await fetch('http://localhost:3000/api/upload', {
+    const response = await fetch('http://localhost:3000/api/store-reviews/upload', {
       method: 'POST',
       body: formData,
     });
 
     if (response.ok) {
       const data = await response.json();
+      console.log('Image upload successful:', data.url);
       return data.url;
     } else {
       console.error('Error uploading image:', response.statusText);

@@ -25,6 +25,15 @@ const upload = multer({
   }),
 });
 
+// 이미지 업로드 라우터
+router.post('/upload', upload.single('image'), (req, res) => {
+  if (req.file) {
+    res.json({ url: req.file.location });
+  } else {
+    res.status(400).json({ message: '이미지 업로드에 실패했습니다.' });
+  }
+});
+
 router.post('/', upload.single('image'), isAuthenticated, async (req, res) => {
   // 파일이 제공되었는지 확인
   if (req.file) {
