@@ -1,15 +1,16 @@
 // 쿠키 삭제 함수 (비동기)
 async function deleteCookie(name) {
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 
   // 서버에 로그아웃 요청 보냄
   try {
     const token = getCookie('token'); // 쿠키에서 토큰 가져오기
+    console.log(token)
     const decodedToken = decodeToken(token); // 토큰 디코딩
 
  if (decodedToken) {
       const response = await fetch('/logout', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`, // 토큰을 헤더에 추가
@@ -28,7 +29,7 @@ async function deleteCookie(name) {
       alert('로그아웃이 성공적으로 처리되었습니다.');
     } else {
       // 서버에서 로그아웃이 실패한 경우
-      alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
+      alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요1.');
     }
   } else {
     console.error('토큰 디코딩 실패');
@@ -36,7 +37,7 @@ async function deleteCookie(name) {
 } catch (error) {
   // 서버에서의 로그아웃이 실패했을 경우의 처리
   console.error('Error:', error);
-  alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
+  alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요2.');
 }
 }
 
@@ -195,13 +196,13 @@ function logout() {
         alert('로그아웃이 성공적으로 처리되었습니다.');
       } else {
         // 서버에서 로그아웃이 실패한 경우
-        alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
+        alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요3.');
       }
     })
     .catch(error => {
       // 서버에서의 로그아웃이 실패했을 경우의 처리
       console.error('Error:', error);
-      alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요.');
+      alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요4.');
     });
 
   // 페이지 리로드
