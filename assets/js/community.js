@@ -112,7 +112,7 @@ async function deleteReview(reviewId) {
     } 
     else if (response.status === 403) {
       // 권한이 없는 경우 알림 표시
-      alert('수정할 권한이 없습니다.');
+      alert('삭제할 권한이 없습니다.');
     }
     else {
       console.error('Error deleting review:', response.status, response.statusText);
@@ -129,7 +129,7 @@ async function editReview(reviewId) {
 
   if (token) {
     try {
-      const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
+      const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}/edit`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ async function editReview(reviewId) {
       });
 
       if (response.ok) {
-        // 리뷰를 작성한 사용자와 현재 로그인한 사용자가 동일하면 수정 페이지로 이동
+        // 서버에서 권한이 확인되면 수정 페이지로 이동
         window.location.href = `./storeReviews.html?id=${reviewId}`;
       } else if (response.status === 403) {
         // 권한이 없는 경우 알림 표시
@@ -154,6 +154,7 @@ async function editReview(reviewId) {
     alert('로그인이 필요합니다.');
   }
 }
+
 
 
 

@@ -49,9 +49,9 @@ const isAuthenticated = async (req, res, next) => {
     });
   }
 };
+
 const verifyToken = async (req, res, next) => {
   try {
-    console.log('cmcm');
     const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
     if (tokenType !== 'Bearer') {
@@ -75,7 +75,6 @@ const verifyToken = async (req, res, next) => {
 
     delete user.password;
     req.user = user;
-    console.log('verifyTokenUser', req.user);
 
     const refreshToken = await RefreshTokens.findOne({
       where: { userId: user.id },
@@ -89,7 +88,8 @@ const verifyToken = async (req, res, next) => {
     }
 
     if (refreshToken && !accessToken) {
-      const accessToken = jwt.sign(
+      // 기존 코드에서 사용되지 않는 refreshToken 변수를 지움
+      const newAccessToken = jwt.sign(
         { userId: user.id },
         JWT_ACCESS_TOKEN_SECRET,
         {
@@ -100,7 +100,7 @@ const verifyToken = async (req, res, next) => {
       const expires = new Date();
       expires.setHours(expires.getHours() + 12);
 
-      res.cookie('authorization', `Bearer + ${accessToken}`, {
+      res.cookie('authorization', `Bearer ${newAccessToken}`, {
         expires: expires,
       });
     }
@@ -110,39 +110,32 @@ const verifyToken = async (req, res, next) => {
     }
   } catch (error) {
     console.error('error message=>', error.message);
-    // 토큰의 유효기간이 지난 경우와 검증에 실패한 경우는 오류가 뜨기 때문에
-    // catch의 error 부분에서 처리해줌
+
     let statusCode = 500;
     let errorMessage = '';
 
     switch (error.message) {
       case 'jwt expired':
-        const authorizationHeader = req.headers.authorization;
-        console.log('authorizationHeader=>', authorizationHeader);
-        const decodedPayload = jwt.verify(
-          refreshToken,
-          JWT_ACCESS_TOKEN_SECRET,
-        );
-        console.log(decodedPayload);
-        res.clearCookie();
-        // const refreshToken = await RefreshTokens.destroy({
-        //   where: { userId: user.id },
-        // });
-        console.log('here');
-        const accessToken = jwt.sign(
-          { userId: user.id },
-          JWT_ACCESS_TOKEN_SECRET,
-          {
-            expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
-          },
-        );
-        console.log('here');
-        const expires = new Date();
-        expires.setHours(expires.getHours() + 12);
+        // 여기서 refreshToken을 얻어오기
+        const refreshToken = req.cookies.authorization.split(' ')[2];
 
-        res.cookie('authorization', `Bearer + ${accessToken}`, {
-          expires: expires,
-        });
+        // refreshToken이 존재하면 새로운 accessToken을 발급하고 쿠키를 업데이트
+        if (refreshToken) {
+          const newAccessToken = jwt.sign(
+            { userId: decodedPayload.userId },
+            JWT_ACCESS_TOKEN_SECRET,
+            {
+              expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+            },
+          );
+
+          const expires = new Date();
+          expires.setHours(expires.getHours() + 12);
+
+          res.cookie('authorization', `Bearer ${newAccessToken}`, {
+            expires: expires,
+          });
+        }
         break;
       case 'invalid signature':
         statusCode = 401;

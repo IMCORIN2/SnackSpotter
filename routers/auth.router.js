@@ -141,57 +141,57 @@ authRouter.post('/signin', async (req, res) => {
       });
     }
 
-    const user = (await Users.findOne({ where: { email } }))?.toJSON();
-    const hashedPassword = user?.password; // optional chaining을 사용하여 'user'가 정의되어 있을 때만 'password'를 읽어옴
-    const ispasswordMatched = bcrypt.compareSync(password, hashedPassword);
-    const isCorrectUser = user && ispasswordMatched;
+    const user = await Users.findOne({ where: { email } });
 
-    if (!isCorrectUser) {
+    if (!user) {
       return res.status(401).json({
         success: false,
-        message: '일치하는 인증 정보가 없습니다.',
+        message: '일치하는 사용자 정보가 없습니다.',
       });
     }
-    try {
-      const accessToken = jwt.sign(
-        { userId: user.id },
-        JWT_ACCESS_TOKEN_SECRET,
-        {
-          expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
-        },
-      );
 
-      const expires = new Date();
-      expires.setHours(expires.getHours() + 12);
+    const hashedPassword = user.password;
+    const isPasswordMatched = bcrypt.compareSync(password, hashedPassword);
 
-      res.cookie('authorization', `Bearer ${accessToken}`, {
-        expires: expires,
-      });
-
-      const refreshToken = jwt.sign(
-        { userId: user.id },
-        JWT_REFRESH_TOKEN_SECRET,
-        {
-          expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN,
-        },
-      );
-
-      const newRefreshToken = (
-        await RefreshTokens.create({ value: refreshToken, userId: user.id })
-      ).toJSON();
-
-      return res.status(200).json({
-        success: true,
-        message: '로그인에 성공했습니다.',
-        data: { accessToken },
-      });
-    } catch (error) {
-      console.error('JWT Signing Error:', error);
-      return res.status(500).json({
+    if (!isPasswordMatched) {
+      return res.status(401).json({
         success: false,
-        message: 'JWT 토큰 서명 중 오류가 발생했습니다. 다시 시도해주세요.',
+        message: '비밀번호가 일치하지 않습니다.',
       });
     }
+
+    const accessToken = jwt.sign(
+      { userId: user.id },
+      JWT_ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+      },
+    );
+
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 12);
+
+    res.cookie('authorization', `Bearer ${accessToken}`, {
+      expires: expires,
+    });
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      JWT_REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN,
+      },
+    );
+
+    const newRefreshToken = (
+      await RefreshTokens.create({ value: refreshToken, userId: user.id })
+    ).toJSON();
+
+    return res.status(200).json({
+      success: true,
+      message: '로그인에 성공했습니다.',
+      data: { accessToken },
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -200,6 +200,7 @@ authRouter.post('/signin', async (req, res) => {
     });
   }
 });
+
 
 authRouter.delete('/logout', isAuthenticated, async (req, res) => {
   try {

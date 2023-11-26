@@ -122,6 +122,29 @@ router.put('/:id', isAuthenticated, async (req, res) => {
   }
 });
 
+router.get('/:id/edit', isAuthenticated, async (req, res) => {
+  const reviewId = req.params.id;
+
+  try {
+    const review = await StoreReviews.findByPk(reviewId);
+
+    // 리뷰가 존재하는지 확인
+    if (!review) {
+      return res.status(400).json({ message: '리뷰를 찾을 수 없습니다.' });
+    }
+
+    // 사용자가 리뷰를 수정할 권한이 있는지 확인
+    if (review.userId !== req.user.id) {
+      return res.status(403).json({ message: '리뷰를 수정할 권한이 없습니다.' });
+    }
+
+    res.json({ message: '권한 확인 성공' });
+  } catch (error) {
+    console.error('Error checking review permission:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 router.delete('/:id', isAuthenticated, async (req, res) => {
   const reviewId = req.params.id;
 
