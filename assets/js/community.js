@@ -160,9 +160,11 @@ async function deleteReview(reviewId) {
     }
     else {
       console.error('Error deleting review:', response.status, response.statusText);
+      alert('로그인을 해주세요.');
     }
   } catch (error) {
     console.error('Error deleting review:', error);
+    
   }
 }
 
