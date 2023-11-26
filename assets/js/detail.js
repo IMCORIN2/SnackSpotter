@@ -20,7 +20,7 @@ if (productId) {
   async function fetchProductDetails() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/products/${productId}`
+        `http://localhost:3000/api/products/${productId}`,
       );
       return response.data.data;
     } catch (error) {
@@ -106,14 +106,17 @@ if (productId) {
           quantity: quantity,
         }),
       });
-  
+
       const data = await response.json();
-  
+      console.log(data);
+
       if (data.success) {
-        console.log(`${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`);
-          // 모달 열기
-          openModal();
-        } else {
+        console.log(
+          `${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`,
+        );
+        // 모달 열기
+        openModal();
+      } else {
         console.error('오류:', response.status, response.statusText);
         alert(data.message);
       }
@@ -121,19 +124,19 @@ if (productId) {
       console.error('오류:', error);
     }
   }
-  
-// 페이지 로드 시 모달 초기화
-const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 
-// 모달 열기 함수
-function openModal() {
-  myModal.show();
-}
+  // 페이지 로드 시 모달 초기화
+  const myModal = new bootstrap.Modal(document.getElementById('myModal'));
 
-// 모달 닫기 함수
-function closeModal() {
-  myModal.hide();
-}
+  // 모달 열기 함수
+  function openModal() {
+    myModal.show();
+  }
+
+  // 모달 닫기 함수
+  function closeModal() {
+    myModal.hide();
+  }
 
   // 직접 구매 로직
   function directPurchase(product, quantity) {
