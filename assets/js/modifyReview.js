@@ -1,3 +1,4 @@
+let id;
 // 쿠키 가져오기
 function getCookie(name) {
     const cookies = document.cookie.split(';');
@@ -75,7 +76,6 @@ async function editReview() {
   const rating = parseInt(starRatingSelect.value, 10);
   const imageFile = imageInput.files[0];
   const resizedImageFile = imageFile ? await resizeImage(imageFile) : null;
-  
   let imageUrl = null;
   if (resizedImageFile) {
     imageUrl = await uploadImage(resizedImageFile);
@@ -106,8 +106,9 @@ async function editReview() {
 
       if (response.ok) {
         const result = await response.json();
+        id = result.data.id;
         alert('리뷰 수정이 완료되었습니다!');
-        window.location.replace('./community.html'); // 페이지 이동
+        redirectToCommunityPage(id, imageUrl);// 페이지 이동
       } else {
         console.error('Error submitting review:', response.status, response.statusText);
       }
@@ -125,6 +126,11 @@ async function editReview() {
     window.location.href = './community.html';
   }
   
+  // 페이지 이동 함수
+function redirectToCommunityPage(id, imageUrl) {
+  window.location.href = `./community.html?reviewId=${encodeURIComponent(id)}&imageUrl=${encodeURIComponent(imageUrl)}`;
+}
+
  // 가게 목록을 가져오는 함수
 async function getStores() {
     try {
@@ -171,13 +177,14 @@ async function uploadImage(file) {
   formData.append('image', file);
 
   try {
-    const response = await fetch('http://localhost:3000/api/upload', {
+    const response = await fetch('http://localhost:3000/api/store-reviews/upload', {
       method: 'POST',
       body: formData,
     });
 
     if (response.ok) {
       const data = await response.json();
+      console.log('Image upload successful:', data.url);
       return data.url;
     } else {
       console.error('Error uploading image:', response.statusText);

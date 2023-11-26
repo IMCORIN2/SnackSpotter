@@ -1,3 +1,4 @@
+let id;
 // 쿠키 가져오기
 function getCookie(name) {
     const cookies = document.cookie.split(';');
@@ -77,11 +78,9 @@ async function submitReview() {
   const resizedImageFile = imageFile ? await resizeImage(imageFile) : null;
   let imageUrl = null;
   if (resizedImageFile) {
-    console.log(resizedImageFile);
-    console.log(imageUrl);
     imageUrl = await uploadImage(resizedImageFile);
   }
-  console.log(imageUrl);
+
   // 토큰 가져오기
   const token = getCookie('token');
 
@@ -106,8 +105,11 @@ async function submitReview() {
 
       if (response.ok) {
         const result = await response.json();
+        id = result.data.id;
+        console.log(result.data);
+        console.log(id);
         alert('리뷰 제출이 완료되었습니다!');
-        window.location.replace('./community.html'); // 페이지 이동
+        redirectToCommunityPage(id, imageUrl);// 페이지 이동
       } else {
         console.error('Error submitting review:', response.status, response.statusText);
       }
@@ -118,7 +120,10 @@ async function submitReview() {
     alert('입력에 오류가 있습니다!');
   }
 }
-
+// 페이지 이동 함수
+function redirectToCommunityPage(id, imageUrl) {
+  window.location.href = `./community.html?reviewId=${encodeURIComponent(id)}&imageUrl=${encodeURIComponent(imageUrl)}`;
+}
   // 로그아웃 
   function logout() {
     deleteCookie('token'); // 토큰 삭제

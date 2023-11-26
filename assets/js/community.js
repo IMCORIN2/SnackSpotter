@@ -57,6 +57,20 @@ async function fetchReviews() {
     throw error;
   }
 }
+
+// 이미지 URL 가져오기
+function getImageUrlFromQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('imageUrl');
+}
+
+// 아이디 URL 가져오기
+function getIdUrlFromQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('reviewId');
+}
+
+
 // 편의점 리뷰 렌더링하기
 async function renderReviewCards() {
   try {
@@ -66,12 +80,23 @@ async function renderReviewCards() {
     // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
     reviewCardsContainer.innerHTML = ''; 
 
+    const imageUrlFromQuery = getImageUrlFromQuery();
+    const idUrlFromQuery = getIdUrlFromQuery();
+
+    console.log(imageUrlFromQuery);
+    console.log(idUrlFromQuery);
+
     for (let i = 0; i < reviews.length; i++) {
       const review = reviews[i];
-      const imageUrl = review.image ? `http://localhost:3000${review.image}` : '';
+      const imageUrl = imageUrlFromQuery;
+      const imageId = idUrlFromQuery;
       const storeName = review.store ? review.store.name : 'No Store Name';
       const userName = review.user ? review.user.name : 'No User Name';
 
+      if (imageId == review.id) {
+        review.image = imageUrl;
+      }
+      
       function getStarRating(rating) {
         const stars = '⭐'.repeat(rating); 
         return stars || 'No Rating'; 
@@ -82,7 +107,6 @@ async function renderReviewCards() {
       card.className = 'col';
       card.innerHTML = `
         <div class="card h-100">
-          ${review.image ? `<img src="${imageUrl}" class="card-img-top" alt="${storeName}">` : ''}
           <div class="card-body">
             <h5 class="card-title" style="color: #0D6EFD;">${storeName}</h5>
             <p class="card-text">별점: ${getStarRating(review.rating)}</p>
@@ -93,8 +117,17 @@ async function renderReviewCards() {
           </div>
         </div>`;
 
-      reviewCardsContainer.appendChild(card);
+    // 이미지가 있는 경우 이미지 엘리먼트를 생성하고 추가
+    if (review.image) {
+      const imgElement = document.createElement('img');
+      imgElement.src = review.image;
+      imgElement.alt = storeName;
+      imgElement.className = 'card-img-top';
+      card.querySelector('.card-body').prepend(imgElement);
     }
+    
+    reviewCardsContainer.appendChild(card);
+  }
   } catch (error) {
     console.error('에러 ---', error);
   }
@@ -160,6 +193,33 @@ async function editReview(reviewId) {
   }
 }
 
+// 이미지를 업로드하고 URL을 반환하는 함수
+async function uploadImageAndGetUrl(file) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await fetch('http://localhost:3000/api/store-reviews/upload', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Image upload successful:', data.url);
+      return data.url;
+    } else {
+      console.error('Error uploading image:', response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return null;
+  }
+}
 
 
 
