@@ -26,31 +26,42 @@ function fileToBase64(file) {
   });
 }
 
-//이미지 사이즈 조정
+// 이미지 확장자 추출 함수 정의
+function getImageFileExtension(filename) {
+  const matches = filename.match(/\.(jpg|jpeg|png|gif)$/i);
+  if (!matches || matches.length < 2) {
+    return 'jpeg'; // 기본적으로 jpeg 확장자를 반환하도록 수정
+  }
+  return matches[1].toLowerCase();
+}
+
+// 이미지 사이즈 조정
 async function resizeImage(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const img = new Image();
-      img.onload = () => {
+      img.onload = async () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 100; // 원하는 폭으로 설정
         canvas.height = (100 * img.height) / img.width; // 종횡비 유지
 
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob) => {
+        canvas.toBlob(async (blob) => {
+          // 이미지 확장자에 따라 ContentType 변경
           const resizedFile = new File([blob], file.name, {
-            type: 'image/jpeg', // 필요에 따라 타입 조정
+            type: `image/${getImageFileExtension(file.name)}`,
           });
           resolve(resizedFile);
-        }, 'image/jpeg');
+        }, `image/${getImageFileExtension(file.name)}`);
       };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   });
 }
+
 
 //글쓰기
 async function submitReview() {
@@ -92,6 +103,7 @@ async function submitReview() {
       if (response.ok) {
         const result = await response.json();
         alert('리뷰 제출이 완료되었습니다!');
+        window.location.replace('./community.html'); // 페이지 이동
       } else {
         console.error('Error submitting review:', response.status, response.statusText);
       }
