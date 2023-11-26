@@ -59,7 +59,7 @@ async function cartGet() {
           <img src="${imageUrl}" style="height: 120px" />
         </div>
         <div class="about">
-          <h3 class="title">${product.name}</h3>
+          <div class="title">${product.name}</div>
         </div>
         <div class="counter">
           <div class="btn minus" data-index="${i}">-</div>
