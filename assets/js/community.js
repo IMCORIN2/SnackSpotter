@@ -1,14 +1,3 @@
-function createUpdatedReview(review, newImageUrl) {
-  const updatedReview = { ...review }; // 기존 리뷰 객체를 복제
-
-  if (newImageUrl) {
-    updatedReview.image = newImageUrl; // 새로운 이미지 URL 추가
-  }
-
-  return updatedReview;
-}
-
-
 function createReview() {
   console.log('createReview function called');
   const isLoggedIn = checkLoginStatus();
@@ -94,6 +83,9 @@ async function renderReviewCards() {
     const imageUrlFromQuery = getImageUrlFromQuery();
     const idUrlFromQuery = getIdUrlFromQuery();
 
+    console.log(imageUrlFromQuery);
+    console.log(idUrlFromQuery);
+
     for (let i = 0; i < reviews.length; i++) {
       const review = reviews[i];
       const imageUrl = imageUrlFromQuery;
@@ -101,10 +93,8 @@ async function renderReviewCards() {
       const storeName = review.store ? review.store.name : 'No Store Name';
       const userName = review.user ? review.user.name : 'No User Name';
 
-      let updatedReview = { ...review };
-
- if (imageId == review.id) {
-        updatedReview.image = imageUrl;
+      if (imageId == review.id) {
+        review.image = imageUrl;
       }
       
       function getStarRating(rating) {
@@ -128,18 +118,13 @@ async function renderReviewCards() {
         </div>`;
 
     // 이미지가 있는 경우 이미지 엘리먼트를 생성하고 추가
-if (updatedReview.image || updatedReview.newImage) {
-  const imgElement = document.createElement('img');
-  imgElement.src = updatedReview.newImage || updatedReview.image;
-  imgElement.alt = storeName;
-  imgElement.className = 'card-img-top';
-
-  // 이미지 크기를 조절
-  imgElement.style.maxHeight = '100px'; 
-  imgElement.style.maxWidth = '100px';  
-
-  card.querySelector('.card-body').prepend(imgElement);
-}
+    if (review.image) {
+      const imgElement = document.createElement('img');
+      imgElement.src = review.image;
+      imgElement.alt = storeName;
+      imgElement.className = 'card-img-top';
+      card.querySelector('.card-body').prepend(imgElement);
+    }
     
     reviewCardsContainer.appendChild(card);
   }
