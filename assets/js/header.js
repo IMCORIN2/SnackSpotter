@@ -138,6 +138,10 @@ function checkTokenExpiration() {
 // 쿠키에서 토큰 가져오기
 function getCookie(name) {
   const cookies = document.cookie.split('; ');
+  // cookies = [name=, expires=Thu, 01 Jan 1970 00:00:00 UTC, path=/]
+  // 1 [name, null]
+  // 2 [expires, 01 Jan 1970 00:00:00 UTC]
+  // 3 [path, /]
   for (const cookie of cookies) {
     const [cookieName, cookieValue] = cookie.split('=');
     if (cookieName === name) {
@@ -178,7 +182,7 @@ function logout() {
 
   // 서버에 로그아웃 요청 보냄
   fetch('/logout', {
-    method: 'POST',
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getCookie('token')}`, // 토큰을 헤더에 추가
