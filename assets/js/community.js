@@ -78,7 +78,7 @@ async function renderReviewCards() {
     const reviewCardsContainer = document.getElementById('productCardsContainer');
 
     // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
-    reviewCardsContainer.innerHTML = ''; 
+    reviewCardsContainer.innerHTML = '';
 
     const imageUrlFromQuery = getImageUrlFromQuery();
     const idUrlFromQuery = getIdUrlFromQuery();
@@ -96,10 +96,10 @@ async function renderReviewCards() {
       if (imageId == review.id) {
         review.image = imageUrl;
       }
-      
+
       function getStarRating(rating) {
-        const stars = '⭐'.repeat(rating); 
-        return stars || 'No Rating'; 
+        const stars = '⭐'.repeat(rating);
+        return stars || 'No Rating';
       }
 
       // 새로운 리뷰 카드를 생성하고 추가
@@ -117,21 +117,26 @@ async function renderReviewCards() {
           </div>
         </div>`;
 
-    // 이미지가 있는 경우 이미지 엘리먼트를 생성하고 추가
-    if (review.image) {
-      const imgElement = document.createElement('img');
-      imgElement.src = review.image;
-      imgElement.alt = storeName;
-      imgElement.className = 'card-img-top';
-      card.querySelector('.card-body').prepend(imgElement);
+      // 이미지가 있는 경우 이미지 엘리먼트를 생성하고 추가
+      if (review.image) {
+        const imgElement = document.createElement('img');
+        imgElement.src = review.image;
+        imgElement.alt = storeName;
+        imgElement.className = 'card-img-top';
+        card.querySelector('.card-body').prepend(imgElement);
+
+        // 이미지 크기를 조절
+        imgElement.style.maxHeight = '100px';
+        imgElement.style.maxWidth = '100px';
+      }
+
+      reviewCardsContainer.appendChild(card);
     }
-    
-    reviewCardsContainer.appendChild(card);
-  }
   } catch (error) {
     console.error('에러 ---', error);
   }
 }
+
 
 // 리뷰 삭제
 async function deleteReview(reviewId) {
