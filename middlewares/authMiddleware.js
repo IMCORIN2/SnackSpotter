@@ -6,8 +6,53 @@ const {
 const db = require('../models/index.js');
 const { Users, RefreshTokens } = db;
 
+// const isAuthenticated = async (req, res, next) => {
+//   try {
+//     const authorizationHeaders = req.headers.authorization;
+//     if (!authorizationHeaders) {
+//       return res.status(400).json({
+//         success: false,
+//         message: '인증 정보가 없습니다.',
+//       });
+//     }
+
+//     const [tokenType, accessToken] = authorizationHeaders.split(' ');
+
+//     if (tokenType !== 'Bearer') {
+//       return res.status(400).json({
+//         success: false,
+//         message: '지원하지 않는 인증 방식입니다.',
+//       });
+//     }
+
+//     // 토큰이 유효한지 확인
+//     const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
+
+//     const { userId } = decodedPayload;
+//     const user = await Users.findByPk(userId);
+
+//     if (!user) {
+//       return res.status(400).json({
+//         success: false,
+//         message: '존재하지 않는 사용자입니다.',
+//       });
+//     }
+
+//     req.user = user; // 사용자 정보를 req.user에 할당
+
+//     next();
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
+//     });
+//   }
+// };
+
 const isAuthenticated = async (req, res, next) => {
   try {
+    
     const authorizationHeaders = req.headers.authorization;
     if (!authorizationHeaders) {
       return res.status(400).json({
@@ -16,42 +61,6 @@ const isAuthenticated = async (req, res, next) => {
       });
     }
 
-    const [tokenType, accessToken] = authorizationHeaders.split(' ');
-
-    if (tokenType !== 'Bearer') {
-      return res.status(400).json({
-        success: false,
-        message: '지원하지 않는 인증 방식입니다.',
-      });
-    }
-
-    // 토큰이 유효한지 확인
-    const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
-
-    const { userId } = decodedPayload;
-    const user = await Users.findByPk(userId);
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: '존재하지 않는 사용자입니다.',
-      });
-    }
-
-    req.user = user; // 사용자 정보를 req.user에 할당
-
-    next();
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
-    });
-  }
-};
-
-const verifyToken = async (req, res, next) => {
-  try {
     const [tokenType, accessToken] = req.headers.authorization?.split(' ');
 
     if (tokenType !== 'Bearer') {
