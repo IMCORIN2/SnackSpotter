@@ -6,36 +6,51 @@ const { Carts, Products } = require('../models');
 
 // 장바구니 조회
 router.get('/', isAuthenticated, async (req, res) => {
-  const carts = await Carts.findAll({
-    where: { userId: req.user.id },
-    attributes: ['productId', 'quantity'],
-  });
+  try {
+    const carts = await Carts.findAll({
+      where: { userId: req.user.id },
+      attributes: ['productId', 'quantity'],
+    });
 
-  const products = await Promise.all(
-    carts.map(async (cartItem) => {
-      const product = await Products.findByPk(cartItem.productId, {
-        attributes: ['name', 'price', 'image'],
-      });
+    const products = await Promise.all(
+      carts.map(async (cartItem) => {
+        const product = await Products.findByPk(cartItem.productId, {
+          attributes: ['name', 'price', 'image'],
+        });
 
-      return {
-        price: product.price,
-        name: product.name,
-        image: product.image,
-      };
-    }),
-  );
+        return {
+          price: product.price,
+          name: product.name,
+          image: product.image,
+        };
+      }),
+    );
 
-  res.status(200).json({
-    success: true,
-    message: '장바구니 목록 조회 성공하였습니다',
-    products,
-    carts,
-  });
+    res.status(200).json({
+      success: true,
+      message: '장바구니 목록 조회 성공하였습니다',
+      products,
+      carts,
+    });
+  } catch (error) {
+    console.error('에러 --- ', error);
+    res.status(500).json({
+      success: false,
+      message: '장바구니 목록 조회에 실패하였습니다',
+    });
+  }
 });
 
-// 장바구니에 물품 추가
 router.post('/', isAuthenticated, async (req, res) => {
   try {
+    if (!req.user) {
+      // 토큰이 없거나 유효하지 않은 경우 401 에러를 클라이언트에게 반환
+      return res.status(401).json({
+        success: false,
+        message: '로그인이 필요합니다.',
+      });
+    }
+
     const { productId, quantity } = req.body;
 
     const existProduct = await Carts.findOne({
@@ -43,11 +58,9 @@ router.post('/', isAuthenticated, async (req, res) => {
       attributes: ['quantity'],
     });
 
-    console.log(existProduct);
-
     if (existProduct) {
       await Carts.update(
-        { quantity: quantity + existProduct.quantity },
+        { quantity: quantity + (existProduct.quantity || 0) },
         { where: { userId: req.user.id, productId: productId } },
       );
     } else {
@@ -58,15 +71,20 @@ router.post('/', isAuthenticated, async (req, res) => {
       });
     }
 
+    // 성공 메시지 및 버튼과 함께 응답
     res.status(200).json({
       success: true,
       message: '장바구니에 담기 성공하였습니다',
     });
   } catch (error) {
     console.error('에러 --- ', error);
+    res.status(500).json({
+      success: false,
+      message: '장바구니에 담기 실패하였습니다',
+    });
   }
 });
-
+   
 // 장바구니의 물품 삭제
 router.delete('/', isAuthenticated, async (req, res) => {
   const { productId } = req.body;
@@ -110,6 +128,31 @@ router.put('/', isAuthenticated, async (req, res) => {
 
   try {
     const findProduct = await Products.findOne({ where: { id: id } });
+    if (findProduct) {
+      await findProduct.update({ quantity });
+      return res.json({
+        success: true,
+        message: '상품 정보를 수정하였습니다',
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, errorMessage: '상품을 찾을 수 없습니다' });
+    }
+  } catch (error) {
+    res
+      .status(400)
+      .json({ success: false, message: '상품 수정 실패했습니다', error });
+  }
+});
+
+router.put('/:id', isAuthenticated, async (req, res) => {
+  const { id } = req.params;
+  const { quantity } = req.body;
+
+  try {
+    const findProduct = await Products.findByPk(id);
+    
     if (findProduct) {
       await findProduct.update({ quantity });
       return res.json({

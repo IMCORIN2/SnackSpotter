@@ -20,7 +20,7 @@ if (productId) {
   async function fetchProductDetails() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/products/${productId}`,
+        `http://localhost:3000/api/products/${productId}`
       );
       return response.data.data;
     } catch (error) {
@@ -95,9 +95,6 @@ if (productId) {
 
   // 장바구니에 제품 추가 로직
   async function addToCart(product, quantity) {
-    // 제품을 장바구니에 추가하는 로직 구현
-    // 로컬 스토리지에 장바구니 항목 저장이나 서버에 요청을 보낼 수 있음
-
     try {
       const response = await fetch('http://localhost:3000/api/cart', {
         method: 'POST',
@@ -111,19 +108,49 @@ if (productId) {
         }),
       });
 
-      const result = await response.json();
+      const data = await response.json();
 
-      if (result.success) {
-        console.log(
-          `${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`,
-        );
+      if (data.success) {
+        console.log(`${quantity}개의 ${product.name}을 장바구니에 추가했습니다.`);
+
+        // 동적으로 버튼 생성
+        const buttonContainer = document.getElementById('myModal');
+        if (buttonContainer) {
+          data.buttons.forEach((buttonInfo) => {
+            const button = document.createElement('button');
+            button.innerText = buttonInfo.label;
+            button.addEventListener('click', () => {
+              window.location.href = buttonInfo.action;
+              closeModal();
+            });
+            buttonContainer.appendChild(button);
+          });
+        } else {
+          console.error('Button container not found.');
+        }
+
+        // 모달 열기
+        openModal();
       } else {
         console.error('Error:', response.status, response.statusText);
+        alert(data.message);
       }
     } catch (error) {
       console.error('Error:', error);
     }
   }
+
+ // 모달 열기
+function openModal() {
+  const modal = document.getElementById('myModal');
+  modal.style.display = 'block';
+}
+
+// 모달 닫기
+function closeModal() {
+  const modal = document.getElementById('myModal');
+  modal.style.display = 'none';
+}
 
   // 직접 구매 로직
   function directPurchase(product, quantity) {
