@@ -66,28 +66,19 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-            <div class="modal" tabindex="-1" role="dialog" id="myModal">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p>장바구니에 물건이 성공적으로 담겼습니다.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='cart.html'">장바구니로 이동</button>
-                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">닫기</button>
-                  </div>
-                </div>
-              </div>
+            <div class="modal-body">
+              <p>장바구니에 물건이 성공적으로 담겼습니다.</p>
             </div>
-            
-            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick="window.location.href='cart.html'">장바구니로 이동</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.location.href='products.html'">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     </div>
   </main>
@@ -97,7 +88,17 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/assets/js/detail.js"></script>
   <script src="../js/header.js"></script>
+  <script>
+    document.getElementById('addToCartBtn').addEventListener('click', function () {
+      openModal();
+    });
 
+    // 모달 열기
+    function openModal() {
+      const modal = new bootstrap.Modal(document.getElementById('myModal'));
+      modal.show();
+    }
+  </script>
 </body>
 
 </html>
