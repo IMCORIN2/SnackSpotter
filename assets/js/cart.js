@@ -39,6 +39,8 @@ async function cartGet() {
 
     let totalPrice = 0;
 
+    itemBox.innerHTML = '';
+
     const { carts, products } = data;
 
     for (let i = 0; i < carts.length; i++) {
@@ -189,7 +191,7 @@ async function handleQuantityChange(event) {
       // 서버에 업데이트된 장바구니 정보 전송
       await updateCart(item);
 
-      location.reload();
+      await cartGet();
     }
   } catch (error) {
     console.error('에러 ---', error);
