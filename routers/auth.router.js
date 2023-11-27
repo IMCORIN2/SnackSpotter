@@ -115,18 +115,46 @@ authRouter.post('/signup', async (req, res) => {
     ).toJSON();
     delete newUser.password;
 
-    return res.status(201).json({
-      success: true,
-      message: '회원가입에 성공했습니다.',
-      data: newUser,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
-    });
-  }
+// 회원가입 성공 후 로그인 처리
+const accessToken = jwt.sign(
+  { userId: newUser.id },
+  JWT_ACCESS_TOKEN_SECRET,
+  {
+    expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+  },
+);
+
+const expires = new Date();
+expires.setHours(expires.getHours() + 12);
+
+res.cookie('authorization', `Bearer ${accessToken}`, {
+  expires: expires,
+});
+
+const refreshToken = jwt.sign(
+  { userId: newUser.id },
+  JWT_REFRESH_TOKEN_SECRET,
+  {
+    expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN,
+  },
+);
+
+const newRefreshToken = (
+  await RefreshTokens.create({ value: refreshToken, userId: newUser.id })
+).toJSON();
+
+return res.status(201).json({
+  success: true,
+  message: '회원가입 및 로그인에 성공했습니다.',
+  data: { accessToken },
+});
+} catch (error) {
+console.error(error);
+return res.status(500).json({
+  success: false,
+  message: '예상치 못한 에러가 발생했습니다. 관리자에게 문의하세요.',
+});
+}
 });
 
 //로그인
@@ -205,7 +233,7 @@ authRouter.post('/signin', async (req, res) => {
 authRouter.post('/logout', isAuthenticated, async (req, res) => {
   try {
     const user = req.user;
-    res.clearCookie('authorization');
+    res.clearCookie('');
 
     // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나
     // db에 있는 refresh 토큰값과 그냥 가지고 있는 refresh 토큰 값을 비교해서 refresh 토큰이 존재한다고 조건을 걸면 되는건가

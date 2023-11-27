@@ -214,7 +214,7 @@ router.post('/', upload.single('image'), isAuthenticated, async (req, res) => {
       storeId: store.id,
       userId,
       rating: rating,
-      image: imageUrl,
+      image: image,
       comment: comment,
     });
     console.log(image);
@@ -225,7 +225,7 @@ router.post('/', upload.single('image'), isAuthenticated, async (req, res) => {
         name: name,
         comment: comment,
         rating: rating,
-        image: imageUrl,
+        image: image,
         user: req.user.name,
       },
     });
@@ -243,14 +243,13 @@ router.put(
     // 파일이 제공되었는지 확인
     if (req.file) {
       // 파일 업로드 처리
-      const imageUrl = req.file.location;
-      res.json({ url: imageUrl });
+      const image = req.file.location;
+      res.json({ url: image });
     } else {
       // 리뷰 제출 처리
-      const { name, rating, comment, imageUrl } = req.body;
+      const { name, rating, comment, image } = req.body;
 
       // 업로드된 파일 확인
-      const image = imageUrl ? imageUrl : null;
       const reviewId = req.params.id;
 
       if (!comment || !rating) {
@@ -282,7 +281,7 @@ router.put(
 
         // 이미지 파일이 업로드된 경우에만 업데이트
         if (req.file) {
-          updateFields.image = imageUrl;
+          updateFields.image = image;
         }
 
         await review.update(updateFields);
@@ -293,7 +292,7 @@ router.put(
             id: review.id,
             name: review.store.name,
             comment: comment,
-            image: imageUrl,
+            image: image,
             rating: rating,
             user: req.user.name,
           },

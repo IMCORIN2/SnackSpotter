@@ -1,15 +1,24 @@
-function createReview() {
-  console.log('createReview function called');
-  const isLoggedIn = checkLoginStatus();
-
-  if (!isLoggedIn) {
-    // 로그인되어 있지 않으면 메시지 표시 후 함수 종료
-    alert('로그인을 해주세요.');
-    return;
+async function createReview() {
+  try {
+    const response = await fetch('http://localhost:3000/api/users', {
+      method: 'GET',
+      credentials: "include",
+    });
+ 
+    if (response.ok) {
+      const data = await response.json();
+      window.location.href = './storeReviews.html';
+      return true;
+    } else {
+      console.error('Error uploading image:', response.statusText);
+      alert('로그인이 필요합니다.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    alert('로그인이 필요합니다.');
+    return false;
   }
-
-  // 로그인이 되어 있으면 포스트 작성 페이지로 이동
-  window.location.href = './storeReviews.html';
 }
 
 async function checkLoginStatus() {
@@ -140,6 +149,7 @@ async function deleteReview(reviewId) {
       // 권한이 없는 경우 알림 표시
       alert('삭제할 권한이 없습니다.');
     } else {
+          alert('로그인이 필요합니다.');
       console.error(
         'Error deleting review:',
         response.status,
@@ -152,17 +162,12 @@ async function deleteReview(reviewId) {
 }
 
 async function editReview(reviewId) {
-  const isLoggedIn = checkLoginStatus();
-  if (isLoggedIn) {
-    try {
-      const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}/edit`, {
-        method: 'GET',  
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: "include",
-      });
-
+  try {
+    const response = await fetch('http://localhost:3000/api/users', {
+      method: 'GET',
+      credentials: "include",
+    });
+ 
       if (response.ok) {
         // 서버에서 권한이 확인되면 수정 페이지로 이동
         window.location.href = `./modifyReview.html?id=${reviewId}`;
@@ -170,6 +175,7 @@ async function editReview(reviewId) {
         // 권한이 없는 경우 알림 표시
         alert('수정할 권한이 없습니다.');
       } else {
+        alert('로그인이 필요합니다.');
         console.error(
           'Error fetching review:',
           response.status,
@@ -179,10 +185,6 @@ async function editReview(reviewId) {
     } catch (error) {
       console.error('Error fetching review:', error);
     }
-  } else {
-    // 토큰이 없는 경우 로그인 페이지로 이동 또는 다른 처리를 수행
-    alert('로그인이 필요합니다.');
-  }
 }
 
 // 이미지를 업로드하고 URL을 반환하는 함수

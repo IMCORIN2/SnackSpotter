@@ -70,7 +70,6 @@ async function submitReview() {
         method: 'POST',
         body: formData,
         credentials: "include",
-        mode: 'cors',
       });
 
       if (response.ok) {
@@ -166,6 +165,7 @@ async function uploadImage(image) {
     const response = await fetch('http://localhost:3000/api/store-reviews/upload', {
       method: 'POST',
       body: formData,
+      credentials: "include",
     });
 
     if (response.ok) {
