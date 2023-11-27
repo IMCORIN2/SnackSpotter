@@ -5,9 +5,6 @@ async function fetchCart() {
   try {
     const response = await fetch('http://localhost:3000/api/cart', {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       credentials: 'include',
     });
     const data = await response.json();
@@ -93,7 +90,7 @@ async function cartGet() {
             body: JSON.stringify({
               productId: carts[index].productId,
             }),
-            credentials: "include",
+            credentials: 'include',
           });
           cartGet();
         } catch (error) {
@@ -138,7 +135,7 @@ async function updateCart(cartItems) {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify({
         id: cartItems.id,
         quantity: cartItems.quantity,
@@ -187,3 +184,5 @@ async function handleQuantityChange(event) {
     throw error;
   }
 }
+
+window.onload(cartGet());
