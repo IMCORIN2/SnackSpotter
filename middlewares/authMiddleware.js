@@ -9,7 +9,7 @@ const { Users, RefreshTokens } = db;
 const isAuthenticated = async (req, res, next) => {
   try {
     
-    const authorizationHeaders = req.headers.authorization;
+    const authorizationHeaders = req.cookies.authorization;
     if (!authorizationHeaders) {
       return res.status(400).json({
         success: false,
@@ -17,7 +17,7 @@ const isAuthenticated = async (req, res, next) => {
       });
     }
 
-    const [tokenType, accessToken] = req.headers.authorization?.split(' ');
+    const [tokenType, accessToken] = req.cookies.authorization?.split(' ');
 
     if (tokenType !== 'Bearer') {
       return res.status(400).json({

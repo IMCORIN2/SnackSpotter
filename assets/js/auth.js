@@ -64,7 +64,6 @@ function sign_up() {
       console.log(result);
       if (result.success) {
         alert('회원가입 성공!');
-        setCookie('token', result.data.accessToken, 7);
         window.history.back();
       } else {
         alert(`회원가입 실패: ${result.message}`);
@@ -86,14 +85,13 @@ function sign_up() {
     },
     body: JSON.stringify({ email, password }),
     mode: 'cors', 
+    credentials: "include",
   })
     .then(response => response.json())
     .then(result => {
       console.log(result);
       if (result.success) {
         alert('로그인 성공!');
-        //localStorage.setItem('token', result.data.accessToken);
-        setCookie('token', result.data.accessToken, 7);
         window.history.back();
       } else {
         alert(`로그인 실패: ${result.message}`);
