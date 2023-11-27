@@ -123,7 +123,6 @@ function logout() {
   window.location.reload();
 }
 
-
  // 가게 목록을 가져오는 함수
 async function getStores() {
     try {

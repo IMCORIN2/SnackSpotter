@@ -205,7 +205,7 @@ authRouter.post('/signin', async (req, res) => {
 authRouter.post('/logout', isAuthenticated, async (req, res) => {
   try {
     const user = req.user;
-    res.clearCookie();
+    res.clearCookie('authorization');
 
     // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나
     // db에 있는 refresh 토큰값과 그냥 가지고 있는 refresh 토큰 값을 비교해서 refresh 토큰이 존재한다고 조건을 걸면 되는건가
