@@ -106,7 +106,6 @@ if (productId) {
         openModal();
       } else {
         console.error('오류:', response.status, response.statusText);
-        alert(data.message);
       }
     } catch (error) {
       console.error('오류:', error);

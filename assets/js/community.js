@@ -81,22 +81,10 @@ async function renderReviewCards() {
     // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
     reviewCardsContainer.innerHTML = '';
 
-    const imageUrlFromQuery = getImageUrlFromQuery();
-    const idUrlFromQuery = getIdUrlFromQuery();
-
-    console.log(imageUrlFromQuery);
-    console.log(idUrlFromQuery);
-
     for (let i = 0; i < reviews.length; i++) {
       const review = reviews[i];
-      const imageUrl = imageUrlFromQuery;
-      const imageId = idUrlFromQuery;
       const storeName = review.store ? review.store.name : 'No Store Name';
       const userName = review.user ? review.user.name : 'No User Name';
-
-      if (imageId == review.id) {
-        review.image = imageUrl;
-      }
 
       function getStarRating(rating) {
         const stars = '⭐'.repeat(rating);
@@ -111,7 +99,7 @@ async function renderReviewCards() {
           <div class="card-body">
             <h5 class="card-title" style="color: #0D6EFD;">${storeName}</h5>
             <p class="card-text">별점: ${getStarRating(review.rating)}</p>
-            <p class="card-text">${review.comment}</p>
+            <p class="card-text">내용: ${review.comment}</p>
             <p class="card-text">글쓴이: ${userName}</p>
             <button class="btn btn-outline-primary" onclick="deleteReview(${
               review.id
