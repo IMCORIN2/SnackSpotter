@@ -50,59 +50,6 @@ router.delete('/delete-all', async (req, res) => {
   }
 });
 
-// router.post('/', upload.single('image'), isAuthenticated, async (req, res) => {
-//   // 파일이 제공되었는지 확인
-//   if (req.file) {
-//     // 파일 업로드 처리
-//     res.json({ url: req.file.key});
-//   } else {
-//     // 리뷰 제출 처리
-//     const { name, rating, comment, imageUrl } = req.body;
-
-//   // 업로드된 파일 확인
-//   const image = imageUrl ? imageUrl : null;
-
-//   if (!name || !comment || !rating) {
-//     return res.status(400).json({ message: '입력이 올바르지 않습니다.' });
-//   }
-
-//   try {
-//     const userId = req.user.id;
-//     // 이름으로 가게 찾기
-//     const store = await Stores.findOne({ where: { name } });
-//     // 가게가 존재하는지 확인
-//     if (!store) {
-//       console.error(`가게를 찾을 수 없습니다. 가게 이름: ${name}`);
-//       return res.status(400).json({ message: '가게를 찾을 수 없습니다.' });
-//     }
-
-//     // 새 리뷰 작성
-//     const review = await StoreReviews.create({
-//       storeId: store.id,
-//       userId,
-//       rating: rating,
-//       image: image,
-//       comment: comment,
-//     });
-
-//     res.json({
-//       status: 'success',
-//       data: {
-//         id: review.id,
-//         name: name,
-//         comment: comment,
-//         rating: rating,
-//         image: image,
-//         user: req.user.name,
-//       },
-//     });
-//   } catch (error) {
-//     console.error(`가게 이름: ${name}`, error);
-//     res.status(500).json({ message: '오류가 발생했습니다.' });
-//   }
-// }
-// });
-
 router.get('/', async (req, res) => {
   try {
     const reviews = await StoreReviews.findAll({
