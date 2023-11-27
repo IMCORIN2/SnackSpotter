@@ -1,4 +1,4 @@
-let id;
+
 // 쿠키 가져오기
 function getCookie(name) {
     const cookies = document.cookie.split(';');
@@ -63,8 +63,6 @@ async function resizeImage(file) {
   });
 }
 
-
-//글쓰기
 async function submitReview() {
   const convenienceStoreSelect = document.getElementById('convenienceStore');
   const starRatingSelect = document.getElementById('starRating');
@@ -76,40 +74,31 @@ async function submitReview() {
   const imageFile = imageInput.files[0];
   const comment = commentType.value;
   const resizedImageFile = imageFile ? await resizeImage(imageFile) : null;
-  let imageUrl = null;
-  if (resizedImageFile) {
-    imageUrl = await uploadImage(resizedImageFile);
-  }
+  let image = resizedImageFile ? await uploadImage(resizedImageFile) : null;
 
   // 토큰 가져오기
   const token = getCookie('token');
 
   if (name && rating && comment && token) {
-    const data = {
-      name,
-      rating,
-      image: imageUrl,
-      comment,
-    };
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('rating', rating);
+    formData.append('image', image); 
+    formData.append('comment', comment);
 
     try {
       const response = await fetch('http://localhost:3000/api/store-reviews', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: formData,
         mode: 'cors',
       });
 
       if (response.ok) {
-        const result = await response.json();
-        id = result.data.id;
-        console.log(result.data);
-        console.log(id);
         alert('리뷰 제출이 완료되었습니다!');
-        redirectToCommunityPage(id, imageUrl);// 페이지 이동
+        window.location.href = `./community.html?`;
       } else {
         console.error('Error submitting review:', response.status, response.statusText);
       }
@@ -120,10 +109,7 @@ async function submitReview() {
     alert('입력에 오류가 있습니다!');
   }
 }
-// 페이지 이동 함수
-function redirectToCommunityPage(id, imageUrl) {
-  window.location.href = `./community.html?reviewId=${encodeURIComponent(id)}&imageUrl=${encodeURIComponent(imageUrl)}`;
-}
+
   // 로그아웃 
   function logout() {
     deleteCookie('token'); // 토큰 삭제
@@ -165,9 +151,9 @@ async function getStores() {
   }
   
   // 이미지를 업로드하고 URL을 반환하는 함수
-async function uploadImage(file) {
+async function uploadImage(image) {
   const formData = new FormData();
-  formData.append('image', file);
+  formData.append('image', image);
 
   try {
     const response = await fetch('http://localhost:3000/api/store-reviews/upload', {

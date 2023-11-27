@@ -58,19 +58,6 @@ async function fetchReviews() {
   }
 }
 
-// 이미지 URL 가져오기
-function getImageUrlFromQuery() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('imageUrl');
-}
-
-// 아이디 URL 가져오기
-function getIdUrlFromQuery() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('reviewId');
-}
-
-
 // 편의점 리뷰 렌더링하기
 async function renderReviewCards() {
   try {
@@ -80,22 +67,10 @@ async function renderReviewCards() {
     // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
     reviewCardsContainer.innerHTML = '';
 
-    const imageUrlFromQuery = getImageUrlFromQuery();
-    const idUrlFromQuery = getIdUrlFromQuery();
-
-    console.log(imageUrlFromQuery);
-    console.log(idUrlFromQuery);
-
     for (let i = 0; i < reviews.length; i++) {
       const review = reviews[i];
-      const imageUrl = imageUrlFromQuery;
-      const imageId = idUrlFromQuery;
       const storeName = review.store ? review.store.name : 'No Store Name';
       const userName = review.user ? review.user.name : 'No User Name';
-
-      if (imageId == review.id) {
-        review.image = imageUrl;
-      }
 
       function getStarRating(rating) {
         const stars = '⭐'.repeat(rating);
@@ -136,7 +111,6 @@ async function renderReviewCards() {
     console.error('에러 ---', error);
   }
 }
-
 
 // 리뷰 삭제
 async function deleteReview(reviewId) {
@@ -199,37 +173,6 @@ async function editReview(reviewId) {
     alert('로그인이 필요합니다.');
   }
 }
-
-// 이미지를 업로드하고 URL을 반환하는 함수
-async function uploadImageAndGetUrl(file) {
-  const formData = new FormData();
-  formData.append('image', file);
-
-  try {
-    const response = await fetch('http://localhost:3000/api/store-reviews/upload', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Image upload successful:', data.url);
-      return data.url;
-    } else {
-      console.error('Error uploading image:', response.statusText);
-      return null;
-    }
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    return null;
-  }
-}
-
-
-
 
 // 페이지 로드 시 자동으로 리뷰 카드 렌더링 함수 호출
 window.onload = renderReviewCards;
