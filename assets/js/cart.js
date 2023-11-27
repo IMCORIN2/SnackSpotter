@@ -8,7 +8,7 @@ async function fetchCart() {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
     });
     const data = await response.json();
 
@@ -95,7 +95,7 @@ async function cartGet() {
             }),
             credentials: "include",
           });
-          location.reload();
+          cartGet();
         } catch (error) {
           console.error('에러 ---', error);
           throw error;
@@ -115,12 +115,12 @@ async function deleteAllCart() {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        credentials: "include",
       },
+      credentials: 'include',
     });
     const data = await response.json();
 
-    location.reload();
+    cartGet();
 
     console.log('Cart updated successfully:', data);
   } catch (error) {
@@ -137,8 +137,8 @@ async function updateCart(cartItems) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        credentials: "include",
       },
+      credentials: "include",
       body: JSON.stringify({
         id: cartItems.id,
         quantity: cartItems.quantity,

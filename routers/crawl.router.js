@@ -30,7 +30,7 @@ async function getLink() {
       // prod_list 클래스를 가진 모든 요소 선택
       const prodListElements = await page.$$('.prod_list');
 
-      for (prodListElement of prodListElements) {
+      for (const prodListElement of prodListElements) {
         const link = await prodListElement.$eval('div.prod_img', (element) =>
           element.getAttribute('onclick').replace(/[^0-9]/g, ''),
         );

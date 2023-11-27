@@ -49,11 +49,25 @@ async function fetchReviews() {
   }
 }
 
+// 이미지 URL 가져오기
+function getImageUrlFromQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('imageUrl');
+}
+
+// 아이디 URL 가져오기
+function getIdUrlFromQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('reviewId');
+}
+
 // 편의점 리뷰 렌더링하기
 async function renderReviewCards() {
   try {
     const reviews = await fetchReviews();
-    const reviewCardsContainer = document.getElementById('productCardsContainer');
+    const reviewCardsContainer = document.getElementById(
+      'productCardsContainer',
+    );
 
     // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
     reviewCardsContainer.innerHTML = '';
@@ -78,8 +92,12 @@ async function renderReviewCards() {
             <p class="card-text">별점: ${getStarRating(review.rating)}</p>
             <p class="card-text">내용: ${review.comment}</p>
             <p class="card-text">글쓴이: ${userName}</p>
-            <button class="btn btn-outline-primary" onclick="deleteReview(${review.id})">Delete</button>
-            <button class="btn btn-primary" onclick="editReview(${review.id})">Edit</button>
+            <button class="btn btn-outline-primary" onclick="deleteReview(${
+              review.id
+            })">Delete</button>
+            <button class="btn btn-primary" onclick="editReview(${
+              review.id
+            })">Edit</button>
           </div>
         </div>`;
 
@@ -118,18 +136,18 @@ async function deleteReview(reviewId) {
       const result = await response.json();
       // 삭제 후 페이지 갱신
       location.reload();
-    } 
-    else if (response.status === 403) {
+    } else if (response.status === 403) {
       // 권한이 없는 경우 알림 표시
       alert('삭제할 권한이 없습니다.');
-    }
-    else {
-      console.error('Error deleting review:', response.status, response.statusText);
-      alert('로그인을 해주세요.');
+    } else {
+      console.error(
+        'Error deleting review:',
+        response.status,
+        response.statusText,
+      );
     }
   } catch (error) {
     console.error('Error deleting review:', error);
-    
   }
 }
 
@@ -152,7 +170,11 @@ async function editReview(reviewId) {
         // 권한이 없는 경우 알림 표시
         alert('수정할 권한이 없습니다.');
       } else {
-        console.error('Error fetching review:', response.status, response.statusText);
+        console.error(
+          'Error fetching review:',
+          response.status,
+          response.statusText,
+        );
       }
     } catch (error) {
       console.error('Error fetching review:', error);
@@ -160,6 +182,37 @@ async function editReview(reviewId) {
   } else {
     // 토큰이 없는 경우 로그인 페이지로 이동 또는 다른 처리를 수행
     alert('로그인이 필요합니다.');
+  }
+}
+
+// 이미지를 업로드하고 URL을 반환하는 함수
+async function uploadImageAndGetUrl(file) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await fetch(
+      'http://localhost:3000/api/store-reviews/upload',
+      {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Image upload successful:', data.url);
+      return data.url;
+    } else {
+      console.error('Error uploading image:', response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return null;
   }
 }
 

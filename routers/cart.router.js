@@ -107,18 +107,19 @@ router.delete('/', isAuthenticated, async (req, res) => {
     }
   } catch (error) {
     res
-      .status(400)
+      .status(500)
       .json({ success: false, message: '상품 삭제에 실패했습니다', error });
   }
 });
 
+// 상품 전체 삭제
 router.delete('/all', isAuthenticated, async (req, res) => {
   try {
     await Carts.destroy({ where: { userId: req.user.id } });
     res.json({ success: true, message: '상품을 삭제하였습니다' });
   } catch (error) {
     res
-      .status(400)
+      .status(500)
       .json({ success: false, message: '상품 삭제에 실패했습니다', error });
   }
 });
@@ -143,7 +144,7 @@ router.put('/', isAuthenticated, async (req, res) => {
     }
   } catch (error) {
     res
-      .status(400)
+      .status(500)
       .json({ success: false, message: '상품 수정 실패했습니다', error });
   }
 });
@@ -168,7 +169,7 @@ router.put('/:id', isAuthenticated, async (req, res) => {
     }
   } catch (error) {
     res
-      .status(400)
+      .status(500)
       .json({ success: false, message: '상품 수정 실패했습니다', error });
   }
 });
