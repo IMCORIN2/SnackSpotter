@@ -195,8 +195,9 @@ router.put('/:id', isAuthenticated, upload.single('image'), async (req, res) => 
       comment: comment,
     };
 
+    console.log(image)
     // 이미지 파일이 업로드된 경우에만 업데이트
-    if (req.file) {
+    if (image) {
       updateFields.image = image;
     }
 

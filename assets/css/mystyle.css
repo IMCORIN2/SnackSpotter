@@ -93,12 +93,12 @@ body {
   margin-bottom: 20px;
 }
 
+.carousel-inner{
+  width:300px;
+  height:300px;
+}
 
 .imageContainer img {
   width: 150px;
   height: 150px;
-}
-.carouselslide {
-  width: 500px;
-  height: 40px;
 }

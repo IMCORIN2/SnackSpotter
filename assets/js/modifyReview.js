@@ -65,6 +65,7 @@ async function editReview() {
     formData.append('image', image); 
     formData.append('comment', comment);
 
+    console.log(image);
     try {
         const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
           method: 'PUT',

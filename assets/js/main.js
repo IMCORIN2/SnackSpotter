@@ -111,35 +111,53 @@ async function fetchReviews() {
     throw error;
   }
 }
+
 // 편의점 리뷰 렌더링하기
 async function renderReviewCards() {
   try {
     const reviews = await fetchReviews();
     const reviewCardsContainer = document.getElementById('reviewCardsContainer');
 
+    // 기존 내용을 지우고 새로운 리뷰 카드를 추가할 요소 생성
+    reviewCardsContainer.innerHTML = '';
+
     for (let i = 0; i < 3; i++) {
       const review = reviews[i];
-      const imageUrl = review.image ? `http://localhost:3000/storeReviews/${review.image}` : '';
       const storeName = review.store ? review.store.name : 'No Store Name';
       const userName = review.user ? review.user.name : 'No User Name';
 
       function getStarRating(rating) {
-        const stars = '⭐'.repeat(rating); 
-        return stars || 'No Rating'; 
+        const stars = '⭐'.repeat(rating);
+        return stars || 'No Rating';
       }
 
-      reviewCardsContainer.innerHTML += `
-        <div class="col">
-          <div class="card h-100">
-            ${review.image ? `<img src="${imageUrl}" class="card-img-top" alt="${storeName}">` : ''}
-            <div class="card-body">
+      // 새로운 리뷰 카드를 생성하고 추가
+      const card = document.createElement('div');
+      card.className = 'col';
+      card.innerHTML = `
+        <div class="card h-100">
+          <div class="card-body">
             <h5 class="card-title" style="color: #0D6EFD;">${storeName}</h5>
-              <p class="card-text">별점: ${getStarRating(review.rating)}</p>
-              <p class="card-text">${review.comment}</p>
-              <p class="card-text">글쓴이: ${userName}</p>
-            </div>
+            <p class="card-text">별점: ${getStarRating(review.rating)}</p>
+            <p class="card-text">내용: ${review.comment}</p>
+            <p class="card-text">글쓴이: ${userName}</p>
           </div>
         </div>`;
+
+      // 이미지가 있는 경우 이미지 엘리먼트를 생성하고 추가
+      if (review.image) {
+        const imgElement = document.createElement('img');
+        imgElement.src = review.image;
+        imgElement.alt = storeName;
+        imgElement.className = 'card-img-top';
+        card.querySelector('.card-body').prepend(imgElement);
+
+        // 이미지 크기를 조절
+        imgElement.style.maxHeight = '100px';
+        imgElement.style.maxWidth = '100px';
+      }
+
+      reviewCardsContainer.appendChild(card);
     }
   } catch (error) {
     console.error('에러 ---', error);
@@ -148,6 +166,9 @@ async function renderReviewCards() {
 
 // 페이지 로드 시 상품 카드 렌더링 함수 호출
 document.addEventListener('DOMContentLoaded', function () {
+  // 상품 카드 렌더링 함수 호출
   renderProductCards();
+
+  // 편의점 리뷰 카드 렌더링 함수 호출
   renderReviewCards();
 });

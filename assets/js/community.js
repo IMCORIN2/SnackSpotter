@@ -59,18 +59,6 @@ async function fetchReviews() {
   }
 }
 
-// 이미지 URL 가져오기
-function getImageUrlFromQuery() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('imageUrl');
-}
-
-// 아이디 URL 가져오기
-function getIdUrlFromQuery() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('reviewId');
-}
-
 // 편의점 리뷰 렌더링하기
 async function renderReviewCards() {
   try {
@@ -112,7 +100,7 @@ async function renderReviewCards() {
         </div>`;
 
       // 이미지가 있는 경우 이미지 엘리먼트를 생성하고 추가
-      if (review.image) {
+      if (review.image && review.image != "null") {
         const imgElement = document.createElement('img');
         imgElement.src = review.image;
         imgElement.alt = storeName;
