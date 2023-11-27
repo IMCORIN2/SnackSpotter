@@ -32,7 +32,7 @@ async function setupLoginButtons() {
     loginButton.addEventListener('click', function () {
       logout();
     });
-  } else {
+  }   if (!isLoggedIn){
     // 로그인 중이 아니면 로그인 버튼 표시
     loginButton.innerText = 'login';
     loginButton.addEventListener('click', function () {

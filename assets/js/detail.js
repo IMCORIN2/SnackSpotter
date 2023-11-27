@@ -104,6 +104,7 @@ if (productId) {
         // 모달 열기
         openModal();
       } else {
+        alert("로그인을 해주세요!")
         console.error('오류:', response.status, response.statusText);
       }
     } catch (error) {
