@@ -1,17 +1,5 @@
 const itemBox = document.querySelector('.Cart-ItemBox');
 
-function getCookie(name) {
-  const cookies = document.cookie.split(';');
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
-
-    if (cookie.startsWith(name + '=')) {
-      return cookie.substring(name.length + 1);
-    }
-  }
-  return null;
-}
-
 // 서버에서 데이터 가져오기
 async function fetchCart() {
   try {
@@ -19,8 +7,8 @@ async function fetchCart() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${getCookie('token')}`,
       },
+      credentials: 'include',
     });
     const data = await response.json();
 
@@ -101,13 +89,13 @@ async function cartGet() {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
-              authorization: `Bearer ${getCookie('token')}`,
             },
             body: JSON.stringify({
               productId: carts[index].productId,
             }),
+            credentials: 'include',
           });
-          location.reload();
+          cartGet();
         } catch (error) {
           console.error('에러 ---', error);
           throw error;
@@ -127,12 +115,12 @@ async function deleteAllCart() {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${getCookie('token')}`,
       },
+      credentials: 'include',
     });
     const data = await response.json();
 
-    location.reload();
+    cartGet();
 
     console.log('Cart updated successfully:', data);
   } catch (error) {
@@ -149,8 +137,8 @@ async function updateCart(cartItems) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${getCookie('token')}`,
       },
+      credentials: 'include',
       body: JSON.stringify({
         id: cartItems.id,
         quantity: cartItems.quantity,
