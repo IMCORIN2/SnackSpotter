@@ -9,7 +9,7 @@ const { Users, RefreshTokens } = db;
 const isAuthenticated = async (req, res, next) => {
   try {
     
-    const authorizationHeaders = req.cookies.authorization;
+    const authorizationHeaders = req.headers.authorization;
     if (!authorizationHeaders) {
       return res.status(400).json({
         success: false,
@@ -63,12 +63,10 @@ const isAuthenticated = async (req, res, next) => {
       );
 
       const expires = new Date();
-     //expires.setHours(expires.getHours() + 12),
-      console.log(expires.setHours(expires.getHours() + 12));
+      expires.setHours(expires.getHours() + 12);
 
       res.cookie('authorization', `Bearer ${newAccessToken}`, {
-        expires:  expires.setHours(expires.getHours() + 12),
-        httpOnly: true,
+        expires: expires,
       });
     }
 

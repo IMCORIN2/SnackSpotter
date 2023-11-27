@@ -45,7 +45,7 @@ authRouter.post('/check-email', async (req, res) => {
 });
 
 // 회원가입
-authRouter.post('/signup', isAuthenticated, async (req, res) => {
+authRouter.post('/signup', async (req, res) => {
   try {
     const { name, email, password, passwordConfirm, gender, birthday } =
       req.body;
@@ -130,7 +130,7 @@ authRouter.post('/signup', isAuthenticated, async (req, res) => {
 });
 
 //로그인
-authRouter.post('/signin', isAuthenticated, async (req, res) => {
+authRouter.post('/signin', async (req, res) => {
   try {
     const { email, password } = req.body;
 
