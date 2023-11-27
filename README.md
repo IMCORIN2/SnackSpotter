@@ -20,7 +20,6 @@ NODE JS, JAVASCRIPT, HTML, CSS, AWS - EC2, RDS, S3
     - [bcrypt](https://github.com/kelektiv/node.bcrypt.js)와 같은 패키지 사용
 - 로그인 및 로그아웃 기능
     - 사용자는 자신의 계정으로 서비스에 로그인하고 로그아웃
-    - 1. 전달 받은 토큰 마킹 하기. 2. 블랙리스트 이용하기 (토큰이 블랙리스트에 선언 되었으면 로그아웃)
 - **프로필 관리**
     - 프로필 수정 기능
     - 이름, 이메일, 비밀번호등 개인 정보 수정
