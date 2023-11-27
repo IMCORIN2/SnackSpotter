@@ -161,31 +161,34 @@ async function deleteReview(reviewId) {
   }
 }
 
+// editReview 함수
 async function editReview(reviewId) {
   try {
-    const response = await fetch('http://localhost:3000/api/users', {
+    const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
       method: 'GET',
-      credentials: "include",
+      credentials: 'include',
     });
- 
-      if (response.ok) {
-        // 서버에서 권한이 확인되면 수정 페이지로 이동
-        window.location.href = `./modifyReview.html?id=${reviewId}`;
-      } else if (response.status === 403) {
-        // 권한이 없는 경우 알림 표시
-        alert('수정할 권한이 없습니다.');
-      } else {
-        alert('로그인이 필요합니다.');
-        console.error(
-          'Error fetching review:',
-          response.status,
-          response.statusText,
-        );
-      }
-    } catch (error) {
-      console.error('Error fetching review:', error);
+
+    if (response.ok) {
+      // Server returned a 200 OK response, proceed with editing
+      window.location.href = `./modifyReview.html?id=${reviewId}`;
+    } else if (response.status === 403) {
+      // User does not have permission
+      alert('수정할 권한이 없습니다.');
+    } else {
+      // Other error scenarios
+      alert('리뷰를 가져오는 중에 오류가 발생했습니다.');
+      console.error('Error fetching review:', response.status, response.statusText);
     }
+  } catch (error) {
+    console.error('Error fetching review:', error);
+    alert('리뷰를 가져오는 중에 오류가 발생했습니다.');
+  }
 }
+
+
+
+
 
 // 이미지를 업로드하고 URL을 반환하는 함수
 async function uploadImageAndGetUrl(file) {

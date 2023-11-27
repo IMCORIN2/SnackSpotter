@@ -66,24 +66,22 @@ async function editReview() {
     formData.append('comment', comment);
 
     try {
-        const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
+        const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}/edit`, {
           method: 'PUT',
           credentials: "include",
           body: formData,
           mode: 'cors',
         });
-      
       if (response.ok) {
         alert('리뷰 수정이 완료되었습니다!');
         window.location.href = `./community.html`;
       } else {
+        alert('수정할 권리가 없습니다!');
         console.error('Error submitting review:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error submitting review:', error);
     }
-  } else {
-    alert('입력에 오류가 있습니다!');
   }
 }
 
