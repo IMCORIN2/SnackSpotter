@@ -58,7 +58,7 @@ function sign_up() {
       console.log(result);
       if (result.success) {
         alert('회원가입 성공!');
-        window.history.back();
+        window.location.href = 'login.html';
       } else {
         alert(`회원가입 실패: ${result.message}`);
       }
@@ -86,7 +86,7 @@ function sign_up() {
       console.log(result);
       if (result.success) {
         alert('로그인 성공!');
-        window.history.back();
+        window.location.href = 'main.html';
       } else {
         alert(`로그인 실패: ${result.message}`);
       }
