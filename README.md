@@ -29,8 +29,10 @@ NODE JS, JAVASCRIPT, HTML, CSS, AWS - EC2, RDS, S3
     - 게시물 작성, 수정, 삭제 시 새로고침 기능
 - **뉴스 피드 기능**
     - 편의점 투어 리뷰 페이지
-- **전체상품 페이지**
-    - CU편의점 웹사이트에서 전체 상품 가져오기
+- **전체상품 및 상세 페이지**
+    - CU편의점 웹사이트에서 상품 가져오기
+- **장바구니 기능**
+    - 장바구니 물건 넣기, 수정, 삭제 기능
 
 <img width="645" alt="Screenshot 2023-11-27 at 1 54 00 PM" src="https://github.com/IMCORIN2/SnackSpotter/assets/39757235/cdaea9a8-c4c1-43f2-838f-1e454bd3deb4">
 <img width="1437" alt="Screenshot 2023-11-27 at 1 54 18 PM" src="https://github.com/IMCORIN2/SnackSpotter/assets/39757235/d2d6231a-4b8d-4baf-9396-d4b42cf1a3aa">
