@@ -1,46 +1,3 @@
-// 쿠키 삭제 함수 (비동기)
-async function deleteCookie(name) {
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-
-  // 서버에 로그아웃 요청 보냄
-  try {
-    const token = getCookie('token'); // 쿠키에서 토큰 가져오기
-    console.log(token)
-    const decodedToken = decodeToken(token); // 토큰 디코딩
-
- if (decodedToken) {
-      const response = await fetch('/logout', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // 토큰을 헤더에 추가
-        },
-        // 사용자 ID 전송
-        body: JSON.stringify({ userId: decodedToken.userId }), // 디코딩된 토큰에서 사용자 ID 가져옴
-      });
-
-    const data = await response.json();
-
-    // 서버에서의 로그아웃이 성공했을 경우의 처리
-    console.log(data);
-
-    // 서버에서 로그아웃이 성공
-    if (data.success) {
-      alert('로그아웃이 성공적으로 처리되었습니다.');
-    } else {
-      // 서버에서 로그아웃이 실패한 경우
-      alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요1.');
-    }
-  } else {
-    console.error('토큰 디코딩 실패');
-  }
-} catch (error) {
-  // 서버에서의 로그아웃이 실패했을 경우의 처리
-  console.error('Error:', error);
-  alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요2.');
-}
-}
-
 // 로그인 버튼 설정 함수
 async function setupLoginButtons() {
   const loginContainer = document.getElementById('loginContainer');
@@ -96,7 +53,7 @@ async function setupLoginButtons() {
     });
 
     buttonContainer.appendChild(myPageButton);
-  } else {
+  } if (!isLoggedIn) {
     const signupButton = document.createElement('button');
     signupButton.type = 'button';
     signupButton.className = 'btn btn-primary me-2';
@@ -111,62 +68,6 @@ async function setupLoginButtons() {
   // 버튼 컨테이너를 로그인 컨테이너에 추가
   loginContainer.appendChild(buttonContainer);
 
-}
-
-// 로그인 버튼 설정 함수 호출
-setupLoginButtons();
-
-// 토큰 만료 여부 확인 및 처리
-function checkTokenExpiration() {
-  const isLoggedIn = checkLoggedIn();
-
-  if (isLoggedIn) {
-    const token = getCookie('token');
-    const decodedToken = decodeToken(token);
-
-    if (decodedToken.exp * 1000 < Date.now()) {
-      // 토큰이 만료되었을 때의 처리
-      alert('토큰이 만료되었습니다. 자동으로 로그아웃됩니다.');
-
-      // 로그아웃
-      logout();
-    }
-  }
-}
-
-// 쿠키에서 토큰 가져오기
-function getCookie(name) {
-  const cookies = document.cookie.split('; ');
-  // cookies = [name=, expires=Thu, 01 Jan 1970 00:00:00 UTC, path=/]
-  // 1 [name, null]
-  // 2 [expires, 01 Jan 1970 00:00:00 UTC]
-  // 3 [path, /]
-  for (const cookie of cookies) {
-    const [cookieName, cookieValue] = cookie.split('=');
-    if (cookieName === name) {
-      return cookieValue;
-    }
-  }
-  return null;
-}
-
-// 토큰 디코딩
-function decodeToken(token) {
-  if (token) {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-
-      return JSON.parse(jsonPayload);
-    } catch (error) {
-      console.error('토큰 디코딩 오류:', error);
-    }
-  }
-
-  return null;
 }
 
 // 로그인 여부 확인
@@ -195,13 +96,13 @@ async function checkLoggedIn() {
 
 // 로그아웃
 function logout() {
-
   // 서버에 로그아웃 요청 보냄
-  fetch('/logout', {
-    method: 'DELETE',
+  fetch('http://localhost:3000/api/auth/logout/', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    credentials: "include",
     // 사용자 ID 전송
     body: JSON.stringify({}), // 더 이상 사용자 ID를 전송할 필요가 없음
   })

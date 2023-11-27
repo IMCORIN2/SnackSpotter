@@ -1,17 +1,4 @@
 
-  // 쿠키 가져오기
-  function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-  
-      if (cookie.startsWith(name + '=')) {
-        return cookie.substring(name.length + 1);
-      }
-    }
-    return null;
-  }
-  
   function checkLoginStatus() {
     // 클라이언트에서 쿠키에서 토큰 읽기
     const cookieString = document.cookie;
@@ -79,8 +66,8 @@ function modifyProfile() {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getCookie('token')}`,
       },
+      credentials: "include",
       body: JSON.stringify(data),
       mode: 'cors', 
     })
