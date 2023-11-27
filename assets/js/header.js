@@ -42,7 +42,7 @@ async function deleteCookie(name) {
 }
 
 // 로그인 버튼 설정 함수
-function setupLoginButtons() {
+async function setupLoginButtons() {
   const loginContainer = document.getElementById('loginContainer');
 
   // loginContainer가 존재하는지 확인
@@ -67,8 +67,9 @@ function setupLoginButtons() {
   loginButton.className = 'btn btn-outline-primary me-2';
 
   // 로그인 중이면 로그아웃 버튼 표시
-  const isLoggedIn = checkLoggedIn();
+  const isLoggedIn = await checkLoggedIn();
 
+  console.log(isLoggedIn);
   if (isLoggedIn) {
     loginButton.innerText = 'logout';
     loginButton.addEventListener('click', function () {
@@ -110,8 +111,6 @@ function setupLoginButtons() {
   // 버튼 컨테이너를 로그인 컨테이너에 추가
   loginContainer.appendChild(buttonContainer);
 
-  // 토큰 만료 여부 확인 및 처리
-  checkTokenExpiration();
 }
 
 // 로그인 버튼 설정 함수 호출
@@ -171,21 +170,37 @@ function decodeToken(token) {
 }
 
 // 로그인 여부 확인
-function checkLoggedIn() {
-  return document.cookie.includes('token=');
+async function checkLoggedIn() {
+
+   // 서버에 내정보 요청 보냄
+   try {
+    const response = await fetch('http://localhost:3000/api/users', {
+      method: 'GET',
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return true;
+    } else {
+      console.error('Error uploading image:', response.statusText);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return false;
+  }
 }
+
 
 // 로그아웃
 function logout() {
-  // 쿠키 삭제
-  deleteCookie('token');
 
   // 서버에 로그아웃 요청 보냄
   fetch('/logout', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getCookie('token')}`, // 토큰을 헤더에 추가
     },
     // 사용자 ID 전송
     body: JSON.stringify({}), // 더 이상 사용자 ID를 전송할 필요가 없음
