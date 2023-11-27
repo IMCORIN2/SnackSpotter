@@ -185,4 +185,4 @@ async function handleQuantityChange(event) {
   }
 }
 
-window.onload(cartGet());
+window.onload = cartGet;
