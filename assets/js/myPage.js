@@ -1,25 +1,12 @@
-// 쿠키 가져오기
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-
-        if (cookie.startsWith(name + '=')) {
-            return cookie.substring(name.length + 1);
-        }
-    }
-    return null;
-}
-
-// 프로필 삭제
+// 프로필 삭제: TODO
 async function deleteProfile() {
     try {
         const response = await fetch(`http://localhost:3000/api/users`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${getCookie('token')}`,
             },
+            credentials: "include",
         });
 
         if (response.ok) {
@@ -42,15 +29,12 @@ async function deleteProfile() {
 // 프로필 가져오기
 async function getUserDetails() {
     try {
-        const token = getCookie('token');
-
-        if (token) {
             const response = await fetch(`http://localhost:3000/api/users`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
                 },
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -65,9 +49,7 @@ async function getUserDetails() {
             } else {
                 console.error('Error fetching user profile:', response.status, response.statusText);
             }
-        } else {
-            alert('로그인이 필요합니다.');
-        }
+        
     } catch (error) {
         console.error('Error fetching user profile:', error.message);
     }

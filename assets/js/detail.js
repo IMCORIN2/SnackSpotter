@@ -1,7 +1,6 @@
 // URL에서 제품 ID를 가져오기
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get('id');
-
 // 제품 ID가 null이 아닌 경우에만 서버에서 제품 정보를 가져옴
 if (productId) {
   // 서버에서 특정 제품 가져오기
@@ -92,7 +91,7 @@ if (productId) {
           productId: product.id,
           quantity: quantity,
         }),
-        credentials: 'include',
+        credentials: "include",
       });
 
       const data = await response.json();

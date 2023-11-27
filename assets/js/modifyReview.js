@@ -1,21 +1,3 @@
-// 쿠키 가져오기
-function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-
-      if (cookie.startsWith(name + '=')) {
-        return cookie.substring(name.length + 1);
-      }
-    }
-    return null;
-  }
-  
-  // 쿠키 지우기
-  function deleteCookie(name) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  }
-  
 // File을 Base64로 변환하는 함수
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -76,10 +58,7 @@ async function editReview() {
   const resizedImageFile = imageFile ? await resizeImage(imageFile) : null;
   let image = resizedImageFile ? await uploadImage(resizedImageFile) : null;
 
-  // 토큰 가져오기
-  const token = getCookie('token');
-
-  if (name && rating && comment && token) {
+  if (name && rating && comment) {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('rating', rating);
@@ -89,9 +68,7 @@ async function editReview() {
     try {
         const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
           method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
           body: formData,
           mode: 'cors',
         });
@@ -110,11 +87,42 @@ async function editReview() {
   }
 }
 
-  // 로그아웃 
-  function logout() {
-    deleteCookie('token'); // 토큰 삭제
-    window.location.href = './community.html';
-  }
+ // 로그아웃
+function logout() {
+
+  // 서버에 로그아웃 요청 보냄
+  fetch('http://localhost:3000/api/auth/logout/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: "include",
+    // 사용자 ID 전송
+    body: JSON.stringify({}), // 더 이상 사용자 ID를 전송할 필요가 없음
+  })
+    .then(response => response.json())
+    .then(data => {
+      // 서버에서의 로그아웃이 성공했을 경우의 처리
+      console.log(data);
+
+      // 서버에서 로그아웃이 성공
+      if (data.success) {
+        alert('로그아웃이 성공적으로 처리되었습니다.');
+      } else {
+        // 서버에서 로그아웃이 실패한 경우
+        alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요3.');
+      }
+    })
+    .catch(error => {
+      // 서버에서의 로그아웃이 실패했을 경우의 처리
+      console.error('Error:', error);
+      // alert('로그아웃 중에 오류가 발생했습니다. 다시 시도해주세요4.');
+    });
+
+  // 페이지 리로드
+  window.location.reload();
+}
+
 
  // 가게 목록을 가져오는 함수
 async function getStores() {

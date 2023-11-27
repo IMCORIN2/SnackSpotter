@@ -93,7 +93,7 @@ async function cartGet() {
             body: JSON.stringify({
               productId: carts[index].productId,
             }),
-            credentials: 'include',
+            credentials: "include",
           });
           cartGet();
         } catch (error) {
@@ -138,7 +138,7 @@ async function updateCart(cartItems) {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
         id: cartItems.id,
         quantity: cartItems.quantity,
@@ -186,9 +186,4 @@ async function handleQuantityChange(event) {
     console.error('에러 ---', error);
     throw error;
   }
-}
-if (document.cookie) {
-  window.onload = cartGet;
-} else {
-  itemBox.innerHTML = '로그인 후 사용해주세요';
 }

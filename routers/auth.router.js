@@ -202,10 +202,9 @@ authRouter.post('/signin', async (req, res) => {
 });
 
 
-authRouter.delete('/logout', isAuthenticated, async (req, res) => {
+authRouter.post('/logout', isAuthenticated, async (req, res) => {
   try {
     const user = req.user;
-    const authorizationHeader = req.headers.authorization;
     res.clearCookie();
 
     // HTTP DELETE 메서드에서 destroy를 만들고 새로 GET메서드를 파야하나

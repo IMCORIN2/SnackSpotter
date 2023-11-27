@@ -12,35 +12,26 @@ function createReview() {
   window.location.href = './storeReviews.html';
 }
 
-// 쿠키 가져오기
-function getCookie(name) {
-  const cookies = document.cookie.split(';');
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
+async function checkLoginStatus() {
 
-    if (cookie.startsWith(name + '=')) {
-      return cookie.substring(name.length + 1);
-    }
-  }
-  return null;
-}
+  // 서버에 내정보 요청 보냄
+  try {
+   const response = await fetch('http://localhost:3000/api/users', {
+     method: 'GET',
+     credentials: "include",
+   });
 
-function checkLoginStatus() {
-  // 클라이언트에서 쿠키에서 토큰 읽기
-  const cookieString = document.cookie;
-
-  // 토큰이 있다면 사용
-  if (cookieString) {
-    const token = cookieString
-      .split('; ')
-      .find((row) => row.startsWith('token='))
-      .split('=')[1];
-
-    return !!token;
-  } else {
-    console.log('No cookies found');
-    return false;
-  }
+   if (response.ok) {
+     const data = await response.json();
+     return true;
+   } else {
+     console.error('Error uploading image:', response.statusText);
+     return false;
+   }
+ } catch (error) {
+   console.error('Error uploading image:', error);
+   return false;
+ }
 }
 async function fetchReviews() {
   try {
@@ -133,16 +124,13 @@ async function renderReviewCards() {
 // 리뷰 삭제
 async function deleteReview(reviewId) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/store-reviews/${reviewId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getCookie('token')}`,
-        },
+    const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      credentials: "include",
+    });
 
     if (response.ok) {
       const result = await response.json();
@@ -164,21 +152,16 @@ async function deleteReview(reviewId) {
 }
 
 async function editReview(reviewId) {
-  // 토큰 가져오기
-  const token = getCookie('token');
-
-  if (token) {
+  const isLoggedIn = checkLoginStatus();
+  if (isLoggedIn) {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/store-reviews/${reviewId}/edit`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}/edit`, {
+        method: 'GET',  
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        credentials: "include",
+      });
 
       if (response.ok) {
         // 서버에서 권한이 확인되면 수정 페이지로 이동
