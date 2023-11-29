@@ -16,7 +16,8 @@ async function fetchProducts() {
 // 상품 카드 렌더링하기
 async function renderReviewCards() {
   try {
-    const products = await fetchReviews();
+
+    const products = await fetchProducts();
     const productCardsContainer = document.getElementById(
       'productCardsContainer',
     );
