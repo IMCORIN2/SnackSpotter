@@ -1,9 +1,10 @@
+
 const itemBox = document.querySelector('.Cart-ItemBox');
 
 // 서버에서 데이터 가져오기
 async function fetchCart() {
   try {
-    const response = await fetch('http://localhost:3000/api/cart', {
+    const response = await fetch(`/api/cart`, {
       method: 'GET',
       credentials: 'include',
     });
@@ -82,7 +83,7 @@ async function cartGet() {
     deleteProducts.forEach((deleteProduct, index) => {
       deleteProduct.addEventListener('click', async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/cart', {
+          const response = await fetch(`/api/cart`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ const removeAllBtn = document.querySelector('.removeAll');
 
 async function deleteAllCart() {
   try {
-    const response = await fetch('http://localhost:3000/api/cart/all', {
+    const response = await fetch(`/api/cart/all`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -130,7 +131,7 @@ removeAllBtn.addEventListener('click', deleteAllCart);
 
 async function updateCart(cartItems) {
   try {
-    const response = await fetch('http://localhost:3000/api/cart', {
+    const response = await fetch(`/api/cart`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

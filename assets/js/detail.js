@@ -7,7 +7,7 @@ if (productId) {
   async function fetchProductDetails() {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/products/${productId}`,
+        `/api/products/${productId}`,
       );
       return response.data.data;
     } catch (error) {
@@ -82,7 +82,7 @@ if (productId) {
 
   async function addToCart(product, quantity) {
     try {
-      const response = await fetch('http://localhost:3000/api/cart', {
+      const response = await fetch(`/api/cart`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

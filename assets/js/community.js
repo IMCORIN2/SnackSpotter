@@ -1,6 +1,6 @@
 async function createReview() {
   try {
-    const response = await fetch('http://localhost:3000/api/users', {
+    const response = await fetch(`/api/users`, {
       method: 'GET',
       credentials: "include",
     });
@@ -25,7 +25,7 @@ async function checkLoginStatus() {
 
   // 서버에 내정보 요청 보냄
   try {
-   const response = await fetch('http://localhost:3000/api/users', {
+   const response = await fetch(`/api/users`, {
      method: 'GET',
      credentials: "include",
    });
@@ -45,7 +45,7 @@ async function checkLoginStatus() {
 
 async function fetchReviews() {
   try {
-    const response = await fetch('http://localhost:3000/api/store-reviews');
+    const response = await fetch(`/api/store-reviews`);
     if (!response.ok) {
       throw new Error('서버 응답이 실패하였습니다.');
     }
@@ -122,7 +122,7 @@ async function renderReviewCards() {
 // 리뷰 삭제
 async function deleteReview(reviewId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
+    const response = await fetch(`/api/store-reviews/${reviewId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ async function deleteReview(reviewId) {
 // editReview 함수
 async function editReview(reviewId) {
   try {
-    const response = await fetch(`http://localhost:3000/api/store-reviews/${reviewId}`, {
+    const response = await fetch(`/api/store-reviews/${reviewId}`, {
       method: 'GET',
       credentials: 'include',
     });
@@ -181,7 +181,7 @@ async function uploadImageAndGetUrl(file) {
 
   try {
     const response = await fetch(
-      'http://localhost:3000/api/store-reviews/upload',
+      `/api/store-reviews/upload`,
       {
         method: 'POST',
         body: formData,

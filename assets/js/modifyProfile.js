@@ -1,5 +1,4 @@
-
-  function checkLoginStatus() {
+function checkLoginStatus() {
     // 클라이언트에서 쿠키에서 토큰 읽기
     const cookieString = document.cookie;
     
@@ -25,7 +24,7 @@ async function checkEmail() {
     }
   
     try {
-      const response = await fetch('http://localhost:3000/api/auth/check-email', {
+      const response = await fetch(`/api/auth/check-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +61,7 @@ function modifyProfile() {
       birthday,
     };
   
-    fetch('http://localhost:3000/api/users', {
+    fetch(`/api/users`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

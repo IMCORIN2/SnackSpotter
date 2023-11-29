@@ -1,6 +1,6 @@
 async function vote(productId) {
     try {
-        const response = await fetch('http://localhost:3000/api/votes', {
+        const response = await fetch(`/api/votes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ async function vote(productId) {
 
 function updateResults() {
     // 서버에서 투표 결과를 가져와서 화면 업데이트
-    fetch('http://localhost:3000/api/votes')
+    fetch(`/api/votes`)
         .then(response => response.json())
         .then(data => {
             // data.options를 순회하면서 각 투표 옵션에 대한 화면 업데이트

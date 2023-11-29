@@ -1,8 +1,13 @@
+
 // 서버에서 데이터 가져오기
 async function fetchProducts() {
   try {
-    const response = await axios.get('http://localhost:3000/api/products');
-    return response.data.data;
+    const response = await fetch(`/api/products`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.data;
   } catch (error) {
     console.error('에러 ---', error);
     throw error;
@@ -98,7 +103,7 @@ async function renderProductCards() {
 
 async function fetchReviews() {
   try {
-    const response = await fetch('http://localhost:3000/api/store-reviews');
+    const response = await fetch(`/api/store-reviews`);
     if (!response.ok) {
       throw new Error('서버 응답이 실패하였습니다.');
     }

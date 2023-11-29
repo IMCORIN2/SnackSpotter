@@ -1,7 +1,7 @@
 // 프로필 삭제: TODO
 async function deleteProfile() {
     try {
-        const response = await fetch(`http://localhost:3000/api/users`, {
+        const response = await fetch(`/api/users`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ async function deleteProfile() {
 // 프로필 가져오기
 async function getUserDetails() {
     try {
-            const response = await fetch(`http://localhost:3000/api/users`, {
+            const response = await fetch(`/api/users`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -66,7 +66,7 @@ async function submitReview() {
     formData.append('comment', comment);
 
     try {
-      const response = await fetch('http://localhost:3000/api/store-reviews', {
+      const response = await fetch(`/api/store-reviews`, {
         method: 'POST',
         body: formData,
         credentials: "include",
@@ -90,7 +90,7 @@ async function submitReview() {
 function logout() {
 
   // 서버에 로그아웃 요청 보냄
-  fetch('http://localhost:3000/api/auth/logout/', {
+  fetch(`/api/auth/logout/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ function logout() {
  // 가게 목록을 가져오는 함수
 async function getStores() {
     try {
-      const response = await fetch('http://localhost:3000/api/stores');
+      const response = await fetch(`/api/stores`);
       if (response.ok) {
         const data = await response.json();
         return data.stores;
@@ -162,7 +162,7 @@ async function uploadImage(image) {
   formData.append('image', image);
 
   try {
-    const response = await fetch('http://localhost:3000/api/store-reviews/upload', {
+    const response = await fetch(`/api/store-reviews/upload`, {
       method: 'POST',
       body: formData,
       credentials: "include",

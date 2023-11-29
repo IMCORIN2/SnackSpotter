@@ -1,13 +1,17 @@
-// 서버에서 데이터 가져오기
-async function fetchReviews() {
+async function fetchProducts() {
   try {
-    const response = await axios.get('http://localhost:3000/api/products');
-    return response.data.data;
+    const response = await fetch(`/api/products`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.data;
   } catch (error) {
     console.error('에러 ---', error);
     throw error;
   }
 }
+
 
 // 상품 카드 렌더링하기
 async function renderReviewCards() {
